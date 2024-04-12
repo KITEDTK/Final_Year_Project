@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 function LoginAndRegister() {
+  const [user, setUser] = useState();
   return (
     <>
       <main class="main">

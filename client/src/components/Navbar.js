@@ -1,27 +1,270 @@
 import React from "react";
-import { NavLink,Link } from 'react-router-dom';
+import { NavLink, Link } from "react-router-dom";
 
 function Navbar() {
   return (
     <>
-      <header className="header header-5">
-        <div className="header-middle sticky-header">
-          <div className="container-fluid">
+      <header className="header header-6">
+        <div className="header-top">
+          <div className="container">
             <div className="header-left">
-              <button className="mobile-menu-toggler">
-                <span className="sr-only">Toggle mobile menu</span>
-                <i className="icon-bars"></i>
-              </button>
+              <ul className="top-menu top-link-menu d-none d-md-block">
+                <li>
+                  <a href="#">Links</a>
+                  <ul>
+                    <li>
+                      <a href="tel:#">
+                        <i className="icon-phone"></i>Call: +0123 456 789
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              {/* End .top-menu */}
+            </div>
+            {/* End .header-left */}
 
+            <div className="header-right">
+              <div className="social-icons social-icons-color">
+                <a
+                  href="#"
+                  className="social-icon social-facebook"
+                  title="Facebook"
+                  target="_blank"
+                >
+                  <i className="icon-facebook-f"></i>
+                </a>
+                <a
+                  href="#"
+                  className="social-icon social-twitter"
+                  title="Twitter"
+                  target="_blank"
+                >
+                  <i className="icon-twitter"></i>
+                </a>
+                <a
+                  href="#"
+                  className="social-icon social-pinterest"
+                  title="Instagram"
+                  target="_blank"
+                >
+                  <i className="icon-pinterest-p"></i>
+                </a>
+                <a
+                  href="#"
+                  className="social-icon social-instagram"
+                  title="Pinterest"
+                  target="_blank"
+                >
+                  <i className="icon-instagram"></i>
+                </a>
+              </div>
+              {/* End .soial-icons */}
+              <ul className="top-menu top-link-menu">
+                <li>
+                  <a href="#">Links</a>
+                  <ul>
+                    <li>
+                      <Link to="/login" data-toggle="modal">
+                        <i className="icon-user"></i>Login
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              {/* End .top-menu */}
+
+              <div className="header-dropdown">
+                <a href="#">USD</a>
+                <div className="header-menu">
+                  <ul>
+                    <li>
+                      <a href="#">Eur</a>
+                    </li>
+                    <li>
+                      <a href="#">Usd</a>
+                    </li>
+                  </ul>
+                </div>
+                {/* End .header-menu */}
+              </div>
+              {/* End .header-dropdown */}
+
+              <div className="header-dropdown">
+                <a href="#">Eng</a>
+                <div className="header-menu">
+                  <ul>
+                    <li>
+                      <a href="#">English</a>
+                    </li>
+                    <li>
+                      <a href="#">French</a>
+                    </li>
+                    <li>
+                      <a href="#">Spanish</a>
+                    </li>
+                  </ul>
+                </div>
+                {/* End .header-menu */}
+              </div>
+              {/* End .header-dropdown */}
+            </div>
+            {/* End .header-right */}
+          </div>
+        </div>
+        <div className="header-middle">
+          <div className="container">
+            <div className="header-left">
+              <div className="header-search header-search-extended header-search-visible d-none d-lg-block">
+                <a href="#" className="search-toggle" role="button">
+                  <i className="icon-search"></i>
+                </a>
+                <form action="#" method="get">
+                  <div className="header-search-wrapper search-wrapper-wide">
+                    <label for="q" className="sr-only">
+                      Search
+                    </label>
+                    <button className="btn btn-primary" type="submit">
+                      <i className="icon-search"></i>
+                    </button>
+                    <input
+                      type="search"
+                      className="form-control"
+                      name="q"
+                      id="q"
+                      placeholder="Search product ..."
+                      required
+                    />
+                  </div>
+                  {/* End .header-search-wrapper */}
+                </form>
+              </div>
+              {/* End .header-search */}
+            </div>
+            <div className="header-center">
               <Link to="/" className="logo">
                 <img
-                  src="assets/images/demos/demo-5/logo.png"
+                  src="assets/images/demos/demo-6/logo.png"
                   alt="Molla Logo"
-                  width="105"
-                  height="25"
+                  width="82"
+                  height="20"
                 />
-              </Link >
+              </Link>
+            </div>
+            {/* End .header-left */}
 
+            <div className="header-right">
+              <a href="wishlist.html" className="wishlist-link">
+                <i className="icon-heart-o"></i>
+                <span className="wishlist-count">3</span>
+                <span className="wishlist-txt">My Wishlist</span>
+              </a>
+
+              <div className="dropdown cart-dropdown">
+                <a
+                  href="#"
+                  className="dropdown-toggle"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  data-display="static"
+                >
+                  <i className="icon-shopping-cart"></i>
+                  <span className="cart-count">2</span>
+                  <span className="cart-txt">$ 164,00</span>
+                </a>
+
+                <div className="dropdown-menu dropdown-menu-right">
+                  <div className="dropdown-cart-products">
+                    <div className="product">
+                      <div className="product-cart-details">
+                        <h4 className="product-title">
+                          <a href="product.html">
+                            Beige knitted elastic runner shoes
+                          </a>
+                        </h4>
+
+                        <span className="cart-product-info">
+                          <span className="cart-product-qty">1</span>x $84.00
+                        </span>
+                      </div>
+                      {/* End .product-cart-details */}
+
+                      <figure className="product-image-container">
+                        <a href="product.html" className="product-image">
+                          <img
+                            src="assets/images/products/cart/product-1.jpg"
+                            alt="product"
+                          />
+                        </a>
+                      </figure>
+                      <a href="#" className="btn-remove" title="Remove Product">
+                        <i className="icon-close"></i>
+                      </a>
+                    </div>
+                    {/* End .product */}
+
+                    <div className="product">
+                      <div className="product-cart-details">
+                        <h4 className="product-title">
+                          <a href="product.html">
+                            Blue utility pinafore denim dress
+                          </a>
+                        </h4>
+
+                        <span className="cart-product-info">
+                          <span className="cart-product-qty">1</span>x $76.00
+                        </span>
+                      </div>
+                      {/* End .product-cart-details */}
+
+                      <figure className="product-image-container">
+                        <a href="product.html" className="product-image">
+                          <img
+                            src="assets/images/products/cart/product-2.jpg"
+                            alt="product"
+                          />
+                        </a>
+                      </figure>
+                      <a href="#" className="btn-remove" title="Remove Product">
+                        <i className="icon-close"></i>
+                      </a>
+                    </div>
+                    {/* End .product */}
+                  </div>
+                  {/* End .cart-product */}
+
+                  <div className="dropdown-cart-total">
+                    <span>Total</span>
+
+                    <span className="cart-total-price">$160.00</span>
+                  </div>
+                  {/* End .dropdown-cart-total */}
+
+                  <div className="dropdown-cart-action">
+                    <a href="cart.html" className="btn btn-primary">
+                      View Cart
+                    </a>
+                    <a href="checkout.html" className="btn btn-outline-primary-2">
+                      <span>Checkout</span>
+                      <i className="icon-long-arrow-right"></i>
+                    </a>
+                  </div>
+                  {/* End .dropdown-cart-total */}
+                </div>
+                {/* End .dropdown-menu */}
+              </div>
+              {/* End .cart-dropdown */}
+            </div>
+          </div>
+          {/* End .container */}
+        </div>
+        {/* End .header-middle */}
+
+        <div className="header-bottom sticky-header">
+          <div className="container">
+            <div className="header-left">
               <nav className="main-nav">
                 <ul className="menu sf-arrows">
                   <li className="megamenu-container active">
@@ -39,12 +282,8 @@ function Navbar() {
                             <a href="index-1.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/1.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/1.jpg)"}}
                               ></span>
-
                               <span className="demo-title">
                                 01 - furniture store
                               </span>
@@ -56,12 +295,8 @@ function Navbar() {
                             <a href="index-2.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/2.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/2.jpg)"}}
                               ></span>
-
                               <span className="demo-title">
                                 02 - furniture store
                               </span>
@@ -73,12 +308,8 @@ function Navbar() {
                             <a href="index-3.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/3.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/3.jpg)"}}
                               ></span>
-
                               <span className="demo-title">
                                 03 - electronic store
                               </span>
@@ -90,12 +321,8 @@ function Navbar() {
                             <a href="index-4.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/4.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/4.jpg)"}}
                               ></span>
-
                               <span className="demo-title">
                                 04 - electronic store
                               </span>
@@ -107,12 +334,8 @@ function Navbar() {
                             <a href="index-5.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/5.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/5.jpg)"}}
                               ></span>
-
                               <span className="demo-title">05 - fashion store</span>
                             </a>
                           </div>
@@ -122,12 +345,8 @@ function Navbar() {
                             <a href="index-6.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/6.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/6.jpg)"}}
                               ></span>
-
                               <span className="demo-title">06 - fashion store</span>
                             </a>
                           </div>
@@ -137,12 +356,8 @@ function Navbar() {
                             <a href="index-7.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/7.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/7.jpg)"}}
                               ></span>
-
                               <span className="demo-title">07 - fashion store</span>
                             </a>
                           </div>
@@ -152,12 +367,8 @@ function Navbar() {
                             <a href="index-8.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/8.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/8.jpg)"}}
                               ></span>
-
                               <span className="demo-title">08 - fashion store</span>
                             </a>
                           </div>
@@ -167,12 +378,8 @@ function Navbar() {
                             <a href="index-9.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/9.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/9.jpg)"}}
                               ></span>
-
                               <span className="demo-title">09 - fashion store</span>
                             </a>
                           </div>
@@ -182,12 +389,8 @@ function Navbar() {
                             <a href="index-10.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/10.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/10.jpg)"}}
                               ></span>
-
                               <span className="demo-title">10 - shoes store</span>
                             </a>
                           </div>
@@ -197,12 +400,8 @@ function Navbar() {
                             <a href="index-11.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/11.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/11.jpg)"}}
                               ></span>
-
                               <span className="demo-title">
                                 11 - furniture simple store
                               </span>
@@ -214,12 +413,8 @@ function Navbar() {
                             <a href="index-12.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/12.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/12.jpg)"}}
                               ></span>
-
                               <span className="demo-title">
                                 12 - fashion simple store
                               </span>
@@ -231,12 +426,8 @@ function Navbar() {
                             <a href="index-13.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/13.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/13.jpg)"}}
                               ></span>
-
                               <span className="demo-title">13 - market</span>
                             </a>
                           </div>
@@ -246,12 +437,8 @@ function Navbar() {
                             <a href="index-14.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/14.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/14.jpg)"}}
                               ></span>
-
                               <span className="demo-title">
                                 14 - market fullwidth
                               </span>
@@ -263,12 +450,8 @@ function Navbar() {
                             <a href="index-15.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/15.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/15.jpg)"}}
                               ></span>
-
                               <span className="demo-title">15 - lookbook 1</span>
                             </a>
                           </div>
@@ -278,12 +461,8 @@ function Navbar() {
                             <a href="index-16.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/16.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/16.jpg)"}}
                               ></span>
-
                               <span className="demo-title">16 - lookbook 2</span>
                             </a>
                           </div>
@@ -293,12 +472,8 @@ function Navbar() {
                             <a href="index-17.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/17.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/17.jpg)"}}
                               ></span>
-
                               <span className="demo-title">17 - fashion store</span>
                             </a>
                           </div>
@@ -308,12 +483,8 @@ function Navbar() {
                             <a href="index-18.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/18.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/18.jpg)"}}
                               ></span>
-
                               <span className="demo-title">
                                 18 - fashion store (with sidebar)
                               </span>
@@ -325,12 +496,8 @@ function Navbar() {
                             <a href="index-19.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/19.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/19.jpg)"}}
                               ></span>
-
                               <span className="demo-title">19 - games store</span>
                             </a>
                           </div>
@@ -340,12 +507,8 @@ function Navbar() {
                             <a href="index-20.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/20.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/20.jpg)"}}
                               ></span>
-
                               <span className="demo-title">20 - book store</span>
                             </a>
                           </div>
@@ -355,12 +518,8 @@ function Navbar() {
                             <a href="index-21.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/21.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/21.jpg)"}}
                               ></span>
-
                               <span className="demo-title">21 - sport store</span>
                             </a>
                           </div>
@@ -370,12 +529,8 @@ function Navbar() {
                             <a href="index-22.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/22.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/22.jpg)"}}
                               ></span>
-
                               <span className="demo-title">22 - tools store</span>
                             </a>
                           </div>
@@ -385,12 +540,8 @@ function Navbar() {
                             <a href="index-23.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/23.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/23.jpg)"}}
                               ></span>
-
                               <span className="demo-title">
                                 23 - fashion left navigation store
                               </span>
@@ -402,12 +553,8 @@ function Navbar() {
                             <a href="index-24.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/24.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/24.jpg)"}}
                               ></span>
-
                               <span className="demo-title">
                                 24 - extreme sport store
                               </span>
@@ -419,12 +566,8 @@ function Navbar() {
                             <a href="index-25.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/25.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/25.jpg)"}}
                               ></span>
-
                               <span className="demo-title">25 - jewelry store</span>
                             </a>
                           </div>
@@ -434,12 +577,8 @@ function Navbar() {
                             <a href="index-26.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/26.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/26.jpg)"}}
                               ></span>
-
                               <span className="demo-title">26 - market store</span>
                             </a>
                           </div>
@@ -449,12 +588,8 @@ function Navbar() {
                             <a href="index-27.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/27.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/27.jpg)"}}
                               ></span>
-
                               <span className="demo-title">27 - fashion store</span>
                             </a>
                           </div>
@@ -464,12 +599,8 @@ function Navbar() {
                             <a href="index-28.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/28.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/28.jpg)"}}
                               ></span>
-
                               <span className="demo-title">
                                 28 - food market store
                               </span>
@@ -481,12 +612,8 @@ function Navbar() {
                             <a href="index-29.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/29.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/29.jpg)"}}
                               ></span>
-
                               <span className="demo-title">
                                 29 - t-shirts store
                               </span>
@@ -498,12 +625,8 @@ function Navbar() {
                             <a href="index-30.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/30.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/30.jpg)"}}
                               ></span>
-
                               <span className="demo-title">
                                 30 - headphones store
                               </span>
@@ -515,12 +638,8 @@ function Navbar() {
                             <a href="index-31.html">
                               <span
                                 className="demo-bg"
-                                style={{
-                                  backgroundImage:
-                                    "url(assets/images/menu/demos/31.jpg)",
-                                }}
+                                style={{backgroundImage: "url(assets/images/menu/demos/31.jpg)"}}
                               ></span>
-
                               <span className="demo-title">31 - yoga store</span>
                             </a>
                           </div>
@@ -796,7 +915,7 @@ function Navbar() {
                         </ul>
                       </li>
                       <li>
-                        <a href="login.html">Login</a>
+                        <Link to="/login">Login</Link >
                       </li>
                       <li>
                         <a href="faq.html">FAQs</a>
@@ -897,7 +1016,7 @@ function Navbar() {
                     </ul>
                   </li>
                   <li>
-                    <a to="/login" className="sf-with-ul">
+                    <a href="elements-list.html" className="sf-with-ul">
                       Elements
                     </a>
 
@@ -952,141 +1071,22 @@ function Navbar() {
                 {/* End .menu */}
               </nav>
               {/* End .main-nav */}
+
+              <button className="mobile-menu-toggler">
+                <span className="sr-only">Toggle mobile menu</span>
+                <i className="icon-bars"></i>
+              </button>
             </div>
             {/* End .header-left */}
 
             <div className="header-right">
-              <div className="header-search header-search-extended header-search-visible">
-                <a href="#" className="search-toggle" role="button">
-                  <i className="icon-search"></i>
-                </a>
-                <form action="#" method="get">
-                  <div className="header-search-wrapper">
-                    <label for="q" className="sr-only">
-                      Search
-                    </label>
-                    <input
-                      type="search"
-                      className="form-control"
-                      name="q"
-                      id="q"
-                      placeholder="Search product ..."
-                      required
-                    />
-                    <button className="btn btn-primary" type="submit">
-                      <i className="icon-search"></i>
-                    </button>
-                  </div>
-                  {/* End .header-search-wrapper */}
-                </form>
-              </div>
-              {/* End .header-search */}
-
-              <a href="wishlist.html" className="wishlist-link">
-                <i className="icon-heart-o"></i>
-              </a>
-
-              <div className="dropdown cart-dropdown">
-                <a
-                  href="#"
-                  className="dropdown-toggle"
-                  role="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                  data-display="static"
-                >
-                  <i className="icon-shopping-cart"></i>
-                  <span className="cart-count">2</span>
-                </a>
-
-                <div className="dropdown-menu dropdown-menu-right">
-                  <div className="dropdown-cart-products">
-                    <div className="product">
-                      <div className="product-cart-details">
-                        <h4 className="product-title">
-                          <a href="product.html">
-                            Beige knitted elastic runner shoes
-                          </a>
-                        </h4>
-
-                        <span className="cart-product-info">
-                          <span className="cart-product-qty">1</span>x $84.00
-                        </span>
-                      </div>
-                      {/* End .product-cart-details */}
-
-                      <figure className="product-image-container">
-                        <a href="product.html" className="product-image">
-                          <img
-                            src="assets/images/products/cart/product-1.jpg"
-                            alt="product"
-                          />
-                        </a>
-                      </figure>
-                      <a href="#" className="btn-remove" title="Remove Product">
-                        <i className="icon-close"></i>
-                      </a>
-                    </div>
-                    {/* End .product */}
-
-                    <div className="product">
-                      <div className="product-cart-details">
-                        <h4 className="product-title">
-                          <a href="product.html">
-                            Blue utility pinafore denim dress
-                          </a>
-                        </h4>
-
-                        <span className="cart-product-info">
-                          <span className="cart-product-qty">1</span>x $76.00
-                        </span>
-                      </div>
-                      {/* End .product-cart-details */}
-
-                      <figure className="product-image-container">
-                        <a href="product.html" className="product-image">
-                          <img
-                            src="assets/images/products/cart/product-2.jpg"
-                            alt="product"
-                          />
-                        </a>
-                      </figure>
-                      <a href="#" className="btn-remove" title="Remove Product">
-                        <i className="icon-close"></i>
-                      </a>
-                    </div>
-                    {/* End .product */}
-                  </div>
-                  {/* End .cart-product */}
-
-                  <div className="dropdown-cart-total">
-                    <span>Total</span>
-
-                    <span className="cart-total-price">$160.00</span>
-                  </div>
-                  {/* End .dropdown-cart-total */}
-
-                  <div className="dropdown-cart-action">
-                    <a href="cart.html" className="btn btn-primary">
-                      View Cart
-                    </a>
-                    <a href="checkout.html" className="btn btn-outline-primary-2">
-                      <span>Checkout</span>
-                      <i className="icon-long-arrow-right"></i>
-                    </a>
-                  </div>
-                  {/* End .dropdown-cart-total */}
-                </div>
-                {/* End .dropdown-menu */}
-              </div>
-              {/* End .cart-dropdown */}
+              <i className="la la-lightbulb-o"></i>
+              <p>Clearance Up to 30% Off</p>
             </div>
-            {/* End .header-right */}
           </div>
-          {/* End .container-fluid */}
+          {/* End .container */}
         </div>
-        {/* End .header-middle */}
+        {/* End .header-bottom */}
       </header>
       {/* End .header */}
     </>

@@ -1,6 +1,6 @@
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Dashboard from "./pages/Dashboard/Dashboard";
+import Dashboard from "./pages/Dashboard/index";
 import LoginAndRegister from "./pages/LoginAndRegister/index";
 import { Route,Routes } from "react-router-dom";
 function App() {

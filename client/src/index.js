@@ -6,13 +6,26 @@ import { Provider } from "react-redux";
 import store from "./store";
 import { BrowserRouter } from "react-router-dom";
 
+import AuthProvider from "react-auth-kit/AuthProvider";
+
+import createStore from "react-auth-kit/createStore";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <React.StrictMode>
-      <BrowserRouter>
-        <App/>
-      </BrowserRouter>
+      <AuthProvider
+        store={createStore({
+          authName: "_auth",
+          authType: "cookie",
+          cookieDomain: window.location.hostname,
+          cookieSecure: window.location.protocol === "https:",
+        })}
+      >
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </AuthProvider>
     </React.StrictMode>
   </Provider>
 );
