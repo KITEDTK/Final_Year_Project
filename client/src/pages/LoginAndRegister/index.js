@@ -1,8 +1,49 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { json, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import useSignIn from 'react-auth-kit/hooks/useSignIn';
+import axios from 'axios';
 
+
+const BASE_URL = 'http://localhost:4000/loginAndRegister';
 function LoginAndRegister() {
+  const signIn = useSignIn();
+  const navigate = useNavigate();
   const [user, setUser] = useState();
+  const [usernameOrEmail,setUsernameOrEmail] = useState();
+  const [password,setPassword] = useState();
+  const handleOnchangeUsername = (value)=>{
+    setUsernameOrEmail(value);
+  }
+  const handleOnchangePassword = (value)=>{
+    setPassword(value);
+  }
+  const  handleSubmit = async ()=>{
+    try{
+      const response = await axios.post(`${BASE_URL}/login`,{
+          usernameOrEmail: usernameOrEmail,
+          password: password
+        });
+        const {token,user} = response.data;
+        const result = signIn({
+          auth: {
+            token: token,
+            type: 'Bearer'
+          },
+          userState: user.email
+        });
+        //console.log(response.data);
+        if(result){
+          navigate('/');
+          console.log('login success');
+        }else{
+          console.log('login failed');
+        }
+    }catch(err){
+      //Xử lí lỗi ở đây
+      console.log('Wrong username or password',err);
+    }
+  }
   return (
     <>
       <main class="main">
@@ -66,7 +107,7 @@ function LoginAndRegister() {
                     role="tabpanel"
                     aria-labelledby="signin-tab-2"
                   >
-                    <form action="#">
+                    <form >
                       <div class="form-group">
                         <label for="singin-email-2">
                           Username or email address *
@@ -76,6 +117,8 @@ function LoginAndRegister() {
                           class="form-control"
                           id="singin-email-2"
                           name="singin-email"
+                          onChange={(event)=>handleOnchangeUsername(event.target.value)}
+                          value={usernameOrEmail}
                           required
                         />
                       </div>
@@ -88,13 +131,15 @@ function LoginAndRegister() {
                           class="form-control"
                           id="singin-password-2"
                           name="singin-password"
+                          onChange={(event)=>handleOnchangePassword(event.target.value)}
+                          value={password}
                           required
                         />
                       </div>
                       {/* End .form-group */}
 
                       <div class="form-footer">
-                        <button type="submit" class="btn btn-outline-primary-2">
+                        <button type="button" class="btn btn-outline-primary-2" onClick={()=>handleSubmit()}>
                           <span>LOG IN</span>
                           <i class="icon-long-arrow-right"></i>
                         </button>

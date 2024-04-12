@@ -9,7 +9,7 @@ class loginAndRegisterController{
             const result =  await loginAndRegister.login(usernameOrEmail,password);
             const token = jwt.sign({ userId: result.id, username: result.username }, secretKey, { expiresIn: '5h' });
             res.json({
-                token: token,
+                token: result !== '' ? token : '',
                 user: result,
                 
             });

@@ -20,7 +20,7 @@ async function login(usernameOrEmail, password) {
   }else if(loginWithEmail){
     login = loginWithEmail;
   }
-  return { login };
+  return login;
 }
 module.exports = {
   login,
