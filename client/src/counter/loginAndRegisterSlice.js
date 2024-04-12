@@ -1,0 +1,46 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { useNavigate } from "react-router-dom";
+import useSignIn from "react-auth-kit/hooks/useSignIn";
+import axios from "axios";
+
+const BASE_URL = "http://localhost:4000/loginAndRegister";
+
+export const fetchUserLogin = createAsyncThunk(
+  "users/login",
+  async ({usernameOrEmail, password}) => {
+    try {
+      const response = await axios({
+        method: 'post',
+        url: `${BASE_URL}/login`,
+        headers: { 'Content-Type': 'application/json' },
+        data :JSON.stringify({
+            usernameOrEmail: usernameOrEmail,
+            password: password,
+        })
+      });
+      return response.data;
+    } catch (err) {
+      //Xử lí lỗi ở đây
+      console.log("Wrong username or password", err, "usernmae: ",usernameOrEmail);
+    }
+  }
+);
+const loginAndRegisterSlice = createSlice({
+  name: "users",
+  initialState: {
+    user: {},
+    loading: false,
+    error: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(fetchUserLogin.fulfilled, (state, action) => {
+        //SignIn and Nav
+      state.loading = false;
+      state.user = action.payload;
+      //console.log(action.payload);
+    });
+  },
+});
+export const usersLoggedIn = (state) => state.user;
+export default loginAndRegisterSlice.reducer;

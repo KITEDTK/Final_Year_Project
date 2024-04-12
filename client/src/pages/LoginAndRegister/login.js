@@ -1,6 +1,24 @@
 import React from "react";
+import { useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUserLogin } from "../../counter/loginAndRegisterSlice";
+import { usersLoggedIn } from "../../counter/loginAndRegisterSlice";
 
-function login() {
+function Login() {
+  const dispatch = useDispatch();
+  const user = useSelector(usersLoggedIn);
+  const [usernameOrEmail,setUsernameOrEmail] = useState('');
+  const [password,setPassword] = useState('');
+  const handleOnchangeUsername = (value)=>{
+    setUsernameOrEmail(value);
+  };
+  const handleOnchangePassword = (value)=>{
+    setPassword(value);
+  };
+  const handleLogin = () =>{
+    dispatch(fetchUserLogin({usernameOrEmail,password}));
+    console.log(JSON.stringify(user));
+  }
   return (
     <>
       <div
@@ -42,7 +60,7 @@ function login() {
             <button
               type="button"
               class="btn btn-outline-primary-2"
-              onClick={() => handleSubmit()}
+              onClick={()=>handleLogin()}
             >
               <span>LOG IN</span>
               <i class="icon-long-arrow-right"></i>
@@ -91,4 +109,4 @@ function login() {
     </>
   );
 }
-export default login;
+export default Login;

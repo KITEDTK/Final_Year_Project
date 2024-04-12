@@ -10,14 +10,12 @@ app.use(cors());
 
 //routes
 const dashboardRouter = require('./routes/dashboardRoute');
-const dumpRouter = require('./routes/dumpRoute')
+const dumpRouter = require('./routes/dumpRoute');
 const loginAndRegisterRouter = require('./routes/loginAndRegisterRoute');
 
 app.use('/dashboard',dashboardRouter);
 app.use('/loginAndRegister',loginAndRegisterRouter);
 app.use('/dump',dumpRouter);
-
-
 
 
 app.listen(port, () => {
