@@ -2,11 +2,11 @@ import React from "react";
 import { useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserLogin } from "../../counter/loginAndRegisterSlice";
-import { usersLoggedIn } from "../../counter/loginAndRegisterSlice";
 
 function Login() {
   const dispatch = useDispatch();
-  const user = useSelector(usersLoggedIn);
+  const userInfo = useSelector((state)=> state.loginAndRegister.userInfoAndToken);
+  //const userInfoAndToken = useSelector(usersLoggedIn);
   const [usernameOrEmail,setUsernameOrEmail] = useState('');
   const [password,setPassword] = useState('');
   const handleOnchangeUsername = (value)=>{
@@ -17,8 +17,9 @@ function Login() {
   };
   const handleLogin = () =>{
     dispatch(fetchUserLogin({usernameOrEmail,password}));
-    console.log(JSON.stringify(user));
+    //console.log(">>>>>:",userInfo);
   }
+  console.log(userInfo);
   return (
     <>
       <div

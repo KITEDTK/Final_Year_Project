@@ -25,22 +25,22 @@ export const fetchUserLogin = createAsyncThunk(
     }
   }
 );
+const initialState = {
+  userInfoAndToken: {},
+  value: 0,
+  loading: false,
+  error: null,
+}
 const loginAndRegisterSlice = createSlice({
   name: "users",
-  initialState: {
-    user: {},
-    loading: false,
-    error: null,
-  },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchUserLogin.fulfilled, (state, action) => {
-        //SignIn and Nav
       state.loading = false;
-      state.user = action.payload;
-      //console.log(action.payload);
+      state.userInfoAndToken = action.payload;
+      //console.log(state.user.user);
     });
-  },
+  }
 });
-export const usersLoggedIn = (state) => state.user;
 export default loginAndRegisterSlice.reducer;
