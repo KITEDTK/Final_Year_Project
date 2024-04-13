@@ -72,7 +72,7 @@ function Navbar() {
                   <a href="#">Links</a>
                   <ul>
                     <li>
-                      {isAuthenticated && isAuthenticated === true ? (
+                      {isAuthenticated && isAuthenticated === true && userInfoAndToken && userInfoAndToken.user ? (
                         // If isAuthenticated is true, render the link to the user profile
                         <Link to="/login" data-toggle="modal">
                           <i className="icon-user"></i>{userInfoAndToken.user.fullname}
