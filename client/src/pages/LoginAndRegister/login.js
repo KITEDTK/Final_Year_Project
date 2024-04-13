@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserLogin } from "../../counter/loginAndRegisterSlice";
+import { useNavigate } from "react-router-dom";
+import useSignIn from "react-auth-kit/hooks/useSignIn";
 
 function Login() {
   const dispatch = useDispatch();
-  const userInfo = useSelector((state)=> state.loginAndRegister.userInfoAndToken);
-  //const userInfoAndToken = useSelector(usersLoggedIn);
+  const signIn = useSignIn();
+  const nagivate = useNavigate();
+  const userInfoAndToken = useSelector((state)=> state.loginAndRegister.userInfoAndToken);
   const [usernameOrEmail,setUsernameOrEmail] = useState('');
   const [password,setPassword] = useState('');
   const handleOnchangeUsername = (value)=>{
@@ -15,11 +18,25 @@ function Login() {
   const handleOnchangePassword = (value)=>{
     setPassword(value);
   };
-  const handleLogin = () =>{
-    dispatch(fetchUserLogin({usernameOrEmail,password}));
-    //console.log(">>>>>:",userInfo);
-  }
-  console.log(userInfo);
+  const handleLogin = async () =>{
+    const dis = await dispatch(fetchUserLogin({usernameOrEmail,password}));
+    if(dis.payload === undefined){
+      console.log('login failed');
+    }else{
+      const {token, user} = dis.payload;
+      await signIn({
+        auth:{
+          token : token,
+          type: 'Bearer'
+        },
+        userState:{
+          username: user.username,
+          email: user.email
+        }
+      });
+      nagivate('/');
+    }
+  };
   return (
     <>
       <div

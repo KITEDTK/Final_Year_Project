@@ -1,7 +1,14 @@
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
 
 function Navbar() {
+  const userInfoAndToken = useSelector(
+    (state) => state.loginAndRegister.userInfoAndToken
+  );
+  const isAuthenticated = useIsAuthenticated();
+  //console.log(isAuthenticated);
   return (
     <>
       <header className="header header-6">
@@ -65,9 +72,17 @@ function Navbar() {
                   <a href="#">Links</a>
                   <ul>
                     <li>
-                      <Link to="/login" data-toggle="modal">
-                        <i className="icon-user"></i>Login
-                      </Link>
+                      {isAuthenticated && isAuthenticated === true ? (
+                        // If isAuthenticated is true, render the link to the user profile
+                        <Link to="/login" data-toggle="modal">
+                          <i className="icon-user"></i>{userInfoAndToken.user.fullname}
+                        </Link>
+                      ) : (
+                        // If isAuthenticated is false or undefined, render the link to the login page
+                        <Link to="/login" data-toggle="modal">
+                          <i className="icon-user"></i>Login
+                        </Link>
+                      )}
                     </li>
                   </ul>
                 </li>
@@ -246,7 +261,10 @@ function Navbar() {
                     <a href="cart.html" className="btn btn-primary">
                       View Cart
                     </a>
-                    <a href="checkout.html" className="btn btn-outline-primary-2">
+                    <a
+                      href="checkout.html"
+                      className="btn btn-outline-primary-2"
+                    >
                       <span>Checkout</span>
                       <i className="icon-long-arrow-right"></i>
                     </a>
@@ -282,7 +300,10 @@ function Navbar() {
                             <a href="index-1.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/1.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/1.jpg)",
+                                }}
                               ></span>
                               <span className="demo-title">
                                 01 - furniture store
@@ -295,7 +316,10 @@ function Navbar() {
                             <a href="index-2.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/2.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/2.jpg)",
+                                }}
                               ></span>
                               <span className="demo-title">
                                 02 - furniture store
@@ -308,7 +332,10 @@ function Navbar() {
                             <a href="index-3.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/3.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/3.jpg)",
+                                }}
                               ></span>
                               <span className="demo-title">
                                 03 - electronic store
@@ -321,7 +348,10 @@ function Navbar() {
                             <a href="index-4.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/4.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/4.jpg)",
+                                }}
                               ></span>
                               <span className="demo-title">
                                 04 - electronic store
@@ -334,9 +364,14 @@ function Navbar() {
                             <a href="index-5.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/5.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/5.jpg)",
+                                }}
                               ></span>
-                              <span className="demo-title">05 - fashion store</span>
+                              <span className="demo-title">
+                                05 - fashion store
+                              </span>
                             </a>
                           </div>
                           {/* End .demo-item */}
@@ -345,9 +380,14 @@ function Navbar() {
                             <a href="index-6.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/6.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/6.jpg)",
+                                }}
                               ></span>
-                              <span className="demo-title">06 - fashion store</span>
+                              <span className="demo-title">
+                                06 - fashion store
+                              </span>
                             </a>
                           </div>
                           {/* End .demo-item */}
@@ -356,9 +396,14 @@ function Navbar() {
                             <a href="index-7.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/7.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/7.jpg)",
+                                }}
                               ></span>
-                              <span className="demo-title">07 - fashion store</span>
+                              <span className="demo-title">
+                                07 - fashion store
+                              </span>
                             </a>
                           </div>
                           {/* End .demo-item */}
@@ -367,9 +412,14 @@ function Navbar() {
                             <a href="index-8.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/8.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/8.jpg)",
+                                }}
                               ></span>
-                              <span className="demo-title">08 - fashion store</span>
+                              <span className="demo-title">
+                                08 - fashion store
+                              </span>
                             </a>
                           </div>
                           {/* End .demo-item */}
@@ -378,9 +428,14 @@ function Navbar() {
                             <a href="index-9.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/9.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/9.jpg)",
+                                }}
                               ></span>
-                              <span className="demo-title">09 - fashion store</span>
+                              <span className="demo-title">
+                                09 - fashion store
+                              </span>
                             </a>
                           </div>
                           {/* End .demo-item */}
@@ -389,9 +444,14 @@ function Navbar() {
                             <a href="index-10.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/10.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/10.jpg)",
+                                }}
                               ></span>
-                              <span className="demo-title">10 - shoes store</span>
+                              <span className="demo-title">
+                                10 - shoes store
+                              </span>
                             </a>
                           </div>
                           {/* End .demo-item */}
@@ -400,7 +460,10 @@ function Navbar() {
                             <a href="index-11.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/11.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/11.jpg)",
+                                }}
                               ></span>
                               <span className="demo-title">
                                 11 - furniture simple store
@@ -413,7 +476,10 @@ function Navbar() {
                             <a href="index-12.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/12.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/12.jpg)",
+                                }}
                               ></span>
                               <span className="demo-title">
                                 12 - fashion simple store
@@ -426,7 +492,10 @@ function Navbar() {
                             <a href="index-13.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/13.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/13.jpg)",
+                                }}
                               ></span>
                               <span className="demo-title">13 - market</span>
                             </a>
@@ -437,7 +506,10 @@ function Navbar() {
                             <a href="index-14.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/14.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/14.jpg)",
+                                }}
                               ></span>
                               <span className="demo-title">
                                 14 - market fullwidth
@@ -450,9 +522,14 @@ function Navbar() {
                             <a href="index-15.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/15.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/15.jpg)",
+                                }}
                               ></span>
-                              <span className="demo-title">15 - lookbook 1</span>
+                              <span className="demo-title">
+                                15 - lookbook 1
+                              </span>
                             </a>
                           </div>
                           {/* End .demo-item */}
@@ -461,9 +538,14 @@ function Navbar() {
                             <a href="index-16.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/16.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/16.jpg)",
+                                }}
                               ></span>
-                              <span className="demo-title">16 - lookbook 2</span>
+                              <span className="demo-title">
+                                16 - lookbook 2
+                              </span>
                             </a>
                           </div>
                           {/* End .demo-item */}
@@ -472,9 +554,14 @@ function Navbar() {
                             <a href="index-17.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/17.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/17.jpg)",
+                                }}
                               ></span>
-                              <span className="demo-title">17 - fashion store</span>
+                              <span className="demo-title">
+                                17 - fashion store
+                              </span>
                             </a>
                           </div>
                           {/* End .demo-item */}
@@ -483,7 +570,10 @@ function Navbar() {
                             <a href="index-18.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/18.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/18.jpg)",
+                                }}
                               ></span>
                               <span className="demo-title">
                                 18 - fashion store (with sidebar)
@@ -496,9 +586,14 @@ function Navbar() {
                             <a href="index-19.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/19.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/19.jpg)",
+                                }}
                               ></span>
-                              <span className="demo-title">19 - games store</span>
+                              <span className="demo-title">
+                                19 - games store
+                              </span>
                             </a>
                           </div>
                           {/* End .demo-item */}
@@ -507,9 +602,14 @@ function Navbar() {
                             <a href="index-20.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/20.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/20.jpg)",
+                                }}
                               ></span>
-                              <span className="demo-title">20 - book store</span>
+                              <span className="demo-title">
+                                20 - book store
+                              </span>
                             </a>
                           </div>
                           {/* End .demo-item */}
@@ -518,9 +618,14 @@ function Navbar() {
                             <a href="index-21.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/21.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/21.jpg)",
+                                }}
                               ></span>
-                              <span className="demo-title">21 - sport store</span>
+                              <span className="demo-title">
+                                21 - sport store
+                              </span>
                             </a>
                           </div>
                           {/* End .demo-item */}
@@ -529,9 +634,14 @@ function Navbar() {
                             <a href="index-22.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/22.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/22.jpg)",
+                                }}
                               ></span>
-                              <span className="demo-title">22 - tools store</span>
+                              <span className="demo-title">
+                                22 - tools store
+                              </span>
                             </a>
                           </div>
                           {/* End .demo-item */}
@@ -540,7 +650,10 @@ function Navbar() {
                             <a href="index-23.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/23.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/23.jpg)",
+                                }}
                               ></span>
                               <span className="demo-title">
                                 23 - fashion left navigation store
@@ -553,7 +666,10 @@ function Navbar() {
                             <a href="index-24.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/24.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/24.jpg)",
+                                }}
                               ></span>
                               <span className="demo-title">
                                 24 - extreme sport store
@@ -566,9 +682,14 @@ function Navbar() {
                             <a href="index-25.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/25.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/25.jpg)",
+                                }}
                               ></span>
-                              <span className="demo-title">25 - jewelry store</span>
+                              <span className="demo-title">
+                                25 - jewelry store
+                              </span>
                             </a>
                           </div>
                           {/* End .demo-item */}
@@ -577,9 +698,14 @@ function Navbar() {
                             <a href="index-26.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/26.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/26.jpg)",
+                                }}
                               ></span>
-                              <span className="demo-title">26 - market store</span>
+                              <span className="demo-title">
+                                26 - market store
+                              </span>
                             </a>
                           </div>
                           {/* End .demo-item */}
@@ -588,9 +714,14 @@ function Navbar() {
                             <a href="index-27.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/27.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/27.jpg)",
+                                }}
                               ></span>
-                              <span className="demo-title">27 - fashion store</span>
+                              <span className="demo-title">
+                                27 - fashion store
+                              </span>
                             </a>
                           </div>
                           {/* End .demo-item */}
@@ -599,7 +730,10 @@ function Navbar() {
                             <a href="index-28.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/28.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/28.jpg)",
+                                }}
                               ></span>
                               <span className="demo-title">
                                 28 - food market store
@@ -612,7 +746,10 @@ function Navbar() {
                             <a href="index-29.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/29.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/29.jpg)",
+                                }}
                               ></span>
                               <span className="demo-title">
                                 29 - t-shirts store
@@ -625,7 +762,10 @@ function Navbar() {
                             <a href="index-30.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/30.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/30.jpg)",
+                                }}
                               ></span>
                               <span className="demo-title">
                                 30 - headphones store
@@ -638,9 +778,14 @@ function Navbar() {
                             <a href="index-31.html">
                               <span
                                 className="demo-bg"
-                                style={{backgroundImage: "url(assets/images/menu/demos/31.jpg)"}}
+                                style={{
+                                  backgroundImage:
+                                    "url(assets/images/menu/demos/31.jpg)",
+                                }}
                               ></span>
-                              <span className="demo-title">31 - yoga store</span>
+                              <span className="demo-title">
+                                31 - yoga store
+                              </span>
                             </a>
                           </div>
                           {/* End .demo-item */}
@@ -673,7 +818,9 @@ function Navbar() {
                           <div className="menu-col">
                             <div className="row">
                               <div className="col-md-6">
-                                <div className="menu-title">Shop with sidebar</div>
+                                <div className="menu-title">
+                                  Shop with sidebar
+                                </div>
                                 {/* End .menu-title */}
                                 <ul>
                                   <li>
@@ -704,7 +851,9 @@ function Navbar() {
                                   </li>
                                 </ul>
 
-                                <div className="menu-title">Shop no sidebar</div>
+                                <div className="menu-title">
+                                  Shop no sidebar
+                                </div>
                                 {/* End .menu-title */}
                                 <ul>
                                   <li>
@@ -725,7 +874,9 @@ function Navbar() {
                               {/* End .col-md-6 */}
 
                               <div className="col-md-6">
-                                <div className="menu-title">Product Category</div>
+                                <div className="menu-title">
+                                  Product Category
+                                </div>
                                 {/* End .menu-title */}
                                 <ul>
                                   <li>
@@ -772,7 +923,10 @@ function Navbar() {
 
                         <div className="col-md-4">
                           <div className="banner banner-overlay">
-                            <a href="category.html" className="banner banner-menu">
+                            <a
+                              href="category.html"
+                              className="banner banner-menu"
+                            >
                               <img
                                 src="assets/images/menu/banner-1.jpg"
                                 alt="Banner"
@@ -915,7 +1069,7 @@ function Navbar() {
                         </ul>
                       </li>
                       <li>
-                        <Link to="/login">Login</Link >
+                        <Link to="/login">Login</Link>
                       </li>
                       <li>
                         <a href="faq.html">FAQs</a>

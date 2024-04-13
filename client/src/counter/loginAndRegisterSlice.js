@@ -21,7 +21,7 @@ export const fetchUserLogin = createAsyncThunk(
       return response.data;
     } catch (err) {
       //Xử lí lỗi ở đây
-      console.log("Wrong username or password", err, "usernmae: ",usernameOrEmail);
+      console.log("Wrong username or password", err);
     }
   }
 );
@@ -39,7 +39,6 @@ const loginAndRegisterSlice = createSlice({
     builder.addCase(fetchUserLogin.fulfilled, (state, action) => {
       state.loading = false;
       state.userInfoAndToken = action.payload;
-      //console.log(state.user.user);
     });
   }
 });
