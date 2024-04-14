@@ -1,4 +1,6 @@
 const usersDumpService = require('../services/Dumps/users');
+const clothesDumpService = require('../services/Dumps/clothes');
+const clothDetailsDumpService = require('../services/Dumps/clothDetail');
 
 class dumpController {
     async userDumps(res,req){
@@ -31,6 +33,23 @@ class dumpController {
             console.log(result);
         }catch(err){
             res.status(500).json({ error: err });
+        }
+    }
+    async clothesDumps(res, req){
+        try{
+            const result = await clothesDumpService.createManyClothes();
+            console.log(result);
+        }catch(err){
+            res.status(500).json({ error: err });
+        }
+    }
+    async clothDetailsDump(res, req){
+        try{
+            const result = await clothDetailsDumpService.createManyClothDetails();
+            console.log(result);
+        }catch(err){
+            const result = await clothDetailsDumpService.createManyClothDetails();
+            res.status(500).json({ error: result });
         }
     }
 }

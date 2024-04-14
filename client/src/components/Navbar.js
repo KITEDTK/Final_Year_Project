@@ -8,7 +8,6 @@ function Navbar() {
     (state) => state.loginAndRegister.userInfoAndToken
   );
   const isAuthenticated = useIsAuthenticated();
-  //console.log(isAuthenticated);
   return (
     <>
       <header className="header header-6">

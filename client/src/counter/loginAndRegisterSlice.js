@@ -27,7 +27,6 @@ export const fetchUserLogin = createAsyncThunk(
 );
 const initialState = {
   userInfoAndToken: {},
-  value: 0,
   loading: false,
   error: null,
 }

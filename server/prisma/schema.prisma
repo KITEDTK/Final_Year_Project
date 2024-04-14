@@ -61,7 +61,7 @@ model ClothDetails {
   codeBar String? @unique
   cloth Clothes @relation(fields: [clothId], references: [id])
   clothId String
-  amount Int
+  amount Int 
   createAt DateTime @default(now())
   updateAt DateTime? 
   isEnable Boolean @default(true)

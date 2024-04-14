@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserLogin } from "../../counter/loginAndRegisterSlice";
 import { useNavigate } from "react-router-dom";
 import useSignIn from "react-auth-kit/hooks/useSignIn";
@@ -9,7 +9,9 @@ function Login() {
   const dispatch = useDispatch();
   const signIn = useSignIn();
   const nagivate = useNavigate();
-  const userInfoAndToken = useSelector((state)=> state.loginAndRegister.userInfoAndToken);
+  const userInfoAndToken = useSelector(
+    (state) => state.loginAndRegister.userInfoAndToken
+  );
   const [usernameOrEmail,setUsernameOrEmail] = useState('');
   const [password,setPassword] = useState('');
   const handleOnchangeUsername = (value)=>{
@@ -37,7 +39,10 @@ function Login() {
       nagivate('/');
     }
   };
-  return (
+  useEffect(()=>{
+    console.log('>>>>', userInfoAndToken);
+  },[userInfoAndToken])
+   return (
     <>
       <div
         class="tab-pane fade"
