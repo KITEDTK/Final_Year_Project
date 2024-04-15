@@ -3,8 +3,9 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import store from "./store";
+import {store,persistor} from "./store";
 import { BrowserRouter } from "react-router-dom";
+import { PersistGate } from 'redux-persist/integration/react'
 
 import AuthProvider from "react-auth-kit/AuthProvider";
 
@@ -13,6 +14,7 @@ import createStore from "react-auth-kit/createStore";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
+    <PersistGate persistor={persistor} >
     <React.StrictMode>
       <AuthProvider
         store={createStore({
@@ -27,6 +29,7 @@ root.render(
         </BrowserRouter>
       </AuthProvider>
     </React.StrictMode>
+    </PersistGate>
   </Provider>
 );
 

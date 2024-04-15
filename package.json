@@ -1,0 +1,13 @@
+{
+    "name": "your-project-name",
+    "version": "1.0.0",
+    "scripts": {
+      "dev": "concurrently \"cd client && npm start\" \"cd server && npm run dev\""
+    },
+    "dependencies": {
+      "concurrently": "^8.2.2" 
+    },
+    "devDependencies": {
+     
+    }
+  }

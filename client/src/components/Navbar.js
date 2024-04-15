@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
@@ -8,6 +8,7 @@ function Navbar() {
     (state) => state.loginAndRegister.userInfoAndToken
   );
   const isAuthenticated = useIsAuthenticated();
+  console.log(isAuthenticated); 
   return (
     <>
       <header className="header header-6">
@@ -71,10 +72,10 @@ function Navbar() {
                   <a href="#">Links</a>
                   <ul>
                     <li>
-                      {isAuthenticated && isAuthenticated === true && userInfoAndToken && userInfoAndToken.user ? (
+                      {isAuthenticated && isAuthenticated === true && userInfoAndToken && userInfoAndToken.user ?  (
                         // If isAuthenticated is true, render the link to the user profile
                         <Link to="/login" data-toggle="modal">
-                          <i className="icon-user"></i>{userInfoAndToken.user.fullname}
+                          <i className="icon-user"></i>{userInfoAndToken.user.username}
                         </Link>
                       ) : (
                         // If isAuthenticated is false or undefined, render the link to the login page
@@ -807,9 +808,9 @@ function Navbar() {
                     {/* End .megamenu */}
                   </li>
                   <li>
-                    <a href="category.html" className="sf-with-ul">
+                    <Link to='/shoplist' className="sf-with-ul">
                       Shop
-                    </a>
+                    </Link>
 
                     <div className="megamenu megamenu-md">
                       <div className="row no-gutters">
