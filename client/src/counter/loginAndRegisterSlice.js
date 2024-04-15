@@ -4,7 +4,6 @@ import useSignIn from "react-auth-kit/hooks/useSignIn";
 import axios from "axios";
 
 const BASE_URL = "http://localhost:4000/loginAndRegister";
-
 export const fetchUserLogin = createAsyncThunk(
   "users/login",
   async ({usernameOrEmail, password}) => {
@@ -27,6 +26,7 @@ export const fetchUserLogin = createAsyncThunk(
 );
 const initialState = {
   userInfoAndToken: {},
+  isAuth: false,
   loading: false,
   error: null,
 }
@@ -38,6 +38,7 @@ const loginAndRegisterSlice = createSlice({
     builder.addCase(fetchUserLogin.fulfilled, (state, action) => {
       state.loading = false;
       state.userInfoAndToken = action.payload;
+      state.isAuth = true;
     });
   }
 });

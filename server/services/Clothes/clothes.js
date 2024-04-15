@@ -21,5 +21,5 @@ async function getSingleClothes(clothesId){
     return cloth
 }
 module.exports ={
-    getAllProduct, getSingleClothes
+    getAllClothes, getSingleClothes
 }

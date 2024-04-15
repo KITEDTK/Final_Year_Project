@@ -1,16 +1,28 @@
 import React, { useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
+import useSignOut from 'react-auth-kit/hooks/useSignOut';
+
 
 function Navbar() {
+  const signOut = useSignOut();
   const userInfoAndToken = useSelector(
     (state) => state.loginAndRegister.userInfoAndToken
   );
-  const isAuthenticated = useIsAuthenticated();
-  console.log(isAuthenticated); 
+  const isAuthenticated = useSelector(
+    (state)=> state.loginAndRegister.isAuth
+  )
+  const handleLogout = ()=>{
+    //dispatch logout
+    signOut();
+  }
+  const handleOnChange = ()=>{
+    console.log('navbar',isAuthenticated);
+  }
   return (
     <>
+    <input onChange={()=>handleOnChange()}/>
+    {/* <button onClick={()=> handleLogout()}>signOut</button> */}
       <header className="header header-6">
         <div className="header-top">
           <div className="container">
@@ -72,7 +84,7 @@ function Navbar() {
                   <a href="#">Links</a>
                   <ul>
                     <li>
-                      {isAuthenticated && isAuthenticated === true && userInfoAndToken && userInfoAndToken.user ?  (
+                      {isAuthenticated === true && userInfoAndToken && userInfoAndToken.user ?  (
                         // If isAuthenticated is true, render the link to the user profile
                         <Link to="/login" data-toggle="modal">
                           <i className="icon-user"></i>{userInfoAndToken.user.username}

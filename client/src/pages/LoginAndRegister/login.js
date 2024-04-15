@@ -4,14 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserLogin } from "../../counter/loginAndRegisterSlice";
 import { useNavigate } from "react-router-dom";
 import useSignIn from "react-auth-kit/hooks/useSignIn";
+import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
 
 function Login() {
+  const isAuthenticated = useIsAuthenticated();
   const dispatch = useDispatch();
   const signIn = useSignIn();
-  const nagivate = useNavigate();
-  const userInfoAndToken = useSelector(
-    (state) => state.loginAndRegister.userInfoAndToken
-  );
+  const navigate = useNavigate();
   const [usernameOrEmail,setUsernameOrEmail] = useState('');
   const [password,setPassword] = useState('');
   const handleOnchangeUsername = (value)=>{
@@ -36,12 +35,9 @@ function Login() {
           email: user.email
         }
       });
-      nagivate('/');
+      navigate('/');
     }
   };
-  useEffect(()=>{
-    console.log('>>>>', userInfoAndToken);
-  },[userInfoAndToken])
    return (
     <>
       <div
