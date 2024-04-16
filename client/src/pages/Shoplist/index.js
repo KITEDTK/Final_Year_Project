@@ -8,7 +8,7 @@ function Shoplist() {
     dispatch(fetchAllClothes());
   }, []);
   const clothes = useSelector((state) => state.clothes.clothes);
-  console.log(clothes);
+  //console.log(clothes);
   return (
     <>
       <main className="main">

@@ -1,6 +1,36 @@
 import React from "react";
+import _ from "lodash";
 
-function SingleCloth() {
+function SingleCloth({ clothes }) {
+  let size = [];
+  let color = {};
+  const [colorState, setColorState] = useState({
+    
+  });
+  const { clothDetails } = clothes;
+  const handleChooseColor = (colorId) => {
+    const findSize = clothDetails.filter((item)=> item.colorId === colorId);
+    const sizeIds = findSize.map((item)=>item.colorId);
+    size = {
+      clothId: clothes.id,
+      sizes: sizeIds
+    }
+    console.log(size);
+  };
+  if (clothDetails.length === 0) {
+    color = {
+      clothId: clothes.id,
+      color: [],
+    };
+  } else {
+    const colorUnq = _.uniqBy(clothDetails, "colorId").map(
+      (item) => item.colorId
+    );
+    color = {
+      clothId: clothes.id,
+      color: colorUnq,
+    };
+  }
   return (
     <>
       <div className="col-6 col-md-4 col-lg-4">
@@ -17,7 +47,6 @@ function SingleCloth() {
 
             <div className="product-action-vertical">
               <a
-                href="#"
                 className="btn-product-icon btn-wishlist btn-expandable"
               >
                 <span>add to wishlist</span>
@@ -61,7 +90,7 @@ function SingleCloth() {
             </div>
             {/* End .product-cat */}
             <h3 className="product-title">
-              <a href="product.html">item.name</a>
+              <a href="product.html">{clothes.name}</a>
             </h3>
             {/* End .product-title */}
             <div className="product-price">$60.00</div>
@@ -77,12 +106,19 @@ function SingleCloth() {
             {/* End .rating-container */}
 
             <div className="product-nav product-nav-thumbs">
-              <a href="#" className="active">
-                <img
-                  src="assets/images/products/product-4-thumb.jpg"
-                  alt="product desc"
-                />
-              </a>
+              {color &&
+                color.color.map((item) => {
+                  return (
+                    <>
+                      <a onClick={()=>handleChooseColor(item)} className="active">
+                        <img
+                          src="assets/images/products/product-4-thumb.jpg"
+                          alt="product desc"
+                        />
+                      </a>
+                    </>
+                  );
+                })}
             </div>
             {/* End .product-nav */}
           </div>
