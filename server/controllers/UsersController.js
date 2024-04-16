@@ -1,12 +1,12 @@
-const loginAndRegister = require('../services/Users/users');
+const userService = require('../services/Users/UsersService');
 const jwt = require('jsonwebtoken');
 
 const secretKey = 'KITE_TOO_HANDSOME_FOR_CODING';
-class loginAndRegisterController{
+class UsersController{
     async login(req,res){
         try{
             const {usernameOrEmail, password} = req.body;
-            const result =  await loginAndRegister.login(usernameOrEmail,password);
+            const result =  await userService.login(usernameOrEmail,password);
             const token = jwt.sign({ userId: result.id, username: result.username }, secretKey, { expiresIn: '5h' });
             res.json({
                 token: result !== '' ? token : '',
@@ -18,4 +18,4 @@ class loginAndRegisterController{
         }
     }
 }
-module.exports = new loginAndRegisterController();
+module.exports = new UsersController();

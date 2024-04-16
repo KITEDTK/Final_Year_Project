@@ -2,27 +2,24 @@ import React, { useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
-
+import {signOut} from '../counter/loginAndRegisterSlice'
 
 function Navbar() {
-  const signOut = useSignOut();
+  const logOut = useSignOut();
+  const dispatch = useDispatch();
   const userInfoAndToken = useSelector(
     (state) => state.loginAndRegister.userInfoAndToken
   );
   const isAuthenticated = useSelector(
     (state)=> state.loginAndRegister.isAuth
   )
-  const handleLogout = ()=>{
-    //dispatch logout
-    signOut();
-  }
-  const handleOnChange = ()=>{
-    console.log('navbar',isAuthenticated);
+  const handleLogout = async ()=>{
+    await dispatch(signOut());
+    logOut();
   }
   return (
     <>
-    <input onChange={()=>handleOnChange()}/>
-    {/* <button onClick={()=> handleLogout()}>signOut</button> */}
+    <button onClick={()=> handleLogout()}>signOut</button>
       <header className="header header-6">
         <div className="header-top">
           <div className="container">

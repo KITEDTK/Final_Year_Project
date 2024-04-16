@@ -7,17 +7,25 @@ async function findSingleCart(cartId){
             cartId: cartId
         }
     })
-    return {cartInfo};
+    return cartInfo;
 }
-async function addToCart(cartId, clothId){
-    const add = await prisma.cartDetails.create({
+async function addToCart(cartId, clothDetailId){ // fix clothId
+    await prisma.cartDetails.create({
         data:{
             cartId: cartId,
-            clothId: clothId,
+            clothId: clothDetailId,
             updateAt: '2012-06-18 10:34:09.0000000'
         }
     });
-    return {add};
+    const getCartInfo = await prisma.cartDetails.findMany({
+        where:{
+            cartId: cartId
+        },
+        include:{
+            cloth: true
+        }
+    });
+    return getCartInfo;
 }
 async function deleteInCart(cartId, clothId){
     const update = await prisma.cartDetails.delete({
@@ -26,7 +34,7 @@ async function deleteInCart(cartId, clothId){
             clothId: clothId
         }
     })
-    return {update};
+    return update;
 }
 module.exports = {
     addToCart, findSingleCart, deleteInCart

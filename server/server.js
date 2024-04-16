@@ -8,13 +8,15 @@ app.use(bodyParser.json());
 app.use(cors());
 
 //routes
-const dashboardRouter = require('./routes/dashboardRoute');
+const CartsRouter = require('./routes/CartsRoute');
 const dumpRouter = require('./routes/dumpRoute');
-const loginAndRegisterRouter = require('./routes/loginAndRegisterRoute');
+const UsersRouter = require('./routes/UsersRoute');
+const ClothesRouter = require('./routes/ClothesRoute');
 
-app.use('/dashboard',dashboardRouter);
-app.use('/loginAndRegister',loginAndRegisterRouter);
+app.use('/carts',CartsRouter);
+app.use('/users',UsersRouter);
 app.use('/dump',dumpRouter);
+app.use('/clothes',ClothesRouter);
 
 
 app.listen(port, () => {

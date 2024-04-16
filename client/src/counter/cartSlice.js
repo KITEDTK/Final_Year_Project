@@ -1,17 +1,12 @@
 import {createSlice,createAsyncThunk} from '@reduxjs/toolkit';
+import axios from 'axios';
 
-const BASE_URL = "http://localhost:4000/dashboard";
+const BASE_URL = "http://localhost:4000/carts";
 export const singleCart = createAsyncThunk(
     'cart/singleCart',
-    async(cartId)=>{
+    async({cartId,clothId})=>{
         try{
-            const response = await fetch(`${BASE_URL}/single-cart/${cartId}`,{
-                method: 'GET',
-                headers:{
-                    'Content-Type': 'application/json',
-                }
-            });
-            return response.json();
+            
         }catch(err){
             throw new Error('Failed to fetch item in cart,error: ',err);
         }
@@ -21,16 +16,15 @@ export const addToCart = createAsyncThunk(
     'cart/addToCart',
     async(cartId,clothId)=>{
         try{
-            const response = await fetch(`${BASE_URL}/add-to-cart/${cartId}`,{
-                method: 'POST',
-                headers:{
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
+            const response = await axios({
+                method: 'post',
+                url: `${BASE_URL}/add-to-cart/${cartId}`,
+                headers: { 'Content-Type': 'application/json' },
+                data: JSON.stringify({
                     clothId: clothId
                 })
             });
-            return response.json();
+            return response.data;
         }catch(err){
             throw new Error('Failed to add item to cart,error: ',err);
         }

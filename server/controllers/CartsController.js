@@ -1,11 +1,11 @@
-const carts =  require('../services/Carts/carts');
+const cartsService =  require('../services/Carts/CartsService');
 
-class dashboardController{
+class CartsController{
     async addToCart(req,res){
         try{
             const {cartId} = req.params;
             const {clothId} = req.body;
-            const result = await carts.addToCart(cartId, clothId);
+            const result = await cartsService.addToCart(cartId, clothId);
             console.log(result);
         }catch(err){
             res.status(500).json({ error: err });
@@ -14,7 +14,7 @@ class dashboardController{
     async findSingleCart(req,res){
         try{
             const {cartId} = req.params;
-            const result = await carts.findSingleCart(cartId);
+            const result = await cartsService.findSingleCart(cartId);
             console.log(result);
         }catch(err){
             res.status(500).json({ error: err });
@@ -24,11 +24,11 @@ class dashboardController{
         try{
             const {cartId}= req.params;
             const {clothId} = req.body;
-            const result = await carts.deleteInCart(cartId,clothId);
+            const result = await cartsService.deleteInCart(cartId,clothId);
             console.log(result);
         }catch(err){
             res.status(500).json({ error: err });
         }
     }
 }
-module.exports = new dashboardController();
+module.exports = new CartsController();
