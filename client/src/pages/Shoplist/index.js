@@ -1,12 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllClothes } from "../../counter/clothesSlice";
 import SingleCloth from "./singleCloth";
+import FilterSize from "./filter/size";
 function Shoplist() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchAllClothes());
   }, []);
+  let sizesFilter = [];
+  const handleSizeSelect =(size)=>{
+    sizesFilter.push(size);
+    console.log(sizesFilter);
+  }
   const clothes = useSelector((state) => state.clothes.clothes);
   //console.log(clothes);
   return (
@@ -346,121 +352,7 @@ function Shoplist() {
                   </div>
                   {/* End .widget */}
 
-                  <div className="widget widget-collapsible">
-                    <h3 className="widget-title">
-                      <a
-                        data-toggle="collapse"
-                        href="#widget-2"
-                        role="button"
-                        aria-expanded="true"
-                        aria-controls="widget-2"
-                      >
-                        Size
-                      </a>
-                    </h3>
-                    {/* End .widget-title */}
-
-                    <div className="collapse show" id="widget-2">
-                      <div className="widget-body">
-                        <div className="filter-items">
-                          <div className="filter-item">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id="size-1"
-                              />
-                              <label className="custom-control-label" for="size-1">
-                                XS
-                              </label>
-                            </div>
-                            {/* End .custom-checkbox */}
-                          </div>
-                          {/* End .filter-item */}
-
-                          <div className="filter-item">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id="size-2"
-                              />
-                              <label className="custom-control-label" for="size-2">
-                                S
-                              </label>
-                            </div>
-                            {/* End .custom-checkbox */}
-                          </div>
-                          {/* End .filter-item */}
-
-                          <div className="filter-item">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                checked
-                                id="size-3"
-                              />
-                              <label className="custom-control-label" for="size-3">
-                                M
-                              </label>
-                            </div>
-                            {/* End .custom-checkbox */}
-                          </div>
-                          {/* End .filter-item */}
-
-                          <div className="filter-item">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                checked
-                                id="size-4"
-                              />
-                              <label className="custom-control-label" for="size-4">
-                                L
-                              </label>
-                            </div>
-                            {/* End .custom-checkbox */}
-                          </div>
-                          {/* End .filter-item */}
-
-                          <div className="filter-item">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id="size-5"
-                              />
-                              <label className="custom-control-label" for="size-5">
-                                XL
-                              </label>
-                            </div>
-                            {/* End .custom-checkbox */}
-                          </div>
-                          {/* End .filter-item */}
-
-                          <div className="filter-item">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id="size-6"
-                              />
-                              <label className="custom-control-label" for="size-6">
-                                XXL
-                              </label>
-                            </div>
-                            {/* End .custom-checkbox */}
-                          </div>
-                          {/* End .filter-item */}
-                        </div>
-                        {/* End .filter-items */}
-                      </div>
-                      {/* End .widget-body */}
-                    </div>
-                    {/* End .collapse */}
-                  </div>
+                  <FilterSize onSelectSize={(size)=>handleSizeSelect(size)} />
                   {/* End .widget */}
 
                   <div className="widget widget-collapsible">

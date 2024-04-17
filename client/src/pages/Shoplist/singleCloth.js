@@ -1,36 +1,80 @@
-import React from "react";
+import React,{useState} from "react";
 import _ from "lodash";
 
 function SingleCloth({ clothes }) {
-  let size = [];
-  let color = {};
-  const [colorState, setColorState] = useState({
-    
-  });
   const { clothDetails } = clothes;
-  const handleChooseColor = (colorId) => {
-    const findSize = clothDetails.filter((item)=> item.colorId === colorId);
-    const sizeIds = findSize.map((item)=>item.colorId);
-    size = {
-      clothId: clothes.id,
-      sizes: sizeIds
+  const [activeColor, setActiveColor] = useState(() => {
+    if (!clothDetails || clothDetails.length === 0) {
+      return ''; 
+    } else {
+      return clothDetails[0] ? clothDetails[0].colorId : ''; 
     }
-    console.log(size);
+  });
+  const [clothInfoState, setClothInfoState] = useState(()=>{ // set default info
+    if (!clothDetails || clothDetails.length === 0) {
+      return {
+        clothId: clothes.id,
+        activeColor: '',
+        sizes: [],
+        image: 1
+      };
+    } else {
+      const findColorInfo = clothDetails.filter((item)=> item.colorId === activeColor);
+      const sizes = findColorInfo.map((item)=>item.size.name);
+      const image = findColorInfo.map((item)=>item.codeBar); // fix to image soon
+      return {
+        clothId: clothes.id,
+        color: activeColor,
+        sizes: sizes,
+        image: image
+      }
+    }
+  });
+  const handleChooseColor = async (colorId) => {
+    const findColorInfo = clothDetails.filter((item)=> item.colorId === colorId);
+    const sizes = findColorInfo.map((item)=>item.size.name);
+    const image = findColorInfo.map((item)=>item.codeBar);
+    setActiveColor(colorId);
+    setClothInfoState({
+      clothId: clothes.id,
+      color: colorId,
+      sizes: sizes,
+      image: image
+    });
+    //console.log(clothInfoState);
   };
+  let color = {};
   if (clothDetails.length === 0) {
     color = {
       clothId: clothes.id,
       color: [],
     };
   } else {
-    const colorUnq = _.uniqBy(clothDetails, "colorId").map(
-      (item) => item.colorId
-    );
+    const colorUnq = _.uniqBy(clothDetails, "colorId").map((item) => item.colorId);
     color = {
       clothId: clothes.id,
       color: colorUnq,
     };
+  };
+  const handleAddCart = (size)=>{
+    const {clothId, color} = clothInfoState;
+    const clothDetailToAdd = {
+      clothId: clothId,
+      colorId: color,
+      size: size,
+    }
+    const clothDetailId = clothDetails.find((item)=>{
+      const {clothId, colorId, size} = clothDetailToAdd;
+      return item.clothId === clothId && item.colorId === colorId && item.size.name === size;
+    });
+    console.log('clothDetailId',clothDetailId.id);
   }
+  const buttonStyle = {
+    // backgroundColor: 'transparent',
+    // border: 'none',
+    cursor: 'pointer',
+    padding: '2' // Adjust padding as needed
+  };
   return (
     <>
       <div className="col-6 col-md-4 col-lg-4">
@@ -69,14 +113,19 @@ function SingleCloth({ clothes }) {
             {/* End .product-action-vertical */}
 
             <div className="product-action">
-              <a href="#" className="btn-product btn-cart">
+              <a className="btn-product btn-cart">
                 <span>
                   add to cart
                   <br />
-                  <button>S</button>
-                  <button>M</button>
-                  <button>L</button>
-                  <button>XL</button>
+                  {clothInfoState.sizes && clothInfoState.sizes.map((item,index)=>{
+                    return (
+                      <>
+                      <button onClick={()=>handleAddCart(item)} style={buttonStyle}>
+                      size : {item}
+                      </button>
+                      </>
+                    )
+                  })}
                 </span>
               </a>
             </div>
@@ -110,7 +159,7 @@ function SingleCloth({ clothes }) {
                 color.color.map((item) => {
                   return (
                     <>
-                      <a onClick={()=>handleChooseColor(item)} className="active">
+                      <a onClick={()=>handleChooseColor(item)} className={activeColor === item ? "active" : ""}>
                         <img
                           src="assets/images/products/product-4-thumb.jpg"
                           alt="product desc"

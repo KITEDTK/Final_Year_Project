@@ -4,7 +4,21 @@ const prisma = new PrismaClient();
 async function getAllClothes(){
     const clothes = await prisma.clothes.findMany({
         include:{
-            clothDetails : true
+            clothDetails : true,
+            clothDetails: {
+                include:{
+                    size: {
+                        select: {
+                            name: true
+                        }
+                    },
+                    color: {
+                        select:{
+                            name: true
+                        }
+                    }
+                }
+            }
         }
     });
     return clothes;

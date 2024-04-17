@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { json, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import useSignIn from 'react-auth-kit/hooks/useSignIn';
@@ -64,7 +64,7 @@ function LoginAndRegister() {
                   </li>
                 </ul>
                 <div class="tab-content">
-                  <Login/>
+                  <Login />
                   {/* .End .tab-pane */}
                   <div
                     class="tab-pane fade show active"

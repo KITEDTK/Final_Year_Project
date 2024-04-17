@@ -23,21 +23,21 @@ async function createManyClothDetails(){
             colorId: colorIds[Math.floor(Math.random() * colorIds.length)].id,
             clothId: clothesIds[Math.floor(Math.random() * clothesIds.length)].id,
             amount: 1,
-            codeBar: '4'
+            codeBar: '7'
         },
         {
             sizeId: sizeIds[Math.floor(Math.random() * sizeIds.length)].id,
             colorId: colorIds[Math.floor(Math.random() * colorIds.length)].id,
             clothId: clothesIds[Math.floor(Math.random() * clothesIds.length)].id,
             amount: 1,
-            codeBar: '5'
+            codeBar: '8'
         },
         {
             sizeId: sizeIds[Math.floor(Math.random() * sizeIds.length)].id,
             colorId: colorIds[Math.floor(Math.random() * colorIds.length)].id,
             clothId: clothesIds[Math.floor(Math.random() * clothesIds.length)].id,
             amount: 1,
-            codeBar: '6'
+            codeBar: '9'
         },
     ]
     const createClothDetail = await prisma.clothDetails.createMany({
