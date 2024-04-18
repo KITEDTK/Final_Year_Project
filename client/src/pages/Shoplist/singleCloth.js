@@ -41,7 +41,6 @@ function SingleCloth({ clothes }) {
       sizes: sizes,
       image: image
     });
-    //console.log(clothInfoState);
   };
   let color = {};
   if (clothDetails.length === 0) {

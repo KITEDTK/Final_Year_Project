@@ -8,13 +8,13 @@ function Shoplist() {
   useEffect(() => {
     dispatch(fetchAllClothes());
   }, []);
+  //dispatch(fetchAllClothes());
   let sizesFilter = [];
   const handleSizeSelect =(size)=>{
     sizesFilter.push(size);
     console.log(sizesFilter);
-  }
+  };
   const clothes = useSelector((state) => state.clothes.clothes);
-  //console.log(clothes);
   return (
     <>
       <main className="main">

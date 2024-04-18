@@ -5,17 +5,19 @@ import loginAndRegisterSlice from './counter/loginAndRegisterSlice';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import clothesSlice from './counter/clothesSlice';
+import sizesSlice from './counter/sizesSlice';
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['loginAndRegister','clothes']
+  whitelist: ['loginAndRegister','clothes','sizes']
 };
 
 const rootReducer = combineReducers({
     cart: cartSlice,
     loginAndRegister: loginAndRegisterSlice,
-    clothes: clothesSlice
+    clothes: clothesSlice,
+    sizes: sizesSlice
 })
  
 const persistedReducer = persistReducer(persistConfig, rootReducer);

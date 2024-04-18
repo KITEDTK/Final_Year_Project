@@ -17,6 +17,9 @@ function Navbar() {
     await dispatch(signOut());
     logOut();
   }
+  const onClick = ()=>{
+    console.log('Clicked');
+  }
   return (
     <>
     <button onClick={()=> handleLogout()}>signOut</button>
@@ -83,7 +86,7 @@ function Navbar() {
                     <li>
                       {isAuthenticated === true && userInfoAndToken && userInfoAndToken.user ?  (
                         // If isAuthenticated is true, render the link to the user profile
-                        <Link to="/login" data-toggle="modal">
+                        <Link  to="/login" data-toggle="modal">
                           <i className="icon-user"></i>{userInfoAndToken.user.username}
                         </Link>
                       ) : (
@@ -817,9 +820,9 @@ function Navbar() {
                     {/* End .megamenu */}
                   </li>
                   <li>
-                    <Link to='/shoplist' className="sf-with-ul">
+                    <NavLink onClick={()=>onClick()} to='/shoplist' className="sf-with-ul" exact>
                       Shop
-                    </Link>
+                    </NavLink>
 
                     <div className="megamenu megamenu-md">
                       <div className="row no-gutters">
