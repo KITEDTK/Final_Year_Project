@@ -53,6 +53,7 @@ const clothesSlice = createSlice({
         .addCase(filterClothes.fulfilled,(state,action)=>{
             state.loading = false;
             state.clothes = action.payload;
+            //console.log(state.clothes);
         })
     }
 });

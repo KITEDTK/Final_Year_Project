@@ -13,16 +13,21 @@ function FilterSize({ onSelectSize }) {
     setIsCheckedArr((prev)=>{
       const isChecked = isCheckedArr.includes(sizeId);
       if(isChecked){
+        const newArr = isCheckedArr.filter(item=> item !== sizeId);
+        onSelectSize(newArr);
         return isCheckedArr.filter(item=> item !== sizeId);
       }else{
+        const newArr = [...prev,sizeId];
+        onSelectSize(newArr);
         return [...prev,sizeId];
       }
     });
   };
   
-  useEffect(()=>{
-    onSelectSize(isCheckedArr);
-  },[isCheckedArr])
+  
+  // useEffect(()=>{
+    
+  // },[isCheckedArr])
   return (
     <>
       <div className="widget widget-collapsible">

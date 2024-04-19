@@ -6,11 +6,9 @@ import FilterSize from "./filter/size";
 function Shoplist() {
   const dispatch = useDispatch();
   const clothes = useSelector((state) => state.clothes.clothes);
-  //const [clothes, setClothes] = useState();
   useEffect(()=>{
     dispatch(fetchAllClothes());
-    console.log('render');
-  },[]);
+  },[dispatch]);
   //filter
   const [filter,setFilter] = useState({
     name: "",
@@ -22,15 +20,9 @@ function Shoplist() {
     setSizesFilter(size);
   };
   useEffect(()=>{ 
-      filter.sizeIds = sizesFilter;
+      filter.sizeIds = sizesFilter || [];
       dispatch(filterClothes({filter}));
-  },[sizesFilter]);
-  console.log(clothes);
-  //  useEffect(()=>{
-  //   setClothes(clothesRedux);
-  //   console.log(clothesRedux);
-  // },[clothesRedux]);
-  //console.log(clothes);
+  },[dispatch, filter, sizesFilter]);
   return (
     <>
       <main className="main">

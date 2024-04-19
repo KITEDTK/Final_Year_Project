@@ -1,8 +1,11 @@
-import React,{useState} from "react";
+/* eslint-disable jsx-a11y/img-redundant-alt */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React,{useState,useEffect} from "react";
 import _ from "lodash";
 
 function SingleCloth({ clothes }) {
   const { clothDetails } = clothes;
+  console.log(clothes);
   const [activeColor, setActiveColor] = useState(() => {
     if (!clothDetails || clothDetails.length === 0) {
       return ''; 
@@ -10,38 +13,6 @@ function SingleCloth({ clothes }) {
       return clothDetails[0] ? clothDetails[0].colorId : ''; 
     }
   });
-  const [clothInfoState, setClothInfoState] = useState(()=>{ // set default info
-    if (!clothDetails || clothDetails.length === 0) {
-      return {
-        clothId: clothes.id,
-        activeColor: '',
-        sizes: [],
-        image: 1
-      };
-    } else {
-      const findColorInfo = clothDetails.filter((item)=> item.colorId === activeColor);
-      const sizes = findColorInfo.map((item)=>item.size.name);
-      const image = findColorInfo.map((item)=>item.codeBar); // fix to image soon
-      return {
-        clothId: clothes.id,
-        color: activeColor,
-        sizes: sizes,
-        image: image
-      }
-    }
-  });
-  const handleChooseColor = async (colorId) => {
-    const findColorInfo = clothDetails.filter((item)=> item.colorId === colorId);
-    const sizes = findColorInfo.map((item)=>item.size.name);
-    const image = findColorInfo.map((item)=>item.codeBar);
-    setActiveColor(colorId);
-    setClothInfoState({
-      clothId: clothes.id,
-      color: colorId,
-      sizes: sizes,
-      image: image
-    });
-  };
   let color = {};
   if (clothDetails.length === 0) {
     color = {
@@ -55,18 +26,8 @@ function SingleCloth({ clothes }) {
       color: colorUnq,
     };
   };
-  const handleAddCart = (size)=>{
-    const {clothId, color} = clothInfoState;
-    const clothDetailToAdd = {
-      clothId: clothId,
-      colorId: color,
-      size: size,
-    }
-    const clothDetailId = clothDetails.find((item)=>{
-      const {clothId, colorId, size} = clothDetailToAdd;
-      return item.clothId === clothId && item.colorId === colorId && item.size.name === size;
-    });
-    console.log('clothDetailId',clothDetailId.id);
+  const chooseColor = (colorId)=>{
+    setActiveColor(colorId);
   }
   const buttonStyle = {
     // backgroundColor: 'transparent',
@@ -116,15 +77,17 @@ function SingleCloth({ clothes }) {
                 <span>
                   add to cart
                   <br />
-                  {clothInfoState.sizes && clothInfoState.sizes.map((item,index)=>{
-                    return (
-                      <>
-                      <button onClick={()=>handleAddCart(item)} style={buttonStyle}>
-                      size : {item}
-                      </button>
-                      </>
-                    )
-                  })}
+                  {
+                    clothDetails && clothDetails.map((item)=>{
+                      return (
+                        <>
+                        <button style={buttonStyle}>
+                        size : {item.size.name}
+                        </button>
+                        </>
+                      )
+                    })
+                  }
                 </span>
               </a>
             </div>
@@ -158,7 +121,7 @@ function SingleCloth({ clothes }) {
                 color.color.map((item) => {
                   return (
                     <>
-                      <a onClick={()=>handleChooseColor(item)} className={activeColor === item ? "active" : ""}>
+                      <a onClick={()=>chooseColor(item)} className={activeColor === item ? "active" : ""}>
                         <img
                           src="assets/images/products/product-4-thumb.jpg"
                           alt="product desc"
