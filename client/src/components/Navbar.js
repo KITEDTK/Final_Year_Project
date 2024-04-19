@@ -17,9 +17,6 @@ function Navbar() {
     await dispatch(signOut());
     logOut();
   }
-  const onClick = ()=>{
-    console.log('Clicked');
-  }
   return (
     <>
     <button onClick={()=> handleLogout()}>signOut</button>
@@ -820,9 +817,9 @@ function Navbar() {
                     {/* End .megamenu */}
                   </li>
                   <li>
-                    <NavLink onClick={()=>onClick()} to='/shoplist' className="sf-with-ul" exact>
+                    <Link to='/shoplist' className="sf-with-ul" exact>
                       Shop
-                    </NavLink>
+                    </Link>
 
                     <div className="megamenu megamenu-md">
                       <div className="row no-gutters">

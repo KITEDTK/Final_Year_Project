@@ -11,5 +11,15 @@ class ClothesController {
       });
     }
   }
+  async filterClothes(req,res){
+    try {
+      const result = await clothesService.filterClothes(req.body);
+      res.json(result);
+    } catch (err) {
+      res.status(500).json({
+        error: err,
+      });
+    }
+  }
 }
 module.exports = new ClothesController();

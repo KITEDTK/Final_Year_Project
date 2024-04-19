@@ -18,6 +18,7 @@ export const fetchAllClothes = createAsyncThunk(
         }
     }
 );
+
 const initialState = {
     clothes:{},
     loading: false,
