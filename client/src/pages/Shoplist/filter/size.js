@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllSizes } from "../../../counter/sizesSlice";
 
 function FilterSize({ onSelectSize }) {
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllSizes());
   }, []);
@@ -18,7 +19,7 @@ function FilterSize({ onSelectSize }) {
       }
     });
   };
-  const dispatch = useDispatch();
+  
   useEffect(()=>{
     onSelectSize(isCheckedArr);
   },[isCheckedArr])

@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllClothes } from "../../counter/clothesSlice";
+import { fetchAllClothes,filterClothes } from "../../counter/clothesSlice";
 import SingleCloth from "./singleCloth";
 import FilterSize from "./filter/size";
 function Shoplist() {
-  const [clothes,setClothes] = useState();
   const dispatch = useDispatch();
-  const clothesReudx = useSelector((state) => state.clothes.clothes);
+  const clothes = useSelector((state) => state.clothes.clothes);
+  //const [clothes, setClothes] = useState();
   useEffect(()=>{
     dispatch(fetchAllClothes());
-    setClothes(clothesReudx);
+    console.log('render');
   },[]);
   //filter
   const [filter,setFilter] = useState({
+    name: "",
     sizeIds:[],
     colorIds: []
   });
@@ -20,11 +21,16 @@ function Shoplist() {
   const handleSizeSelect = (size)=>{
     setSizesFilter(size);
   };
-  useEffect(()=>{ //mỗi lần filter sizes thì render ở shop
-    //console.log('uuuuuu',sizesFilter);
-    filter.sizeIds = sizesFilter;
-    console.log('filter',filter);
-  },[sizesFilter])
+  useEffect(()=>{ 
+      filter.sizeIds = sizesFilter;
+      dispatch(filterClothes({filter}));
+  },[sizesFilter]);
+  console.log(clothes);
+  //  useEffect(()=>{
+  //   setClothes(clothesRedux);
+  //   console.log(clothesRedux);
+  // },[clothesRedux]);
+  //console.log(clothes);
   return (
     <>
       <main className="main">
