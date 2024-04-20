@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import _ from "lodash";
 
 function SingleCloth({ clothes }) {
@@ -8,9 +8,9 @@ function SingleCloth({ clothes }) {
   console.log(clothes);
   const [activeColor, setActiveColor] = useState(() => {
     if (!clothDetails || clothDetails.length === 0) {
-      return ''; 
+      return "";
     } else {
-      return clothDetails[0] ? clothDetails[0].colorId : ''; 
+      return clothDetails[0] ? clothDetails[0].colorId : "";
     }
   });
   let color = {};
@@ -20,20 +20,22 @@ function SingleCloth({ clothes }) {
       color: [],
     };
   } else {
-    const colorUnq = _.uniqBy(clothDetails, "colorId").map((item) => item.colorId);
+    const colorUnq = _.uniqBy(clothDetails, "colorId").map(
+      (item) => item.colorId
+    );
     color = {
       clothId: clothes.id,
       color: colorUnq,
     };
-  };
-  const chooseColor = (colorId)=>{
-    setActiveColor(colorId);
   }
+  const chooseColor = (colorId) => {
+    setActiveColor(colorId);
+  };
   const buttonStyle = {
     // backgroundColor: 'transparent',
     // border: 'none',
-    cursor: 'pointer',
-    padding: '2' // Adjust padding as needed
+    cursor: "pointer",
+    padding: "2", // Adjust padding as needed
   };
   return (
     <>
@@ -50,9 +52,7 @@ function SingleCloth({ clothes }) {
             </a>
 
             <div className="product-action-vertical">
-              <a
-                className="btn-product-icon btn-wishlist btn-expandable"
-              >
+              <a className="btn-product-icon btn-wishlist btn-expandable">
                 <span>add to wishlist</span>
               </a>
               <a
@@ -77,17 +77,14 @@ function SingleCloth({ clothes }) {
                 <span>
                   add to cart
                   <br />
-                  {
-                    clothDetails && clothDetails.map((item)=>{
-                      return (
-                        <>
-                        <button style={buttonStyle}>
-                        size : {item.size.name}
-                        </button>
-                        </>
-                      )
-                    })
-                  }
+                      {clothDetails && clothDetails.length > 0 && 
+                      clothDetails.filter((item)=> item.colorId === activeColor).map(
+                        (item, index) => (
+                          <button key={index} style={buttonStyle}>
+                            size: {item.size.name}
+                          </button>
+                        )
+                      )}
                 </span>
               </a>
             </div>
@@ -121,7 +118,10 @@ function SingleCloth({ clothes }) {
                 color.color.map((item) => {
                   return (
                     <>
-                      <a onClick={()=>chooseColor(item)} className={activeColor === item ? "active" : ""}>
+                      <a
+                        onClick={() => chooseColor(item)}
+                        className={activeColor === item ? "active" : ""}
+                      >
                         <img
                           src="assets/images/products/product-4-thumb.jpg"
                           alt="product desc"
