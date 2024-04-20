@@ -13,12 +13,14 @@ const dumpRouter = require('./routes/dumpRoute');
 const UsersRouter = require('./routes/UsersRoute');
 const ClothesRouter = require('./routes/ClothesRoute');
 const SizesRouter = require('./routes/SizesRoute');
+const ColorsRouter = require('./routes/ColorsRoute');
 
 app.use('/carts',CartsRouter);
 app.use('/users',UsersRouter);
 app.use('/dump',dumpRouter);
 app.use('/clothes',ClothesRouter);
 app.use('/sizes',SizesRouter);
+app.use('/colors', ColorsRouter);
 
 
 app.listen(port, () => {

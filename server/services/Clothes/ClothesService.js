@@ -1,5 +1,4 @@
 const { PrismaClient } = require("@prisma/client");
-const { includes, size } = require("lodash");
 const prisma = new PrismaClient();
 
 async function getAllClothes() {
@@ -28,6 +27,7 @@ async function filterClothes(filter) {
   const { sizeIds, colorIds, name } = filter;
   let clothesQuery = {
     where: {},
+    where:{AND: []},
     include: {
           clothDetails: true,
           clothDetails: {
@@ -104,6 +104,44 @@ async function filterClothes(filter) {
         where: {
           colorId: {
             in: colorIds,
+          },
+        },
+        include: {
+          size: {
+            select: {
+              name: true,
+            },
+          },
+          color: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    };
+  };
+  if(sizeIds.length > 0 && colorIds.length){
+    clothesQuery.where.AND = clothesQuery.where.AND || [];
+    clothesQuery.where.AND.push({
+      clothDetails: {
+        some: {
+          sizeId: {
+            in: sizeIds,
+          },
+        },
+        some:{
+          colorId:{
+            in: colorIds
+          }
+        }
+      },
+    });
+    clothesQuery.include = {
+      clothDetails: {
+        where: {
+          sizeId: {
+            in: sizeIds,
           },
         },
         include: {

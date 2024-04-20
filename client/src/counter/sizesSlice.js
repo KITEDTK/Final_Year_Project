@@ -14,7 +14,7 @@ export const getAllSizes = createAsyncThunk(
             //console.log(response.data);
             return response.data;
         }catch(err){
-            throw new Error('Failed to fetch item in cart,error: ',err);
+            throw new Error('Failed to fetch all sizes,error: ',err);
         }
     }
 );

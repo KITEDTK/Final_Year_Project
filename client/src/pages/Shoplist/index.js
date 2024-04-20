@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllClothes,filterClothes } from "../../counter/clothesSlice";
 import SingleCloth from "./singleCloth";
 import FilterSize from "./filter/size";
+import FilterColor from "./filter/color";
 function Shoplist() {
   const dispatch = useDispatch();
   const clothes = useSelector((state) => state.clothes.clothes);
@@ -16,13 +17,19 @@ function Shoplist() {
     colorIds: []
   });
   const [sizesFilter, setSizesFilter] = useState();
-  const handleSizeSelect = (size)=>{
+  const [colorsFilter, setColorsFilter] = useState()
+  const handleSizeSelect = (size)=>{ // filter từ thằng FilterSize
     setSizesFilter(size);
   };
-  useEffect(()=>{ 
+  const handleColorSelect = (color)=>{
+    setColorsFilter(color);
+  }
+  //dispatch
+  useEffect(()=>{
+      filter.colorIds = colorsFilter || [];
       filter.sizeIds = sizesFilter || [];
       dispatch(filterClothes({filter}));
-  },[dispatch, filter, sizesFilter]);
+  },[dispatch, filter, sizesFilter, colorsFilter]);
   return (
     <>
       <main className="main">
@@ -377,42 +384,7 @@ function Shoplist() {
                     </h3>
                     {/* End .widget-title */}
 
-                    <div className="collapse show" id="widget-3">
-                      <div className="widget-body">
-                        <div className="filter-colors">
-                          <a href="#" style={{ background: "#b87145" }}>
-                            <span className="sr-only">Color Name</span>
-                          </a>
-                          <a href="#" style={{ background: "#f0c04a" }}>
-                            <span className="sr-only">Color Name</span>
-                          </a>
-                          <a href="#" style={{ background: "#333333" }}>
-                            <span className="sr-only">Color Name</span>
-                          </a>
-                          <a
-                            href="#"
-                            className="selected"
-                            style={{ background: "#cc3333" }}
-                          >
-                            <span className="sr-only">Color Name</span>
-                          </a>
-                          <a href="#" style={{ background: "#3399cc" }}>
-                            <span className="sr-only">Color Name</span>
-                          </a>
-                          <a href="#" style={{ background: "#669933" }}>
-                            <span className="sr-only">Color Name</span>
-                          </a>
-                          <a href="#" style={{ background: "#f2719c" }}>
-                            <span className="sr-only">Color Name</span>
-                          </a>
-                          <a href="#" style={{ background: "#ebebeb" }}>
-                            <span className="sr-only">Color Name</span>
-                          </a>
-                        </div>
-                        {/* End .filter-colors */}
-                      </div>
-                      {/* End .widget-body */}
-                    </div>
+                      <FilterColor onSelectColor={(color)=>handleColorSelect(color)}/>
                     {/* End .collapse */}
                   </div>
                   {/* End .widget */}

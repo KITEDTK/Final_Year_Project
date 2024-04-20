@@ -1,11 +1,13 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import _ from "lodash";
 
 function SingleCloth({ clothes }) {
-  const { clothDetails } = clothes;
-  console.log(clothes);
+  const clothDetails = useMemo(
+    () => clothes.clothDetails,
+    [clothes.clothDetails]
+  );
   const [activeColor, setActiveColor] = useState(() => {
     if (!clothDetails || clothDetails.length === 0) {
       return "";
@@ -13,24 +15,33 @@ function SingleCloth({ clothes }) {
       return clothDetails[0] ? clothDetails[0].colorId : "";
     }
   });
-  let color = {};
+  let color = [];
   if (clothDetails.length === 0) {
     color = {
       clothId: clothes.id,
-      color: [],
+      colorId: [],
+      name: "",
     };
   } else {
-    const colorUnq = _.uniqBy(clothDetails, "colorId").map(
-      (item) => item.colorId
-    );
+    // const colorUnqId = _.uniqBy(clothDetails, "colorId").map(
+    //   (item) => item.colorId
+    // );
+    const colorUnqId = _.uniqBy(clothDetails, "colorId").map((item) => {
+      return {
+        colorId: item.colorId,
+        name: item.color.name,
+      };
+    });
+
     color = {
       clothId: clothes.id,
-      color: colorUnq,
+      colorInfo: colorUnqId.map(({ colorId, name }) => ({ colorId, name })) || [],
     };
   }
   const chooseColor = (colorId) => {
     setActiveColor(colorId);
   };
+
   const buttonStyle = {
     // backgroundColor: 'transparent',
     // border: 'none',
@@ -77,14 +88,15 @@ function SingleCloth({ clothes }) {
                 <span>
                   add to cart
                   <br />
-                      {clothDetails && clothDetails.length > 0 && 
-                      clothDetails.filter((item)=> item.colorId === activeColor).map(
-                        (item, index) => (
-                          <button key={index} style={buttonStyle}>
-                            size: {item.size.name}
-                          </button>
-                        )
-                      )}
+                  {clothDetails &&
+                    clothDetails.length > 0 &&
+                    clothDetails
+                      .filter((item) => item.colorId === activeColor)
+                      .map((item, index) => (
+                        <button key={index} style={buttonStyle}>
+                          size: {item.size.name}
+                        </button>
+                      ))}
                 </span>
               </a>
             </div>
@@ -114,22 +126,41 @@ function SingleCloth({ clothes }) {
             {/* End .rating-container */}
 
             <div className="product-nav product-nav-thumbs">
-              {color &&
-                color.color.map((item) => {
+              {/* {color &&
+                color.colorId.map((item) => {
                   return (
                     <>
                       <a
                         onClick={() => chooseColor(item)}
                         className={activeColor === item ? "active" : ""}
+                        style={{ border: activeColor === item ? "2px solid black" : "none" }}
                       >
                         <img
                           src="assets/images/products/product-4-thumb.jpg"
                           alt="product desc"
+                          style={{ border: `2px solid ${item.name}` }}
                         />
                       </a>
                     </>
                   );
-                })}
+                })} */}
+              { color && color.colorInfo && color.colorInfo.map((item) => (
+                <a
+                  key={item.colorId} // Ensure each element in the map has a unique key
+                  onClick={() => chooseColor(item.colorId)}
+                  className={activeColor === item.colorId ? "active" : ""}
+                  style={{
+                    border:
+                      activeColor === item.colorId ? "2px solid black" : "none",
+                  }}
+                >
+                  <img
+                    src="assets/images/products/product-4-thumb.jpg"
+                    alt="product desc"
+                    style={{ border: `2px solid ${item.name}` }}
+                  />
+                </a>
+              ))}
             </div>
             {/* End .product-nav */}
           </div>

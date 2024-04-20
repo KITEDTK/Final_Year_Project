@@ -4,10 +4,10 @@ import { getAllSizes } from "../../../counter/sizesSlice";
 
 function FilterSize({ onSelectSize }) {
   const dispatch = useDispatch();
+  const allSizes = useSelector((state) => state.sizes.sizes);
   useEffect(() => {
     dispatch(getAllSizes());
   }, []);
-  const allSizes = useSelector((state) => state.sizes.sizes);
   const [isCheckedArr, setIsCheckedArr] = useState([]);
   const handleOnChangeCheckbox = (sizeId) => {
     setIsCheckedArr((prev)=>{
