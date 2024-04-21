@@ -1,13 +1,10 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import _ from "lodash";
 
 function SingleCloth({ clothes }) {
-  const clothDetails = useMemo(
-    () => clothes.clothDetails,
-    [clothes.clothDetails]
-  );
+  const {clothDetails} = clothes;
   const [activeColor, setActiveColor] = useState(() => {
     if (!clothDetails || clothDetails.length === 0) {
       return "";
@@ -15,6 +12,15 @@ function SingleCloth({ clothes }) {
       return clothDetails[0] ? clothDetails[0].colorId : "";
     }
   });
+  useEffect(()=>{ // Mỗi lần filter thì reset mẫu màu đã chọn 
+    setActiveColor(()=>{
+      if (!clothDetails || clothDetails.length === 0) {
+        return "";
+      } else {
+        return clothDetails[0] ? clothDetails[0].colorId : "";
+      }
+    })
+  },[clothDetails]);
   let color = [];
   if (clothDetails.length === 0) {
     color = {
@@ -23,9 +29,6 @@ function SingleCloth({ clothes }) {
       name: "",
     };
   } else {
-    // const colorUnqId = _.uniqBy(clothDetails, "colorId").map(
-    //   (item) => item.colorId
-    // );
     const colorUnqId = _.uniqBy(clothDetails, "colorId").map((item) => {
       return {
         colorId: item.colorId,
@@ -126,24 +129,6 @@ function SingleCloth({ clothes }) {
             {/* End .rating-container */}
 
             <div className="product-nav product-nav-thumbs">
-              {/* {color &&
-                color.colorId.map((item) => {
-                  return (
-                    <>
-                      <a
-                        onClick={() => chooseColor(item)}
-                        className={activeColor === item ? "active" : ""}
-                        style={{ border: activeColor === item ? "2px solid black" : "none" }}
-                      >
-                        <img
-                          src="assets/images/products/product-4-thumb.jpg"
-                          alt="product desc"
-                          style={{ border: `2px solid ${item.name}` }}
-                        />
-                      </a>
-                    </>
-                  );
-                })} */}
               { color && color.colorInfo && color.colorInfo.map((item) => (
                 <a
                   key={item.colorId} // Ensure each element in the map has a unique key

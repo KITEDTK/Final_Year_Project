@@ -27,138 +27,43 @@ async function filterClothes(filter) {
   const { sizeIds, colorIds, name } = filter;
   let clothesQuery = {
     where: {},
-    where:{AND: []},
     include: {
-          clothDetails: true,
-          clothDetails: {
-            include: {
-              size: {
-                select: {
-                  name: true,
-                },
-              },
-              color: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-          },
+      clothDetails: {
+        include: {
+          size: { select: { name: true } },
+          color: { select: { name: true } },
+        },
+      },
     },
   };
-  //push properties in an object
+
   if (name !== "") {
-    clothesQuery.where = {
-      name: name,
-    };
+    clothesQuery.where.name = name;
   }
 
-  if (sizeIds.length !== 0) {
-    //check if clothesQuery has an And or not
-    clothesQuery.where.AND = clothesQuery.where.AND || [];
-    clothesQuery.where.AND.push({
-      clothDetails: {
-        some: {
-          sizeId: {
-            in: sizeIds,
-          },
-        },
-      },
-    });
-    clothesQuery.include = {
-      // chỉ chọn những thằng có giá trị giống trong array
-      clothDetails: {
-        where: {
-          sizeId: {
-            in: sizeIds,
-          },
-        },
-        include: {
-          size: {
-            select: {
-              name: true,
-            },
-          },
-          color: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-    };
+  if (sizeIds.length > 0 || colorIds.length > 0) {
+    const where = {};
+    const searchName ={};
+    if (sizeIds.length > 0) {
+      where.sizeId = { in: sizeIds };
+    }
+
+    if (colorIds.length > 0) {
+      where.colorId = { in: colorIds };
+    }
+
+    if(name !== ""){ //sau này fix thành filter category 
+      searchName = { name: name }
+    }
+
+    clothesQuery.where.AND = [
+      ...(clothesQuery.where.AND || []),
+      { clothDetails: { some: where } },
+      {...(searchName)}
+    ];
+    clothesQuery.include.clothDetails.where = where;
   }
-  if (colorIds.length !== 0) {
-    clothesQuery.where.AND = clothesQuery.where.AND || [];
-    clothesQuery.where.AND.push({
-      clothDetails: {
-        some: {
-          colorId: {
-            in: colorIds,
-          },
-        },
-      },
-    });
-    clothesQuery.include = {
-      clothDetails: {
-        where: {
-          colorId: {
-            in: colorIds,
-          },
-        },
-        include: {
-          size: {
-            select: {
-              name: true,
-            },
-          },
-          color: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-    };
-  };
-  if(sizeIds.length > 0 && colorIds.length){
-    clothesQuery.where.AND = clothesQuery.where.AND || [];
-    clothesQuery.where.AND.push({
-      clothDetails: {
-        some: {
-          sizeId: {
-            in: sizeIds,
-          },
-        },
-        some:{
-          colorId:{
-            in: colorIds
-          }
-        }
-      },
-    });
-    clothesQuery.include = {
-      clothDetails: {
-        where: {
-          sizeId: {
-            in: sizeIds,
-          },
-        },
-        include: {
-          size: {
-            select: {
-              name: true,
-            },
-          },
-          color: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-    };
-  }
+
   const clothes = await prisma.clothes.findMany(clothesQuery);
   return clothes;
 }
