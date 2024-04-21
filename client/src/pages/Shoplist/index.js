@@ -16,6 +16,7 @@ function Shoplist() {
     sizeIds:[],
     colorIds: []
   });
+
   const [sizesFilter, setSizesFilter] = useState();
   const [colorsFilter, setColorsFilter] = useState()
   const handleSizeSelect = (size)=>{ // filter từ thằng FilterSize

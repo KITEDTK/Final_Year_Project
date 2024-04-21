@@ -7,27 +7,22 @@ function FilterSize({ onSelectSize }) {
   const allSizes = useSelector((state) => state.sizes.sizes);
   useEffect(() => {
     dispatch(getAllSizes());
-  }, []);
+  }, [dispatch]);
   const [isCheckedArr, setIsCheckedArr] = useState([]);
   const handleOnChangeCheckbox = (sizeId) => {
-    setIsCheckedArr((prev)=>{
+    setIsCheckedArr((prev) => {
       const isChecked = isCheckedArr.includes(sizeId);
-      if(isChecked){
-        const newArr = isCheckedArr.filter(item=> item !== sizeId);
+      if (isChecked) {
+        const newArr = isCheckedArr.filter((item) => item !== sizeId);
         onSelectSize(newArr);
-        return isCheckedArr.filter(item=> item !== sizeId);
-      }else{
-        const newArr = [...prev,sizeId];
+        return isCheckedArr.filter((item) => item !== sizeId);
+      } else {
+        const newArr = [...prev, sizeId];
         onSelectSize(newArr);
-        return [...prev,sizeId];
+        return [...prev, sizeId];
       }
     });
   };
-  
-  
-  // useEffect(()=>{
-    
-  // },[isCheckedArr])
   return (
     <>
       <div className="widget widget-collapsible">
@@ -51,12 +46,22 @@ function FilterSize({ onSelectSize }) {
                 allSizes.map((size, index) => {
                   return (
                     <>
-                    <div className="filter-item">
-													<div className="custom-control custom-checkbox">
-														<input onChange={()=>handleOnChangeCheckbox(size.id)} type="checkbox" class="custom-control-input" id={"size-"+index}/>
-														<label className="custom-control-label" for={"size-"+index}>{size.name}</label>
-													</div>
-												</div>
+                      <div className="filter-item">
+                        <div className="custom-control custom-checkbox">
+                          <input
+                            onChange={() => handleOnChangeCheckbox(size.id)}
+                            type="checkbox"
+                            class="custom-control-input"
+                            id={"size-" + index}
+                          />
+                          <label
+                            className="custom-control-label"
+                            for={"size-" + index}
+                          >
+                            {size.name}
+                          </label>
+                        </div>
+                      </div>
                     </>
                   );
                 })}
