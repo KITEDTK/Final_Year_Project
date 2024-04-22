@@ -116,116 +116,12 @@ async function createManyColors() {
   return { create };
 }
 async function createManyCategories(){
-  const dataCategories = [
-    {
-      name: "Product"
-    },
-    {
-      name: "Underwear"
-    },
-    {
-      name: "Sportswear"
-    },
-    {
-      name: "Casualwear"
-    },
-    {
-      name: "Perfume"
-    },
-    {
-      name: "Accesories"
+  
+  await prisma.categories.create({
+    data: {
+      name: "All Men Shirts",
+      parentId: "f443d79e-7ac9-49b8-af5f-4bb9fd6fcdf2"
     }
-  ];
-  await prisma.categories.createMany({
-    data: dataCategories
-  });
-  const categoryProductId = await prisma.categories.findFirst({
-    where:{
-      name: "Product"
-    }
-  });
-  const categoryUnderwearId = await prisma.categories.findFirst({
-    where:{
-      name: "Underwear"
-    }
-  });
-  const categorySportswearId = await prisma.categories.findFirst({
-    where:{
-      name: "Sportswear"
-    }
-  });
-  const categoryCasualwearId = await prisma.categories.findFirst({
-    where:{
-      name: "Casualwear"
-    }
-  });
-  const categoryPerfumeId = await prisma.categories.findFirst({
-    where:{
-      name: "Perfume"
-    }
-  });
-  const categoryAccessoriesId = await prisma.categories.findFirst({
-    where:{
-      name: "Accessories"
-    }
-  });
-  let childData = [
-    //Products
-    { 
-      name: "Men Shirts",
-      parentId : categoryProductId.id
-    },
-    {
-      name: "Men Trousers",
-      parentId : categoryProductId.id
-    },
-    {
-      name: "Men Acessories",
-      parentId : categoryProductId.id
-    },
-    {
-      name: "Accroding to Products",
-      parentId : categoryProductId.id
-    },
-    //Underwear
-    {
-      name: "Accroding to Products",
-      parentId : categoryUnderwearId.id
-    },
-    {
-      name: "Personal preferences",
-      parentId : categoryUnderwearId.id
-    },
-    //Sport
-    {
-      name: "Accroding to Products",
-      parentId : categorySportswearId.id
-    },
-    {
-      name: "Personal preferences",
-      parentId : categorySportswearId.id
-    },
-    //Casual
-    {
-      name: "Accroding to Products",
-      parentId : categoryCasualwearId.id
-    },
-    {
-      name: "Collections",
-      parentId : categoryCasualwearId.id
-    },
-    //Perfume
-    {
-      name: "Accroding to Products",
-      parentId : categoryPerfumeId.id
-    },
-    {
-      name: "Collections",
-      parentId : categoryPerfumeId.id
-    },
-  ];
-  await prisma.categories.createMany({
-    data: childData
   });
 }
 module.exports = {

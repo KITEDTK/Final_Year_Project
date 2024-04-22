@@ -1,5 +1,5 @@
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import {Header} from "./components/Headers/Header";
+import Footer from "./components/Footers/Footer";
 import Dashboard from "./pages/Dashboard/index";
 import Shoplist from "./pages/Shoplist/index";
 import LoginAndRegister from "./pages/LoginAndRegister/index";
@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App">
       <div className="page-wrapper">
-        <Navbar />
+        <Header />
         <Routes>
           <Route path="/" element={<Dashboard/>}/>
           <Route path="/login" element={<LoginAndRegister />}/>

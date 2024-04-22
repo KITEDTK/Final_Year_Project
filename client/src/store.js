@@ -7,11 +7,12 @@ import storage from 'redux-persist/lib/storage';
 import clothesSlice from './counter/clothesSlice';
 import sizesSlice from './counter/sizesSlice';
 import colorsSlice from './counter/colorsSlice';
+import categoriesSlice from './counter/categoriesSlice';
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['loginAndRegister','clothes','sizes','colors']
+  whitelist: ['loginAndRegister','clothes','sizes','colors','categories']
 };
 
 const rootReducer = combineReducers({
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
     loginAndRegister: loginAndRegisterSlice,
     clothes: clothesSlice,
     sizes: sizesSlice,
-    colors: colorsSlice
+    colors: colorsSlice,
+    categories: categoriesSlice
 })
  
 const persistedReducer = persistReducer(persistConfig, rootReducer);
