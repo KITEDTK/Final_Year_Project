@@ -4,12 +4,13 @@ import { fetchAllClothes,filterClothes } from "../../counter/clothesSlice";
 import SingleCloth from "./singleCloth";
 import FilterSize from "./filter/size";
 import FilterColor from "./filter/color";
+import { useParams } from "react-router-dom";
 function Shoplist() {
   const dispatch = useDispatch();
-  const clothes = useSelector((state) => state.clothes.clothes);
-  useEffect(()=>{
+  const clothes = useSelector((state) => state.clothes.clothes);  useEffect(()=>{
     dispatch(fetchAllClothes());
   },[dispatch]);
+  let {categoryId} = useParams();
   //filter
   const [filter,setFilter] = useState({
     name: "",
@@ -24,6 +25,7 @@ function Shoplist() {
   };
   const handleColorSelect = (color)=>{
     setColorsFilter(color);
+    console.log(categoryId);
   }
   //dispatch
   useEffect(()=>{
