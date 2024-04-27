@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllClothes,filterClothes } from "../../counter/clothesSlice";
+import {filterClothes } from "../../counter/clothesSlice";
 import SingleCloth from "./singleCloth";
 import FilterSize from "./filter/size";
 import FilterColor from "./filter/color";
-import { useParams } from "react-router-dom";
 function Shoplist() {
   const dispatch = useDispatch();
-  const clothes = useSelector((state) => state.clothes.clothes);  useEffect(()=>{
-    dispatch(fetchAllClothes());
-  },[dispatch]);
-  let {categoryId} = useParams();
+  const clothes = useSelector((state) => state.clothes.clothes);
+  const category = useSelector((state)=> state.categories.category);
   //filter
   const [filter,setFilter] = useState({
-    name: "",
+    categoryId: "",
     sizeIds:[],
     colorIds: []
   });
@@ -25,14 +22,14 @@ function Shoplist() {
   };
   const handleColorSelect = (color)=>{
     setColorsFilter(color);
-    console.log(categoryId);
   }
   //dispatch
   useEffect(()=>{
+      filter.categoryId = category.id;
       filter.colorIds = colorsFilter || [];
       filter.sizeIds = sizesFilter || [];
       dispatch(filterClothes({filter}));
-  },[dispatch, filter, sizesFilter, colorsFilter]);
+  },[dispatch, filter, sizesFilter, colorsFilter,category]);
   return (
     <>
       <main className="main">

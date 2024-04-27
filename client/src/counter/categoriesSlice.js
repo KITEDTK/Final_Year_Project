@@ -18,10 +18,26 @@ export const fetchAllCategories = createAsyncThunk(
     }
   }
 );
+export const fetchSingleCategories = createAsyncThunk(
+  "categories/get-single-categories",
+  async ({ categoryId }) => {
+    try {
+      const response = await axios({
+        method: "get",
+        url: `${BASE_URL}/${categoryId}`,
+        headers: { "Content-Type": "application/json" },
+      });
+      return response.data;
+    } catch (err) {
+      console.log("fetching error");
+    }
+  }
+);
 const categoriesSlice = createSlice({
   name: "categories",
   initialState: {
     categories: [],
+    category: {},
     loading: false,
     error: null,
   },
@@ -30,6 +46,10 @@ const categoriesSlice = createSlice({
     buidler.addCase(fetchAllCategories.fulfilled, (state, action) => {
       state.loading = true;
       state.categories = action.payload;
+    })
+    .addCase(fetchSingleCategories.fulfilled, (state,action)=>{
+      state.loading = true;
+      state.category = action.payload;
     });
   },
 });

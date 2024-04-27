@@ -21,5 +21,16 @@ class ClothesController {
       });
     }
   }
+  async getClothesByCategories(req,res){
+    try{
+      const {categoryId} = req.params;
+      const result = await clothesService.getClothesByCategory(categoryId);
+      res.json(result);
+    }catch(err){
+      res.status(500).json({
+        error: err,
+      });
+    }
+  }
 }
 module.exports = new ClothesController();

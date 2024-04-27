@@ -34,8 +34,23 @@ export const filterClothes = createAsyncThunk(
     }
   }
 );
+export const fetchClothesByCategories = createAsyncThunk(
+  "clothes/categories",
+  async ({categoryId})=>{
+    try {
+      const response = await axios({
+        method: "get",
+        url: `${BASE_URL}/categories/${categoryId}`,
+        headers: { "Content-Type": "application/json" },
+      });
+      return response.data;
+    } catch (err) {
+      console.log("error filter", err);
+    }
+  }
+)
 const initialState = {
-  clothes: {},
+  clothes: [],
   loading: false,
   error: null,
 };
@@ -50,6 +65,10 @@ const clothesSlice = createSlice({
         state.clothes = action.payload;
       })
       .addCase(filterClothes.fulfilled, (state, action) => {
+        state.loading = false;
+        state.clothes = action.payload;
+      })
+      .addCase(fetchClothesByCategories.fulfilled,(state, action)=>{
         state.loading = false;
         state.clothes = action.payload;
       });

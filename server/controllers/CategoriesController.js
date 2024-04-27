@@ -11,5 +11,16 @@ class CategoriesController {
             });
           }
     }
+    async getSingleCategories(req,res){
+      try {
+        const {categoryId} = req.params;
+        const result = await categoriesService.getSingleCategories(categoryId);
+        res.json(result);
+      } catch (err) {
+        res.status(500).json({
+          error: err,
+        });
+      }
+    }
 }
 module.exports = new CategoriesController();

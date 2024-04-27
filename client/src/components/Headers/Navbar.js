@@ -1,16 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllCategories } from "../../counter/categoriesSlice";
+import { fetchSingleCategories } from "../../counter/categoriesSlice";
+import { fetchClothesByCategories } from "../../counter/clothesSlice";
 export function Navbar() {
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories.categories);
+  const category = useSelector((state)=> state.categories.category);
+  const [activeCategoryId, setActiveCategoryId] = useState(null);
+  useEffect(() => {
+    if (category) {
+      setActiveCategoryId(category.id); // Cập nhật giá trị khi category.id thay đổi
+    }
+  }, [category]); 
   useEffect(() => {
     dispatch(fetchAllCategories());
-    //console.log(categories);
   }, [dispatch]);
-  const handleOnclickNav = (categoriesId) =>{
-    console.log(categoriesId);
+  const handleOnclickNav = (categoryId) =>{
+    setActiveCategoryId(categoryId);
+    //dispatch(fetchAllClothes());
+    dispatch(fetchSingleCategories({categoryId}));
+    dispatch(fetchClothesByCategories({categoryId}));
   }
   return (
     <>
@@ -25,8 +36,9 @@ export function Navbar() {
                   categories.map((c) => {
                     return (
                       <>
-                        <li className="megamenu-container">
-                          <Link to={`/shoplist/${c.id}`} className="sf-with-ul">
+                        <li className={`megamenu-container ${c.id === activeCategoryId ? 'active' : ''}`} key={c.id}>
+                          <Link onClick={()=>handleOnclickNav(c.id)}  to={`/shoplist`} className="sf-with-ul">
+                          {/* <Link onClick={()=>handleOnclickNav(c.id)} className="sf-with-ul"> */}
                             {c.name}
                           </Link>
                           <div className="megamenu megamenu-md active">
