@@ -19,7 +19,6 @@ export function Navbar() {
   }, [dispatch]);
   const handleOnclickNav = (categoryId) =>{
     setActiveCategoryId(categoryId);
-    //dispatch(fetchAllClothes());
     dispatch(fetchSingleCategories({categoryId}));
     dispatch(fetchClothesByCategories({categoryId}));
   }

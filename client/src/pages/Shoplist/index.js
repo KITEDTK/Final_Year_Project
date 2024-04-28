@@ -25,7 +25,7 @@ function Shoplist() {
   }
   //dispatch
   useEffect(()=>{
-      filter.categoryId = category.id;
+      filter.categoryId = category.id || "";
       filter.colorIds = colorsFilter || [];
       filter.sizeIds = sizesFilter || [];
       dispatch(filterClothes({filter}));

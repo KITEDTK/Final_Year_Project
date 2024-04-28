@@ -3,6 +3,7 @@
 # dependencies
 client/node_modules
 server/node_modules
+backend1/node_modules
 TsSetupTest/node_modules
 node_modules
 /.pnp

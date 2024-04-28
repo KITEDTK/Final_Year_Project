@@ -77,17 +77,17 @@ model ClothDetails {
 
 model Users {
   id               String            @id @default(uuid())
-  username         String?
-  password         String?
-  fullname         String?
-  email            String?            @unique
-  phoneNumber      String?
-  point            Int?               @default(0)
+  username         String
+  password         String
+  fullname         String
+  email            String            @unique
+  phoneNumber      String
+  point            Int               @default(0)
   verifyToken      String?
   expiredTokenTime DateTime?
-  createAt         DateTime?          @default(now())
+  createAt         DateTime          @default(now())
   updateAt         DateTime?
-  isEnable         Boolean?           @default(true)
+  isEnable         Boolean           @default(true)
   comments         Comments[]
   carts            Carts[]
   payments         Payments[]
