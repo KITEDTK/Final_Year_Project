@@ -9,7 +9,7 @@ export const fetchAllCategories = createAsyncThunk(
     try {
       const response = await axios({
         method: "get",
-        url: `${BASE_URL}/get-all-categories`,
+        url: `${BASE_URL}`,
         headers: { "Content-Type": "application/json" },
       });
       return response.data;
