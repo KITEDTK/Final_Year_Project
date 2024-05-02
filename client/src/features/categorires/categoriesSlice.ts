@@ -1,23 +1,6 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-
-export interface Category {
-  // Define the structure of a single category
-  id: string;
-  name: string;
-  parentId: string | null;
-  createAt: Date;
-  isEnable: boolean;
-  children: Category[]
-  // Add other properties as needed
-}
-
-export interface CategoriesState {
-  categories: Category[];
-  category: Category | null; // or {} if the initial value is an empty object
-  loading: boolean;
-  error: string | null;
-}
+import { Category, CategoriesState,FetchSingleCategoriesPayload } from "./categoriesTypes";
 
 const BASE_URL = "http://localhost:4000/categories";
 
@@ -36,9 +19,6 @@ export const fetchAllCategories = createAsyncThunk<Category[]>(
   }
 );
 
-interface FetchSingleCategoriesPayload {
-  categoryId: string;
-}
 
 export const fetchSingleCategories = createAsyncThunk<Category, FetchSingleCategoriesPayload>(
   "categories/get-single-categories",
@@ -66,6 +46,7 @@ const categoriesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+
       .addCase(fetchAllCategories.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -73,6 +54,10 @@ const categoriesSlice = createSlice({
       .addCase(fetchAllCategories.fulfilled, (state, action) => {
         state.loading = false;
         state.categories = action.payload;
+      })
+      .addCase(fetchAllCategories.rejected, (state, action)=>{
+        state.loading = false;
+        state.error = action.error.message ?? "Unknown error";
       })
 
       .addCase(fetchSingleCategories.pending, (state) => {
