@@ -19,7 +19,6 @@ export function Navbar() {
     setActiveCategoryId(categoryId);
     dispatch(fetchSingleCategories({categoryId}));
     console.log(activeCategoryId)
-    //console.log(categoryId);
   }
   return (
     <>

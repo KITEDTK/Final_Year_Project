@@ -2,6 +2,8 @@
 
 # dependencies
 client/node_modules
+
+client1/node_modules
 server/node_modules
 backend1/node_modules
 TsSetupTest/node_modules
