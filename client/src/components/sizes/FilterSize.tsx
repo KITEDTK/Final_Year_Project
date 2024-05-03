@@ -49,8 +49,8 @@ export const FilterSize: React.FC<Props> = ({onSelectSize})=>{
                 allSizes.map((size, index) => {
                   return (
                     <>
-                      <div className="filter-item">
-                        <div className="custom-control custom-checkbox">
+                      <div className="filter-item" key={index}>
+                        <div className="custom-control custom-checkbox" key={index}>
                           <input
                             onChange={() => handleOnChangeCheckbox(size.id)}
                             type="checkbox"

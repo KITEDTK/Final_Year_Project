@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { User, UserArray } from "./UsersType";
+import { User, UserArray, Login } from "./UsersType";
 
 const prisma = new PrismaClient();
 
-async function getAllUsers(){
+async function getAllUsers() {
   const allUsers = await prisma.users.findMany({});
   return allUsers;
 }
@@ -19,8 +19,21 @@ async function updateUser(UserBody: User, userId: string) {
     where: {
       id: userId,
     },
-    data: {...rest}
+    data: { ...rest },
   });
-  return update 
+  return update;
 }
-export default { createManyUsers, updateUser, getAllUsers };
+async function login(input: Login) {
+  const { usernameOrEmail, password } = input;
+  const checkIfEmail: boolean = usernameOrEmail.includes("@");
+  const result = await prisma.users.findUnique({
+    where: {
+      ...(checkIfEmail === true
+        ? { email: usernameOrEmail }
+        : { username: usernameOrEmail }),
+      password: password,
+    },
+  });
+  return result;
+}
+export default { createManyUsers, updateUser, getAllUsers, login };

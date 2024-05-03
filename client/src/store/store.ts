@@ -8,6 +8,7 @@ import categoriesSlice from "../features/categorires/categoriesSlice";
 import clothesSlice from "../features/products/clothesSlice";
 import sizesSlice from "../features/sizes/sizesSlice";
 import colorsSilce from "../features/colors/colorsSilce";
+import authSlice from "../features/auth/authSlice";
 
 const persitConfig = {
   key : "root",
@@ -18,7 +19,8 @@ const reducer = combineReducers({
   categories : categoriesSlice,
   clothes: clothesSlice,
   sizes: sizesSlice,
-  colors: colorsSilce
+  colors: colorsSilce,
+  auth: authSlice
 });
 const persistedReducer = persistReducer(persitConfig, reducer);
 

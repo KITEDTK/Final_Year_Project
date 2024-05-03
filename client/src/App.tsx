@@ -3,6 +3,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { Footer } from "./components/common/Footer";
 import { Route, Routes } from "react-router-dom";
 import { Shoplist } from "./pages/Shoplist";
+import LoginAndRegister from './pages/LoginAndRegister';
 function App() {
   return (
     <>
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path="" element={<Dashboard />} />
           <Route path="/shoplist" element={<Shoplist />} />
+          <Route path="/login" element={<LoginAndRegister />} />
         </Routes>
         <Footer/>
       </div>

@@ -17,4 +17,12 @@ async function getAllUsers(req: Request, res: Response) {
     console.log(err);
   }
 }
-export default {createManyUsers, getAllUsers}
+async function login(req: Request, res: Response){
+  try {
+    const result = await UsersService.login(req.body);
+    res.send(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
+export default {createManyUsers, getAllUsers, login}

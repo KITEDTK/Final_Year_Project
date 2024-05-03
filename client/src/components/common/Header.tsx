@@ -1,6 +1,8 @@
 import { Navbar } from "../categories/Navbar";
 import { Link } from "react-router-dom";
-export function Header(){
+import { useAppSelector } from '../../store/hooks';
+export const  Header = () => {
+    const auth = useAppSelector(state=> state.auth.auth);
     return (
         <>
         {/* <button onClick={()=> handleLogout()}>signOut</button> */}
@@ -65,17 +67,17 @@ export function Header(){
                       <a href="#">Links</a>
                       <ul>
                         <li>
-                          {/* {isAuthenticated === true && userInfoAndToken && userInfoAndToken.user ?  (
+                          {auth && Object.keys(auth).length !== 0  ?  (
                             // If isAuthenticated is true, render the link to the user profile
                             <Link  to="/login" data-toggle="modal">
-                              <i className="icon-user"></i>{userInfoAndToken.user.username}
+                              <i className="icon-user"></i>{auth.fullname}
                             </Link>
                           ) : (
                             // If isAuthenticated is false or undefined, render the link to the login page
                             <Link to="/login" data-toggle="modal">
                               <i className="icon-user"></i>Login
                             </Link>
-                          )} */}
+                          )}
                         </li>
                       </ul>
                     </li>

@@ -10,7 +10,7 @@ export const fetchFilterClothes = createAsyncThunk<ClothesFilter[], Filter>(
     async ({filter})=>{
       const response: AxiosResponse<ClothesFilter[]> = await axios.post(
         `${BASE_URL}/filter`,
-        { ...filter }, // Pass filter within the data property
+        { ...filter },
         {
           headers: { "Content-Type": "application/json" }
         }

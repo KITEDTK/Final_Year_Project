@@ -77,9 +77,9 @@ model ClothDetails {
 
 model Users {
   id               String            @id @default(uuid())
-  username         String?
+  username         String?           @unique
   password         String?
-  fullname         String?
+  fullname         String?            
   email            String?            @unique
   phoneNumber      String?
   point            Int?               @default(0)

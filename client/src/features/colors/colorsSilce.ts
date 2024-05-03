@@ -21,7 +21,7 @@ export const fetchAllColors = createAsyncThunk<Colors[]>(
 const colorsSlice = createSlice({
     name: "sizes",
     initialState: {
-      sizes: [],
+      colors: [],
       loading: false,
       error: null,
     } as ColorsState,
@@ -34,7 +34,7 @@ const colorsSlice = createSlice({
         })
         .addCase(fetchAllColors.fulfilled, (state, action) => {
           state.loading = false;
-          state.sizes = action.payload;
+          state.colors = action.payload;
         })
         .addCase(fetchAllColors.rejected, (state, action) => {
           state.loading = false;
