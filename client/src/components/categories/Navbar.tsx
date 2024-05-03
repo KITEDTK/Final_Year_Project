@@ -1,9 +1,10 @@
 import  { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {  fetchAllCategories, fetchSingleCategories} from '../../features/categorires/categoriesSlice';
 import { useAppDispatch,useAppSelector } from "../../store/hooks";
-export function Navbar() {
+export const Navbar = () => {
   const dispatch = useAppDispatch();
+  const location = useLocation();
   const categories = useAppSelector((state) => state.categories.categories);
   const category = useAppSelector((state)=> state.categories.category);
   const [activeCategoryId, setActiveCategoryId] = useState<string| null>(null);
@@ -18,8 +19,12 @@ export function Navbar() {
   const handleOnclickNav = (categoryId: string) =>{
     setActiveCategoryId(categoryId);
     dispatch(fetchSingleCategories({categoryId}));
-    console.log(activeCategoryId)
   }
+  useEffect(() => {
+    if (location.pathname !== '/shoplist') {
+      setActiveCategoryId(null);
+    }
+  }, [location]);
   return (
     <>
       <div className="header-bottom sticky-header">

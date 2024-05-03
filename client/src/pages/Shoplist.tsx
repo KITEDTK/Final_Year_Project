@@ -1,35 +1,53 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { filterClothes } from "../../counter/clothesSlice";
-import SingleCloth from "./singleCloth";
-import FilterSize from "./filter/size";
-import FilterColor from "./filter/color";
-function Shoplist() {
-  const dispatch = useDispatch();
-  const clothes = useSelector((state) => state.clothes.clothes);
-  const category = useSelector((state)=> state.categories.category);
-  //filter
-  const [filter,setFilter] = useState({
-    categoryId: "",
-    sizeIds:[],
-    colorIds: []
+import { fetchFilterClothes } from "../features/products/clothesSlice";
+import { SingleClothShoplist } from "../components/products/SingleClothShoplist";
+import { FilterSize } from "../components/sizes/FilterSize";
+import FilterColor from "../components/colors/FilterColor";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+export const Shoplist = () => {
+  const dispatch = useAppDispatch();
+  const category = useAppSelector(state => state.categories.category);
+  const clothes = useAppSelector(state => state.clothes.clothes)
+  // Filter
+  const [filter, setFilter] = useState({
+    categoryId: '',
+    sizeIds: [] as string[],
+    colorIds: [] as string[],
   });
 
-  const [sizesFilter, setSizesFilter] = useState();
-  const [colorsFilter, setColorsFilter] = useState()
-  const handleSizeSelect = (size)=>{ // filter từ thằng FilterSize
-    setSizesFilter(size);
+  const [sizesFilter, setSizesFilter] = useState<string[] | null>(null);
+  const [colorsFilter, setColorsFilter] = useState<string[] | null>(null);
+
+  const handleSizeSelect = (size: string[]) => {
+    setSizesFilter(size); // Set the size filter as an array
   };
-  const handleColorSelect = (color)=>{
-    setColorsFilter(color);
-  }
-  //dispatch
-  useEffect(()=>{
-      filter.categoryId = category.id || "";
-      filter.colorIds = colorsFilter || [];
-      filter.sizeIds = sizesFilter || [];
-      dispatch(filterClothes({filter}));
-  },[dispatch, filter, sizesFilter, colorsFilter,category]);
+
+  const handleColorSelect = (color: string[]) => {
+    setColorsFilter(color); // Set the color filter as an array
+  };
+
+  // Dispatch
+  useEffect(() => {
+    if (category) {
+      setFilter(prevFilter => ({
+        ...prevFilter,
+        categoryId: category.id,
+        colorIds: colorsFilter || [],
+        sizeIds: sizesFilter || [],
+      }));
+    }else {
+      setFilter(prevFilter => ({
+        ...prevFilter,
+        categoryId: '',
+        colorIds: colorsFilter || [],
+        sizeIds: sizesFilter || [],
+      }));
+    }
+  }, [category, sizesFilter, colorsFilter]);
+
+  useEffect(() => {
+    dispatch(fetchFilterClothes({ filter }));
+  }, [dispatch, filter]);
   return (
     <>
       <main className="main">
@@ -78,12 +96,19 @@ function Shoplist() {
 
                   <div className="toolbox-right">
                     <div className="toolbox-sort">
-                      <label for="sortby">Sort by:</label>
+                      <label htmlFor="sortby">Sort by:</label>
                       <div className="select-custom">
-                        <select name="sortby" id="sortby" className="form-control">
-                          <option value="popularity" selected="selected">
-                            Most Popular
-                          </option>
+                        <select
+                          name="sortby"
+                          id="sortby"
+                          className="form-control"
+                        >
+                          <select value="popularity">
+                            <option value="popularity" selected>
+                              Most Popular
+                            </option>
+                          </select>
+
                           <option value="rating">Most Rated</option>
                           <option value="date">Date</option>
                         </select>
@@ -146,7 +171,7 @@ function Shoplist() {
                       clothes.map((item) => {
                         return (
                           <>
-                            <SingleCloth key={item.id} clothes={item}/>
+                            <SingleClothShoplist key={item.id} clothes={item} />
                           </>
                         );
                       })}
@@ -163,8 +188,8 @@ function Shoplist() {
                         className="page-link page-link-prev"
                         href="#"
                         aria-label="Previous"
-                        tabindex="-1"
-                        aria-disabled="true"
+                        tabIndex={-1}
+                        aria-disabled={true}
                       >
                         <span aria-hidden="true">
                           <i className="icon-long-arrow-left"></i>
@@ -238,7 +263,10 @@ function Shoplist() {
                                 className="custom-control-input"
                                 id="cat-1"
                               />
-                              <label className="custom-control-label" for="cat-1">
+                              <label
+                                className="custom-control-label"
+                                htmlFor="cat-1"
+                              >
                                 Dresses
                               </label>
                             </div>
@@ -254,7 +282,10 @@ function Shoplist() {
                                 className="custom-control-input"
                                 id="cat-2"
                               />
-                              <label className="custom-control-label" for="cat-2">
+                              <label
+                                className="custom-control-label"
+                                htmlFor="cat-2"
+                              >
                                 T-shirts
                               </label>
                             </div>
@@ -270,7 +301,10 @@ function Shoplist() {
                                 className="custom-control-input"
                                 id="cat-3"
                               />
-                              <label className="custom-control-label" for="cat-3">
+                              <label
+                                className="custom-control-label"
+                                htmlFor="cat-3"
+                              >
                                 Bags
                               </label>
                             </div>
@@ -286,7 +320,10 @@ function Shoplist() {
                                 className="custom-control-input"
                                 id="cat-4"
                               />
-                              <label className="custom-control-label" for="cat-4">
+                              <label
+                                className="custom-control-label"
+                                htmlFor="cat-4"
+                              >
                                 Jackets
                               </label>
                             </div>
@@ -302,7 +339,10 @@ function Shoplist() {
                                 className="custom-control-input"
                                 id="cat-5"
                               />
-                              <label className="custom-control-label" for="cat-5">
+                              <label
+                                className="custom-control-label"
+                                htmlFor="cat-5"
+                              >
                                 Shoes
                               </label>
                             </div>
@@ -318,7 +358,10 @@ function Shoplist() {
                                 className="custom-control-input"
                                 id="cat-6"
                               />
-                              <label className="custom-control-label" for="cat-6">
+                              <label
+                                className="custom-control-label"
+                                htmlFor="cat-6"
+                              >
                                 Jumpers
                               </label>
                             </div>
@@ -334,7 +377,10 @@ function Shoplist() {
                                 className="custom-control-input"
                                 id="cat-7"
                               />
-                              <label className="custom-control-label" for="cat-7">
+                              <label
+                                className="custom-control-label"
+                                htmlFor="cat-7"
+                              >
                                 Jeans
                               </label>
                             </div>
@@ -350,7 +396,10 @@ function Shoplist() {
                                 className="custom-control-input"
                                 id="cat-8"
                               />
-                              <label className="custom-control-label" for="cat-8">
+                              <label
+                                className="custom-control-label"
+                                htmlFor="cat-8"
+                              >
                                 Sportwear
                               </label>
                             </div>
@@ -367,7 +416,7 @@ function Shoplist() {
                   </div>
                   {/* End .widget */}
 
-                  <FilterSize onSelectSize={(size)=>handleSizeSelect(size)} />
+                  <FilterSize onSelectSize={(size) => handleSizeSelect(size)} />
                   {/* End .widget */}
 
                   <div className="widget widget-collapsible">
@@ -384,7 +433,9 @@ function Shoplist() {
                     </h3>
                     {/* End .widget-title */}
 
-                      <FilterColor onSelectColor={(color)=>handleColorSelect(color)}/>
+                    <FilterColor
+                      onSelectColor={(color) => handleColorSelect(color)}
+                    />
                     {/* End .collapse */}
                   </div>
                   {/* End .widget */}
@@ -413,7 +464,10 @@ function Shoplist() {
                                 className="custom-control-input"
                                 id="brand-1"
                               />
-                              <label className="custom-control-label" for="brand-1">
+                              <label
+                                className="custom-control-label"
+                                htmlFor="brand-1"
+                              >
                                 Next
                               </label>
                             </div>
@@ -428,7 +482,10 @@ function Shoplist() {
                                 className="custom-control-input"
                                 id="brand-2"
                               />
-                              <label className="custom-control-label" for="brand-2">
+                              <label
+                                className="custom-control-label"
+                                htmlFor="brand-2"
+                              >
                                 River Island
                               </label>
                             </div>
@@ -443,7 +500,10 @@ function Shoplist() {
                                 className="custom-control-input"
                                 id="brand-3"
                               />
-                              <label className="custom-control-label" for="brand-3">
+                              <label
+                                className="custom-control-label"
+                                htmlFor="brand-3"
+                              >
                                 Geox
                               </label>
                             </div>
@@ -458,7 +518,10 @@ function Shoplist() {
                                 className="custom-control-input"
                                 id="brand-4"
                               />
-                              <label className="custom-control-label" for="brand-4">
+                              <label
+                                className="custom-control-label"
+                                htmlFor="brand-4"
+                              >
                                 New Balance
                               </label>
                             </div>
@@ -473,7 +536,10 @@ function Shoplist() {
                                 className="custom-control-input"
                                 id="brand-5"
                               />
-                              <label className="custom-control-label" for="brand-5">
+                              <label
+                                className="custom-control-label"
+                                htmlFor="brand-5"
+                              >
                                 UGG
                               </label>
                             </div>
@@ -488,7 +554,10 @@ function Shoplist() {
                                 className="custom-control-input"
                                 id="brand-6"
                               />
-                              <label className="custom-control-label" for="brand-6">
+                              <label
+                                className="custom-control-label"
+                                htmlFor="brand-6"
+                              >
                                 F&F
                               </label>
                             </div>
@@ -503,7 +572,10 @@ function Shoplist() {
                                 className="custom-control-input"
                                 id="brand-7"
                               />
-                              <label className="custom-control-label" for="brand-7">
+                              <label
+                                className="custom-control-label"
+                                htmlFor="brand-7"
+                              >
                                 Nike
                               </label>
                             </div>
@@ -567,4 +639,3 @@ function Shoplist() {
     </>
   );
 }
-export default Shoplist;

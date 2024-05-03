@@ -6,6 +6,8 @@ import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import categoriesSlice from "../features/categorires/categoriesSlice";
 import clothesSlice from "../features/products/clothesSlice";
+import sizesSlice from "../features/sizes/sizesSlice";
+import colorsSilce from "../features/colors/colorsSilce";
 
 const persitConfig = {
   key : "root",
@@ -14,7 +16,9 @@ const persitConfig = {
 }
 const reducer = combineReducers({
   categories : categoriesSlice,
-  clothes: clothesSlice
+  clothes: clothesSlice,
+  sizes: sizesSlice,
+  colors: colorsSilce
 });
 const persistedReducer = persistReducer(persitConfig, reducer);
 

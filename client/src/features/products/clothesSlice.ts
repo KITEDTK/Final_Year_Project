@@ -8,16 +8,14 @@ const BASE_URL = "http://localhost:4000/clothes";
 export const fetchFilterClothes = createAsyncThunk<ClothesFilter[], Filter>(
     "cloths/filter",
     async ({filter})=>{
-        try {
-            const response: AxiosResponse<ClothesFilter[]> = await axios.post(`${BASE_URL}/filter`, {
-              headers: { "Content-Type": "application/json" },
-              data: JSON.stringify(filter),
-            });
-            return response.data;
-          } catch (err) {
-            console.error("fetching error", err);
-            throw err;
-          }
+      const response: AxiosResponse<ClothesFilter[]> = await axios.post(
+        `${BASE_URL}/filter`,
+        { ...filter }, // Pass filter within the data property
+        {
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+      return response.data;
     }
 );
 const clothesSlice = createSlice({
