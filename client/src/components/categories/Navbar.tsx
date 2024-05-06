@@ -19,6 +19,7 @@ export const Navbar = () => {
   const handleOnclickNav = (categoryId: string) =>{
     setActiveCategoryId(categoryId);
     dispatch(fetchSingleCategories({categoryId}));
+    //console.log(categories);
   }
   useEffect(() => {
     if (location.pathname !== '/shoplist') {
