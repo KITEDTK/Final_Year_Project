@@ -19,7 +19,20 @@ async function getTreeCategoriesById(categoryId: string){
         INNER JOIN allCategory s ON c.parent_id = s.id
     )
     SELECT * FROM allCategory`;
-    const nested = buildTree.arrayToTree(categories);
-    return {nested: nested, flat: categories, id: categoryId};
+    //const nested = buildTree.arrayToTree(categories);
+    const result = await prisma.categories.findUnique({
+        where:{
+            id: categoryId
+        }
+    })
+    return result;
 }
-export default {getAllCategories, getTreeCategoriesById}
+async function getChildCategories(categoryId: string){
+    const result = await prisma.categories.findMany({
+        where: {
+            parentId : categoryId
+        }
+    });
+    return result
+}
+export default {getAllCategories, getTreeCategoriesById, getChildCategories}

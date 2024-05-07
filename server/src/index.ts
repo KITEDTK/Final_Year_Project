@@ -22,6 +22,10 @@ app.use("/categories",CategoriesRoute);
 app.use("/sizes",SizesRoute);
 app.use("/colors",ColorsRoute);
 
+//dump
+import DumpRoute from "./API/modules/DumpData/DumpRoute";
+app.use("/dump",DumpRoute);
+
 const PORT = 4000;
 
 app.listen(PORT, () => {

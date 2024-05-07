@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { Category, CategoriesState,FetchSingleCategoriesPayload } from "./categoriesTypes";
+import { Category, CategoriesState,FetchSingleCategoriesPayload, BaseCategory } from "./categoriesTypes";
 
 const BASE_URL = "http://localhost:4000/categories";
 
@@ -18,8 +18,6 @@ export const fetchAllCategories = createAsyncThunk<Category[]>(
     }
   }
 );
-
-
 export const fetchSingleCategories = createAsyncThunk<Category, FetchSingleCategoriesPayload>(
   "categories/get-single-categories",
   async ({ categoryId }) => {
@@ -34,12 +32,26 @@ export const fetchSingleCategories = createAsyncThunk<Category, FetchSingleCateg
     }
   }
 );
-
+export const fetchChildCategory = createAsyncThunk<BaseCategory[], FetchSingleCategoriesPayload>(
+  "categories/child",
+  async ({categoryId}) =>{
+    try {
+      const response: AxiosResponse<BaseCategory[]> = await axios.get(`${BASE_URL}/${categoryId}/child`, {
+        headers: { "Content-Type": "application/json" },
+      });
+      return response.data;
+    } catch (err) {
+      console.error("fetching error", err);
+      throw err;
+    }
+  }
+)
 const categoriesSlice = createSlice({
   name: "categories",
   initialState: {
     categories: [],
     category: null,
+    childCategories: [],
     loading: false,
     error: null,
   } as CategoriesState,
@@ -71,7 +83,21 @@ const categoriesSlice = createSlice({
       .addCase(fetchSingleCategories.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message ?? "Unknown error";
-      });
+      })
+      
+      .addCase(fetchChildCategory.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchChildCategory.fulfilled, (state, action) => {
+        state.loading = false;
+        state.childCategories = action.payload;
+      })
+      .addCase(fetchChildCategory.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Unknown error";
+      })
+      ;
   },
 });
 

@@ -1,6 +1,6 @@
 import  { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {  fetchAllCategories, fetchSingleCategories} from '../../features/categorires/categoriesSlice';
+import {  fetchAllCategories, fetchSingleCategories, fetchChildCategory} from '../../features/categorires/categoriesSlice';
 import { useAppDispatch,useAppSelector } from "../../store/hooks";
 export const Navbar = () => {
   const dispatch = useAppDispatch();
@@ -19,7 +19,8 @@ export const Navbar = () => {
   const handleOnclickNav = (categoryId: string) =>{
     setActiveCategoryId(categoryId);
     dispatch(fetchSingleCategories({categoryId}));
-    //console.log(categories);
+    dispatch(fetchChildCategory({categoryId}));
+    console.log(categoryId);
   }
   useEffect(() => {
     if (location.pathname !== '/shoplist') {
@@ -39,9 +40,8 @@ export const Navbar = () => {
                   categories.map((c) => {
                     return (
                       <>
-                        <li onClick={()=>handleOnclickNav(c.id)} className={`megamenu-container ${c.id === activeCategoryId ? 'active' : ''}`} key={c.id}>
-                          <Link to={`/shoplist`} className="sf-with-ul">
-                          {/* <Link onClick={()=>handleOnclickNav(c.id)} className="sf-with-ul"> */}
+                        <li  className={`megamenu-container ${c.id === activeCategoryId ? 'active' : ''}`} key={c.id}>
+                          <Link to={`/shoplist`} onClick={()=>handleOnclickNav(c.id)} className="sf-with-ul">
                             {c.name}
                           </Link>
                           <div className="megamenu megamenu-md active">
@@ -55,9 +55,9 @@ export const Navbar = () => {
                                         return (
                                           <>
                                             <div className="col-md-6">
-                                              <Link to={`/shoplist/${cc.id}`} className="menu-title">
+                                              <div  className="menu-title">
                                                 {cc.name}
-                                              </Link>
+                                              </div>
                                               {/* End .menu-title */}
                                               <ul>
                                                 {cc.children &&
@@ -66,7 +66,7 @@ export const Navbar = () => {
                                                     return (
                                                       <>
                                                         <li >
-                                                          <Link to={`/shoplist/${ccc.id}`}>
+                                                          <Link to={`/shoplist`} onClick={()=>handleOnclickNav(ccc.id)}> 
                                                             <span>
                                                               {ccc.name}
                                                               <span className="tip tip-new">
