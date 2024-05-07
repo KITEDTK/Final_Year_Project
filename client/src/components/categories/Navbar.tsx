@@ -20,7 +20,6 @@ export const Navbar = () => {
     setActiveCategoryId(categoryId);
     dispatch(fetchSingleCategories({categoryId}));
     dispatch(fetchChildCategory({categoryId}));
-    console.log(categoryId);
   }
   useEffect(() => {
     if (location.pathname !== '/shoplist') {

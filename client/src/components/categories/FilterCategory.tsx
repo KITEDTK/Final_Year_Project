@@ -1,21 +1,34 @@
 import { useAppSelector } from "../../store/hooks";
-export const FilterCategory = () => {
-  const categories = useAppSelector(
+import { useState } from "react";
+interface Props {
+  onSelectCategory: (categoryId: string[])=> void;
+}
+export const FilterCategory : React.FC<Props> = ({onSelectCategory})=>{
+  const childCategories = useAppSelector(
     (state) => state.categories.childCategories
   );
   const category = useAppSelector((state) => state.categories.category);
-  const handleOnClickCategory = () => {
-    //console.log(category);
+  const [isCheckedArr, setIsCheckedArr] = useState<string[]>([]);
+  const handleOnClickCategory = (categoryId: string) => {
+    setIsCheckedArr((prev) => {
+      const isChecked = isCheckedArr.includes(categoryId);
+      if (isChecked) {
+        const newArr = isCheckedArr.filter((item) => item !== categoryId);
+        onSelectCategory(newArr);
+        return isCheckedArr.filter((item) => item !== categoryId);
+      } else {
+        const newArr = [...prev, categoryId];
+        onSelectCategory(newArr);
+        return [...prev, categoryId];
+      }
+    });
   };
   return (
     <>
-      {category && category.parentId !== null && categories && categories.length > 0 && (
+      {category && category.parentId !== null && childCategories && childCategories.length > 0 && (
         <div className="widget widget-collapsible">
           <h3 className="widget-title">
             <a
-              onClick={() => {
-                handleOnClickCategory();
-              }}
               data-toggle="collapse"
               href="#widget-1"
               role="button"
@@ -30,14 +43,15 @@ export const FilterCategory = () => {
           <div className="collapse show" id="widget-1">
             <div className="widget-body">
               <div className="filter-items filter-items-count">
-                {categories &&
-                  categories.length &&
-                  categories.map((c, index) => {
+                {childCategories &&
+                  childCategories.length &&
+                  childCategories.map((c, index) => {
                     return (
                       <>
                         <div className="filter-item">
                           <div className="custom-control custom-checkbox">
                             <input
+                            onChange={() => handleOnClickCategory(c.id)}
                               type="checkbox"
                               className="custom-control-input"
                               id={`cat-${index}`}

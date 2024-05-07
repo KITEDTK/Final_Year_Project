@@ -7,44 +7,50 @@ import { FilterCategory } from "../components/categories/FilterCategory";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 export const Shoplist = () => {
   const dispatch = useAppDispatch();
-  const category = useAppSelector(state => state.categories.category);
-  const clothes = useAppSelector(state => state.clothes.clothes)
+  const category = useAppSelector((state) => state.categories.category);
+  const clothes = useAppSelector((state) => state.clothes.clothes);
   // Filter
   const [filter, setFilter] = useState({
-    categoryId: '',
+    rootCategoryId: '' as string,
+    categoryId: [] as string[],
     sizeIds: [] as string[],
     colorIds: [] as string[],
   });
 
   const [sizesFilter, setSizesFilter] = useState<string[] | null>(null);
   const [colorsFilter, setColorsFilter] = useState<string[] | null>(null);
-
-  const handleSizeSelect = (size: string[]) => {
-    setSizesFilter(size); // Set the size filter as an array
+  const [categoryFilter, setCategoryFilter] = useState<string[] | null>(null);
+  
+  const handleCategorySelect = (categoryIds: string[])=>{
+    setCategoryFilter(categoryIds);
+  }
+  const handleSizeSelect = (sizeIds: string[]) => {
+    setSizesFilter(sizeIds); // Set the size filter as an array
   };
 
-  const handleColorSelect = (color: string[]) => {
-    setColorsFilter(color); // Set the color filter as an array
+  const handleColorSelect = (colorIds: string[]) => {
+    setColorsFilter(colorIds); // Set the color filter as an array
   };
 
-  // Dispatch
   useEffect(() => {
     if (category) {
-      setFilter(prevFilter => ({
+      setFilter((prevFilter) => ({
         ...prevFilter,
-        categoryId: category.id,
+        rootCategoryId: category.id,
+        categoryId: categoryFilter || [],
         colorIds: colorsFilter || [],
         sizeIds: sizesFilter || [],
       }));
-    }else {
-      setFilter(prevFilter => ({
+    } else {
+      setFilter((prevFilter) => ({
         ...prevFilter,
-        categoryId: '',
+        rootCategoryId: '',
+        categoryId: categoryFilter || [],
         colorIds: colorsFilter || [],
         sizeIds: sizesFilter || [],
       }));
     }
-  }, [category, sizesFilter, colorsFilter]);
+  }, [category, sizesFilter, colorsFilter,categoryFilter]);
 
   useEffect(() => {
     dispatch(fetchFilterClothes({ filter }));
@@ -240,31 +246,14 @@ export const Shoplist = () => {
                   </div>
                   {/* End .widget widget-clean */}
 
-                  <FilterCategory/>
-                  {/* End .widget */}
+                  <FilterCategory onSelectCategory={(categoryId)=> handleCategorySelect(categoryId)}/>
 
                   <FilterSize onSelectSize={(size) => handleSizeSelect(size)} />
-                  {/* End .widget */}
 
-                  <div className="widget widget-collapsible">
-                    <h3 className="widget-title">
-                      <a
-                        data-toggle="collapse"
-                        href="#widget-3"
-                        role="button"
-                        aria-expanded="true"
-                        aria-controls="widget-3"
-                      >
-                        Colour
-                      </a>
-                    </h3>
-                    {/* End .widget-title */}
-
-                    <FilterColor
-                      onSelectColor={(color) => handleColorSelect(color)}
-                    />
-                    {/* End .collapse */}
-                  </div>
+                  <FilterColor
+                    onSelectColor={(color) => handleColorSelect(color)}
+                  />
+                  {/* End .collapse */}
                   {/* End .widget */}
 
                   <div className="widget widget-collapsible">
@@ -465,4 +454,4 @@ export const Shoplist = () => {
       {/* End .main */}
     </>
   );
-}
+};

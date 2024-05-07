@@ -1,5 +1,6 @@
 export interface filterClothes {
-    categoryId: string;
+    categoryId: Array<string>;
     sizeIds: Array<string>;
     colorIds: Array<string>;
+    rootCategoryId: string | null;
 }
