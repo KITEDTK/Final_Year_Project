@@ -6,20 +6,15 @@ export const Navbar = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const categories = useAppSelector((state) => state.categories.categories);
-  const category = useAppSelector((state)=> state.categories.category);
   const [activeCategoryId, setActiveCategoryId] = useState<string| null>(null);
-  useEffect(() => {
-    if (category) {
-      setActiveCategoryId(category.id); // Cập nhật giá trị khi category.id thay đổi
-    }
-  }, [category]); 
   useEffect(() => {
     dispatch(fetchAllCategories());
   }, [dispatch]);
-  const handleOnclickNav = (categoryId: string) =>{
-    setActiveCategoryId(categoryId);
+  const handleOnclickNav = (categoryId: string, rootCategoryId: string) =>{
+    setActiveCategoryId(rootCategoryId);
     dispatch(fetchSingleCategories({categoryId}));
     dispatch(fetchChildCategory({categoryId}));
+    //console.log('root CategoryId' , activeCategoryId);
   }
   useEffect(() => {
     if (location.pathname !== '/shoplist') {
@@ -40,7 +35,7 @@ export const Navbar = () => {
                     return (
                       <>
                         <li  className={`megamenu-container ${c.id === activeCategoryId ? 'active' : ''}`} key={c.id}>
-                          <Link to={`/shoplist`} onClick={()=>handleOnclickNav(c.id)} className="sf-with-ul">
+                          <Link to={`/shoplist`} onClick={()=>handleOnclickNav(c.id, c.id)} className="sf-with-ul">
                             {c.name}
                           </Link>
                           <div className="megamenu megamenu-md active">
@@ -65,7 +60,7 @@ export const Navbar = () => {
                                                     return (
                                                       <>
                                                         <li >
-                                                          <Link to={`/shoplist`} onClick={()=>handleOnclickNav(ccc.id)}> 
+                                                          <Link to={`/shoplist`} onClick={()=>handleOnclickNav(ccc.id,c.id)}> 
                                                             <span>
                                                               {ccc.name}
                                                               <span className="tip tip-new">

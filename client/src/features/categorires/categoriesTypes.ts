@@ -18,7 +18,7 @@ export interface Category {
   export interface CategoriesState {
     categories: Category[];
     category: Category | null; // or {} if the initial value is an empty object
-    childCategories: BaseCategory[] | null
+    childCategories: BaseCategory[] | null;
     loading: boolean;
     error: string | null;
   }
