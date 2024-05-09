@@ -19,6 +19,7 @@ export interface Category {
     categories: Category[];
     category: Category | null; // or {} if the initial value is an empty object
     childCategories: BaseCategory[] | null;
+    rootChildCategory: BaseCategory;
     loading: boolean;
     error: string | null;
   }

@@ -29,7 +29,7 @@ export interface ClothesFilter {
 export interface Filter {
   filter: {
     rootCategoryId: string;
-    categoryId: string[];
+    categoryId: string | null;
     sizeIds: string[];
     colorIds: string[];
   };

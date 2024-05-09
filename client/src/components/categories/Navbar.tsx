@@ -1,23 +1,32 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {  fetchAllCategories, fetchSingleCategories, fetchChildCategory} from '../../features/categorires/categoriesSlice';
-import { useAppDispatch,useAppSelector } from "../../store/hooks";
+import {
+  fetchAllCategories,
+  fetchSingleCategories,
+  fetchChildCategory,
+  fetchChildRootCategory,
+} from "../../features/categorires/categoriesSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 export const Navbar = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const categories = useAppSelector((state) => state.categories.categories);
-  const [activeCategoryId, setActiveCategoryId] = useState<string| null>(null);
-  useEffect(() => {
+  useEffect(()=>{
     dispatch(fetchAllCategories());
-  }, [dispatch]);
-  const handleOnclickNav = (categoryId: string, rootCategoryId: string) =>{
+  },[dispatch]);
+  const categories = useAppSelector((state) => state.categories.categories);
+  const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
+  const handleOnclickNav = (
+    categoryId: string,
+    rootCategoryId: string,
+    childRootCategoryId: string
+  ) => {
     setActiveCategoryId(rootCategoryId);
-    dispatch(fetchSingleCategories({categoryId}));
-    dispatch(fetchChildCategory({categoryId}));
-    //console.log('root CategoryId' , activeCategoryId);
-  }
+    dispatch(fetchSingleCategories({ categoryId })); //root category
+    dispatch(fetchChildCategory({ categoryId }));
+    dispatch(fetchChildRootCategory({ categoryId: childRootCategoryId })); // dispatch chỉ để hiển thị ở filter category
+  };
   useEffect(() => {
-    if (location.pathname !== '/shoplist') {
+    if (location.pathname !== "/shoplist") {
       setActiveCategoryId(null);
     }
   }, [location]);
@@ -34,8 +43,17 @@ export const Navbar = () => {
                   categories.map((c) => {
                     return (
                       <>
-                        <li  className={`megamenu-container ${c.id === activeCategoryId ? 'active' : ''}`} key={c.id}>
-                          <Link to={`/shoplist`} onClick={()=>handleOnclickNav(c.id, c.id)} className="sf-with-ul">
+                        <li
+                          className={`megamenu-container ${
+                            c.id === activeCategoryId ? "active" : ""
+                          }`}
+                          key={c.id}
+                        >
+                          <Link
+                            to={`/shoplist`}
+                            onClick={() => handleOnclickNav(c.id, c.id, c.id)}
+                            className="sf-with-ul"
+                          >
                             {c.name}
                           </Link>
                           <div className="megamenu megamenu-md active">
@@ -49,7 +67,7 @@ export const Navbar = () => {
                                         return (
                                           <>
                                             <div className="col-md-6">
-                                              <div  className="menu-title">
+                                              <div className="menu-title">
                                                 {cc.name}
                                               </div>
                                               {/* End .menu-title */}
@@ -59,8 +77,17 @@ export const Navbar = () => {
                                                   cc.children.map((ccc) => {
                                                     return (
                                                       <>
-                                                        <li >
-                                                          <Link to={`/shoplist`} onClick={()=>handleOnclickNav(ccc.id,c.id)}> 
+                                                        <li>
+                                                          <Link
+                                                            to={`/shoplist`}
+                                                            onClick={() =>
+                                                              handleOnclickNav(
+                                                                ccc.id,
+                                                                c.id,
+                                                                ccc.id
+                                                              )
+                                                            }
+                                                          >
                                                             <span>
                                                               {ccc.name}
                                                               <span className="tip tip-new">
@@ -69,6 +96,37 @@ export const Navbar = () => {
                                                             </span>
                                                           </Link>
                                                         </li>
+                                                        {ccc.children &&
+                                                          ccc.children.length > 0 &&
+                                                          ccc.children.map(
+                                                            (cccc) => {
+                                                              return (
+                                                                <>
+                                                                  <li>
+                                                                    <Link
+                                                                      to={`/shoplist`}
+                                                                      onClick={() =>
+                                                                        handleOnclickNav(
+                                                                          ccc.id,
+                                                                          c.id,
+                                                                          cccc.id
+                                                                        )
+                                                                      }
+                                                                    >
+                                                                      <span>
+                                                                        {
+                                                                          cccc.name
+                                                                        }
+                                                                        <span className="tip tip-new">
+                                                                          New
+                                                                        </span>
+                                                                      </span>
+                                                                    </Link>
+                                                                  </li>
+                                                                </>
+                                                              );
+                                                            }
+                                                          )}
                                                       </>
                                                     );
                                                   })}
@@ -147,4 +205,4 @@ export const Navbar = () => {
       </div>
     </>
   );
-}
+};

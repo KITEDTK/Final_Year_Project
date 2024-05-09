@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchFilterClothes } from "../features/products/clothesSlice";
 import { SingleClothShoplist } from "../components/products/SingleClothShoplist";
 import { FilterSize } from "../components/sizes/FilterSize";
-import FilterColor from "../components/colors/FilterColor";
+import {FilterColor} from "../components/colors/FilterColor";
 import { FilterCategory } from "../components/categories/FilterCategory";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 export const Shoplist = () => {
@@ -12,17 +12,17 @@ export const Shoplist = () => {
   // Filter
   const [filter, setFilter] = useState({
     rootCategoryId: '' as string,
-    categoryId: [] as string[],
+    categoryId: '' as string,
     sizeIds: [] as string[],
     colorIds: [] as string[],
   });
 
   const [sizesFilter, setSizesFilter] = useState<string[] | null>(null);
   const [colorsFilter, setColorsFilter] = useState<string[] | null>(null);
-  const [categoryFilter, setCategoryFilter] = useState<string[] | null>(null);
+  const [categoryFilter, setCategoryFilter] = useState<string| null>(null);
   
-  const handleCategorySelect = (categoryIds: string[])=>{
-    setCategoryFilter(categoryIds);
+  const handleCategorySelect = (categoryId: string | null)=>{
+    setCategoryFilter(categoryId);
   }
   const handleSizeSelect = (sizeIds: string[]) => {
     setSizesFilter(sizeIds); // Set the size filter as an array
@@ -37,7 +37,7 @@ export const Shoplist = () => {
       setFilter((prevFilter) => ({
         ...prevFilter,
         rootCategoryId: category.id,
-        categoryId: categoryFilter || [],
+        categoryId: categoryFilter || '',
         colorIds: colorsFilter || [],
         sizeIds: sizesFilter || [],
       }));
@@ -45,7 +45,7 @@ export const Shoplist = () => {
       setFilter((prevFilter) => ({
         ...prevFilter,
         rootCategoryId: '',
-        categoryId: categoryFilter || [],
+        categoryId: categoryFilter || '',
         colorIds: colorsFilter || [],
         sizeIds: sizesFilter || [],
       }));

@@ -46,18 +46,45 @@ export const fetchChildCategory = createAsyncThunk<BaseCategory[], FetchSingleCa
     }
   }
 )
+export const fetchChildRootCategory = createAsyncThunk<BaseCategory, FetchSingleCategoriesPayload>(
+  "categories/get-single-categories/root-child",
+  async ({ categoryId }) => {
+    try {
+      const response: AxiosResponse<BaseCategory> = await axios.get(`${BASE_URL}/${categoryId}`, {
+        headers: { "Content-Type": "application/json" },
+      });
+      return response.data;
+    } catch (err) {
+      console.error("fetching error", err);
+      throw err;
+    }
+  }
+);
 const categoriesSlice = createSlice({
   name: "categories",
   initialState: {
     categories: [],
     category: null,
     childCategories: [],
+    rootChildCategory: {} as BaseCategory,
     loading: false,
     error: null,
   } as CategoriesState,
   reducers: {},
   extraReducers: (builder) => {
     builder
+    .addCase(fetchChildRootCategory.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(fetchChildRootCategory.fulfilled, (state, action) => {
+      state.loading = false;
+      state.rootChildCategory = action.payload;
+    })
+    .addCase(fetchChildRootCategory.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message ?? "Unknown error";
+    })
 
       .addCase(fetchAllCategories.pending, (state) => {
         state.loading = true;
