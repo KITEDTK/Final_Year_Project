@@ -80,7 +80,7 @@ export const FilterCategory: React.FC<Props> = ({ onSelectCategory }) => {
                               </label>
                             </div>
                             {/* End .custom-checkbox */}
-                            <span className="item-count">3</span>
+                            <span className="item-count">{c.totalAmount}</span>
                           </div>
                         </>
                       );

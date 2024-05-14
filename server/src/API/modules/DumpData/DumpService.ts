@@ -5,13 +5,13 @@ const prisma = new PrismaClient();
 async function dumpCategories(){
     const input = [
         {
-            name: 'Quần shorts'
+            name: 'Tất cả'
         }
     ];
     const dataInput = input.map((c)=>{
         return {
             ...c,
-            parentId: ''
+            parentId: '0ca741f6-944c-4517-ae17-51087c5ddd11'
         }
     })
     const dump = await prisma.categories.createMany({
@@ -22,13 +22,13 @@ async function dumpCategories(){
 async function updateCategories(){
     const dump = await prisma.categories.updateMany({
         where:{
-            parentId: '',
+            parentId: '0ca741f6-944c-4517-ae17-51087c5ddd11',
             NOT:{
-                id: ''
+                id: '412f916f-0179-4396-a9e7-2ddeba2f3e28'
             }
         },
         data:{
-            parentId: ''
+            parentId: '412f916f-0179-4396-a9e7-2ddeba2f3e28'
         }
     });
     return dump;

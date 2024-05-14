@@ -18,10 +18,18 @@ export interface Category {
   export interface CategoriesState {
     categories: Category[];
     category: Category | null; // or {} if the initial value is an empty object
-    childCategories: BaseCategory[] | null;
+    childCategories: ChildCategories[] | null;
     rootChildCategory: BaseCategory;
     loading: boolean;
     error: string | null;
+  }
+  export interface ChildCategories {
+    id: string;
+    name: string;
+    parentId: string | null;
+    createAt: Date;
+    isEnable: boolean;
+    totalAmount: number;
   }
   export interface FetchSingleCategoriesPayload {
     categoryId: string;

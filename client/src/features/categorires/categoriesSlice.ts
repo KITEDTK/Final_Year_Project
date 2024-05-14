@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { Category, CategoriesState,FetchSingleCategoriesPayload, BaseCategory } from "./categoriesTypes";
+import { Category, CategoriesState,FetchSingleCategoriesPayload, BaseCategory, ChildCategories } from "./categoriesTypes";
 
 const BASE_URL = "http://localhost:4000/categories";
 
@@ -32,11 +32,11 @@ export const fetchSingleCategories = createAsyncThunk<Category, FetchSingleCateg
     }
   }
 );
-export const fetchChildCategory = createAsyncThunk<BaseCategory[], FetchSingleCategoriesPayload>(
+export const fetchChildCategory = createAsyncThunk<ChildCategories[], FetchSingleCategoriesPayload>(
   "categories/child",
   async ({categoryId}) =>{
     try {
-      const response: AxiosResponse<BaseCategory[]> = await axios.get(`${BASE_URL}/${categoryId}/child`, {
+      const response: AxiosResponse<ChildCategories[]> = await axios.get(`${BASE_URL}/${categoryId}/child`, {
         headers: { "Content-Type": "application/json" },
       });
       return response.data;
