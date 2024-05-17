@@ -13,7 +13,7 @@ export interface Auth {
   isEnable: boolean;
 }
 export interface AuthState {
-  auth: Auth;
+  auth: Auth | null;
   loading: boolean;
   error: string | null;
 }

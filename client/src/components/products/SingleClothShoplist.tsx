@@ -44,7 +44,9 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
   const chooseColor = (colorId: string) => {
     setActiveColor(colorId);
   };
-
+  const addItemToCart = (clothDetailId: string) =>{
+    console.log("cloth",clothDetailId);
+  }
   const buttonStyle: React.CSSProperties = {
     cursor: 'pointer',
     padding: '2px', // Adjust padding as needed
@@ -94,7 +96,7 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
                     clothDetails
                       .filter((item) => item.colorId === activeColor)
                       .map((item, index) => (
-                        <button key={index} style={buttonStyle}>
+                        <button onClick={()=> addItemToCart(item.id)} key={index}  style={buttonStyle}>
                           size: {item.size.name}
                         </button>
                       ))}

@@ -9,6 +9,7 @@ import ClothesRoute from "./API/modules/Clothes/ClothesRoute";
 import CategoriesRoute from "./API/modules/Categories/CategoriesRoute";
 import SizesRoute from "./API/modules/Sizes/SizesRoute";
 import ColorsRoute from "./API/modules/Colors/ColorsRoute";
+import CartsRoute from "./API/modules/Carts/CartsRoute";
 
 const app = express();
 app.use((req: Request, res: Response, next: NextFunction) => {
@@ -21,6 +22,7 @@ app.use("/clothes", ClothesRoute);
 app.use("/categories",CategoriesRoute);
 app.use("/sizes",SizesRoute);
 app.use("/colors",ColorsRoute);
+app.use("/carts",CartsRoute);
 
 //dump
 import DumpRoute from "./API/modules/DumpData/DumpRoute";

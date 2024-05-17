@@ -71,7 +71,7 @@ model ClothDetails {
   updateAt       DateTime?
   isEnable       Boolean          @default(true)
   paymentDetails PaymentDetails[]
-  cartDetials    CartDetails[]
+  carts    Carts[]
   refunds        Refunds[]
 }
 
@@ -79,15 +79,15 @@ model Users {
   id               String            @id @default(uuid())
   username         String?           @unique
   password         String?
-  fullname         String?            
-  email            String?            @unique
+  fullname         String?
+  email            String?           @unique
   phoneNumber      String?
-  point            Int?               @default(0)
+  point            Int?              @default(0)
   verifyToken      String?
   expiredTokenTime DateTime?
-  createAt         DateTime?          @default(now())
+  createAt         DateTime?         @default(now())
   updateAt         DateTime?
-  isEnable         Boolean?           @default(true)
+  isEnable         Boolean?          @default(true)
   comments         Comments[]
   carts            Carts[]
   payments         Payments[]
@@ -166,26 +166,16 @@ model PaymentDetails {
 }
 
 model Carts {
-  id          String        @id @default(uuid())
-  users       Users         @relation(fields: [userId], references: [id])
-  userId      String
-  isCheckout  Boolean       @default(false)
-  cartDetails CartDetails[]
-  amount      Int
-  createAt    DateTime      @default(now())
-  updateAt    DateTime?
-  isEnable    Boolean       @default(true)
-}
-
-model CartDetails {
-  id       String       @id @default(uuid())
-  cart     Carts        @relation(fields: [cartId], references: [id])
-  cartId   String
-  cloth    ClothDetails @relation(fields: [clothId], references: [id])
-  clothId  String
-  createAt DateTime     @default(now())
-  updateAt DateTime?
-  isEnable Boolean      @default(true)
+  id            String       @id @default(uuid())
+  users         Users        @relation(fields: [userId], references: [id])
+  userId        String
+  clothDetails ClothDetails @relation(fields: [clothDetailId], references: [id])
+  clothDetailId String
+  isPaid   Boolean      @default(false)
+  amount        Int
+  createAt      DateTime     @default(now())
+  updateAt      DateTime?
+  isEnable      Boolean      @default(true)
 }
 
 model Comments {

@@ -5,8 +5,12 @@
         "dev": "concurrently \"cd client && npm run dev\" \"cd server && npm run dev\""
     },
     "dependencies": {
+        "@prisma/client": "^5.14.0",
         "concurrently": "^8.2.2",
         "lodash": "^4.17.21",
         "redux-persist": "^6.0.0"
+    },
+    "devDependencies": {
+        "prisma": "^5.14.0"
     }
 }
