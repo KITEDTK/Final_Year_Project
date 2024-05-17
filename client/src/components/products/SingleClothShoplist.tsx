@@ -1,11 +1,16 @@
 import  { useState, useEffect } from "react";
 import { ClothesFilter } from '../../features/products/clothesTypes';
+import { Bounce, toast } from "react-toastify";
 import _ from "lodash";
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
+import { fetchAddItemToCart } from "../../features/carts/cartsSlice";
 interface Props {
     clothes : ClothesFilter
 }
 export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
   const {clothDetails} = clothes;
+  const dispatch = useAppDispatch();
+  const auth = useAppSelector((state)=> state.auth.auth);
   const [activeColor, setActiveColor] = useState(() => {
     if (!clothDetails || clothDetails.length === 0) {
       return "";
@@ -44,9 +49,40 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
   const chooseColor = (colorId: string) => {
     setActiveColor(colorId);
   };
-  const addItemToCart = (clothDetailId: string) =>{
-    console.log("cloth",clothDetailId);
+
+  const addItemToCart = async (clothDetailId: string) => {
+    if (auth && auth !== null) {
+      try {
+          await dispatch(fetchAddItemToCart({ userId: auth.id, clothDetailId })).unwrap();
+          toast.success(<>Đã thêm sản phẩm vào giỏ hàng</>, {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+            });
+      } catch (error) {
+        toast.error(<>Lỗi</>, {
+          position: "bottom-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
+      }
+  } else {
+      console.log(auth);
   }
+};
+
   const buttonStyle: React.CSSProperties = {
     cursor: 'pointer',
     padding: '2px', // Adjust padding as needed

@@ -20,4 +20,13 @@ async function getCartInfo(req: Request, res: Response){
     console.log(err);
   }
 }
-export default {addItemToCarts, getCartInfo}
+async function deleteItemInCart(req: Request, res: Response){
+  try {
+    const {cartId, userId} = req.params;
+    const result = await CartsService.deleteItemInCart(cartId, userId);
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
+export default {addItemToCarts, getCartInfo,deleteItemInCart}

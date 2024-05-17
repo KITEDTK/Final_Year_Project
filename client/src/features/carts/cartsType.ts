@@ -4,6 +4,17 @@ export interface BaseCart{
     clothDetailId: string;
     isCheckout: boolean;
     amount: number;
+    clothDetails: {
+        size:{
+            name: string;
+        },
+        color:{
+            name: string;
+        },
+        cloth:{
+            name: string;
+        }
+    }
 }
 export interface AddItemInput{
     userId: string;

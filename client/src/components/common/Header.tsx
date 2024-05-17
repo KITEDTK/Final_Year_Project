@@ -171,24 +171,7 @@ export const  Header = () => {
                     <span className="wishlist-txt">My Wishlist</span>
                   </a>
     
-                  <div className="dropdown cart-dropdown">
-                    <a
-                      href="#"
-                      className="dropdown-toggle"
-                      role="button"
-                      data-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                      data-display="static"
-                    >
-                      <i className="icon-shopping-cart"></i>
-                      <span className="cart-count">2</span>
-                      <span className="cart-txt">$ 164,00</span>
-                    </a>
-    
                   <MiniHeaderCart/>
-                    {/* End .dropdown-menu */}
-                  </div>
                   {/* End .cart-dropdown */}
                 </div>
               </div>

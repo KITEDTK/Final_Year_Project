@@ -8,6 +8,8 @@ import { BrowserRouter } from "react-router-dom";
 import AuthProvider from "react-auth-kit/AuthProvider";
 import createStore from "react-auth-kit/createStore";
 import { persistStore } from 'redux-persist';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
@@ -23,6 +25,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             })}
           >
             <App />
+            <ToastContainer />
           </AuthProvider>
         </React.StrictMode>
       </PersistGate>
