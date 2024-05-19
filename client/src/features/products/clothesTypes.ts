@@ -24,6 +24,7 @@ export interface ClothesFilter {
   createAt: Date;
   isEnable: boolean;
   clothDetails: ClothDetailsColorSize[];
+  price: number;
 }
 
 export interface Filter {

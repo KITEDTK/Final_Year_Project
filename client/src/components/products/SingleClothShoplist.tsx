@@ -1,16 +1,19 @@
-import  { useState, useEffect } from "react";
-import { ClothesFilter } from '../../features/products/clothesTypes';
+import { useState, useEffect } from "react";
+import { ClothesFilter } from "../../features/products/clothesTypes";
 import { Bounce, toast } from "react-toastify";
 import _ from "lodash";
-import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import { fetchAddItemToCart } from "../../features/carts/cartsSlice";
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import {
+  addItemInLocalCart,
+  fetchAddItemToCart,
+} from "../../features/carts/cartsSlice";
 interface Props {
-    clothes : ClothesFilter
+  clothes: ClothesFilter;
 }
 export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
-  const {clothDetails} = clothes;
+  const { clothDetails, ...rest } = clothes;
   const dispatch = useAppDispatch();
-  const auth = useAppSelector((state)=> state.auth.auth);
+  const auth = useAppSelector((state) => state.auth.auth);
   const [activeColor, setActiveColor] = useState(() => {
     if (!clothDetails || clothDetails.length === 0) {
       return "";
@@ -18,15 +21,16 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
       return clothDetails[0] ? clothDetails[0].colorId : "";
     }
   });
-  useEffect(()=>{ // Mỗi lần filter thì reset mẫu màu đã chọn 
-    setActiveColor(()=>{
+  useEffect(() => {
+    // Mỗi lần filter thì reset mẫu màu đã chọn
+    setActiveColor(() => {
       if (!clothDetails || clothDetails.length === 0) {
         return "";
       } else {
         return clothDetails[0] ? clothDetails[0].colorId : "";
       }
-    })
-  },[clothDetails]);
+    });
+  }, [clothDetails]);
   let color: {
     clothId: string;
     colorInfo: { colorId: string; name: string }[];
@@ -37,7 +41,7 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
       colorInfo: [],
     };
   } else {
-    const colorUnqId = _.uniqBy(clothDetails, 'colorId').map(item => ({
+    const colorUnqId = _.uniqBy(clothDetails, "colorId").map((item) => ({
       colorId: item.colorId,
       name: item.color.name,
     }));
@@ -52,19 +56,22 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
 
   const addItemToCart = async (clothDetailId: string) => {
     if (auth && auth !== null) {
+      // Khách hàng đã đăng nhập
       try {
-          await dispatch(fetchAddItemToCart({ userId: auth.id, clothDetailId })).unwrap();
-          toast.success(<>Đã thêm sản phẩm vào giỏ hàng</>, {
-            position: "bottom-right",
-            autoClose: 4000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-            });
+        await dispatch(
+          fetchAddItemToCart({ userId: auth.id, clothDetailId })
+        ).unwrap();
+        toast.success(<>Đã thêm sản phẩm vào giỏ hàng</>, {
+          position: "bottom-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
       } catch (error) {
         toast.error(<>Lỗi</>, {
           position: "bottom-right",
@@ -76,16 +83,56 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
           progress: undefined,
           theme: "light",
           transition: Bounce,
-          });
+        });
       }
-  } else {
-      console.log(auth);
-  }
-};
+    } else {
+      // khách hàng chưa đăng nhập
+      try {
+        const clothInfo = clothDetails.find((cd) => cd.id === clothDetailId);
+        const result = {
+          ...rest,
+          clothInfo,
+        };
+        await dispatch(
+          addItemInLocalCart({
+            clothDetailId: clothDetailId,
+            sizeName: result.clothInfo?.size.name ?? "Không tồn tại size",
+            colorName: result.clothInfo?.color.name ?? "Không tồn tại màu",
+            clothesName: result.name,
+            amount: 1,
+            price: result.price,
+          })
+        );
+        toast.success(<>Đã thêm sản phẩm vào giỏ hàng</>, {
+          position: "bottom-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      } catch (error) {
+        toast.error(<>Lỗi</>, {
+          position: "bottom-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      }
+    }
+  };
 
   const buttonStyle: React.CSSProperties = {
-    cursor: 'pointer',
-    padding: '2px', // Adjust padding as needed
+    cursor: "pointer",
+    padding: "2px", // Adjust padding as needed
   };
   return (
     <>
@@ -132,7 +179,11 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
                     clothDetails
                       .filter((item) => item.colorId === activeColor)
                       .map((item, index) => (
-                        <button onClick={()=> addItemToCart(item.id)} key={index}  style={buttonStyle}>
+                        <button
+                          onClick={() => addItemToCart(item.id)}
+                          key={index}
+                          style={buttonStyle}
+                        >
                           size: {item.size.name}
                         </button>
                       ))}
@@ -152,7 +203,7 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
               <a href="product.html">{clothes.name}</a>
             </h3>
             {/* End .product-title */}
-            <div className="product-price">$60.00</div>
+            <div className="product-price">{clothes.price} vnd</div>
             {/* End .product-price */}
             <div className="ratings-container">
               <div className="ratings">
@@ -165,23 +216,27 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
             {/* End .rating-container */}
 
             <div className="product-nav product-nav-thumbs">
-              { color && color.colorInfo && color.colorInfo.map((item) => (
-                <a
-                  key={item.colorId} // Ensure each element in the map has a unique key
-                  onClick={() => chooseColor(item.colorId)}
-                  className={activeColor === item.colorId ? "active" : ""}
-                  style={{
-                    border:
-                      activeColor === item.colorId ? "2px solid black" : "none",
-                  }}
-                >
-                  <img
-                    src="assets/images/products/product-4-thumb.jpg"
-                    alt="product desc"
-                    style={{ border: `2px solid ${item.name}` }}
-                  />
-                </a>
-              ))}
+              {color &&
+                color.colorInfo &&
+                color.colorInfo.map((item) => (
+                  <a
+                    key={item.colorId} // Ensure each element in the map has a unique key
+                    onClick={() => chooseColor(item.colorId)}
+                    className={activeColor === item.colorId ? "active" : ""}
+                    style={{
+                      border:
+                        activeColor === item.colorId
+                          ? "2px solid black"
+                          : "none",
+                    }}
+                  >
+                    <img
+                      src="assets/images/products/product-4-thumb.jpg"
+                      alt="product desc"
+                      style={{ border: `2px solid ${item.name}` }}
+                    />
+                  </a>
+                ))}
             </div>
             {/* End .product-nav */}
           </div>
@@ -191,5 +246,4 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
       </div>
     </>
   );
-}
-
+};

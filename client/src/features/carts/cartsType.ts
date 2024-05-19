@@ -22,9 +22,27 @@ export interface AddItemInput{
 }
 export interface CartsState{
     carts: BaseCart[] | null;
-    loading: boolean,
-    error: string | null
+    loading: boolean;
+    error: string | null;
+    localCarts : LocalCarts;
 }
 export interface UserId{
     userId: string;
+}
+export interface DeleteItemInput { 
+    userId: string;
+    cartId: string;
+}
+export interface LocalCarts{
+    items: ItemInLocalCarts[];
+    amount: number;
+    totalPrice: number;
+}
+export interface ItemInLocalCarts{
+    sizeName: string ;
+    colorName: string;
+    clothesName: string;
+    clothDetailId: string;
+    amount: number;
+    price: number;
 }

@@ -1,9 +1,14 @@
 import { Navbar } from "../categories/Navbar";
 import { Link } from "react-router-dom";
-import { useAppSelector } from '../../store/hooks';
+import { useAppSelector,useAppDispatch } from '../../store/hooks';
 import { MiniHeaderCart } from "../carts/MiniHeaderCart";
+import { resetAuth } from "../../features/auth/authSlice";
 export const  Header = () => {
+    const dispatch = useAppDispatch();
     const auth = useAppSelector(state=> state.auth.auth);
+    const handleLogout = () =>{
+      dispatch(resetAuth());
+    }
     return (
         <>
         {/* <button onClick={()=> handleLogout()}>signOut</button> */}
@@ -116,6 +121,11 @@ export const  Header = () => {
                         </li>
                       </ul>
                     </div>
+                    {/* End .header-menu */}
+                  </div>
+                  {/* End .header-dropdown */}
+                  <div className="header-dropdown">
+                    <a onClick={()=> handleLogout() }>Đăng xuất</a>
                     {/* End .header-menu */}
                   </div>
                   {/* End .header-dropdown */}

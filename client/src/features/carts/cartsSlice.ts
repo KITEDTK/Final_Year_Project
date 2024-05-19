@@ -1,9 +1,8 @@
-import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { AddItemInput, BaseCart, CartsState,UserId, DeleteItemInput } from './cartsType';
+import { AddItemInput, BaseCart, CartsState, UserId, DeleteItemInput, ItemInLocalCarts, LocalCarts } from './cartsType';
 
 const BASE_URL = "http://localhost:4000/carts";
-
 export const fetchAddItemToCart = createAsyncThunk<BaseCart[], AddItemInput>(
     "carts/add-to-cart",
     async ({ userId, clothDetailId }) => {
@@ -55,9 +54,41 @@ const cartsSlice = createSlice({
     initialState:{
         carts: [],
         loading: false,
-        error: null
+        error: null,
+        localCarts: {} as LocalCarts,
     } as CartsState,
-    reducers:{},
+    reducers:{
+        addItemInLocalCart: (state, action: PayloadAction<ItemInLocalCarts>) =>{
+            const newItem = action.payload;
+            if(!state.localCarts){
+                state.localCarts = {
+                    items: [newItem],
+                    amount: 1,
+                    totalPrice: newItem.price
+                }
+            }else{
+                const existingItem = state.localCarts.items.find((item)=> item.clothDetailId === newItem.clothDetailId)
+                if(existingItem){
+                    existingItem.amount += newItem.amount;
+                }else{
+                    state.localCarts.items.push(newItem);
+                }
+                state.localCarts.totalPrice += newItem.price * newItem.amount;
+            }
+        },
+        removeItemFromLocalCart(state, action: PayloadAction<string>) {
+            const clothDetailIdToRemove = action.payload;
+            if (state.localCarts) {
+              const updatedItems = state.localCarts.items.filter((item) => item.clothDetailId !== clothDetailIdToRemove);
+              const removedItem = state.localCarts.items.find((item) => item.clothDetailId === clothDetailIdToRemove);
+              if (removedItem) {
+                state.localCarts.amount -= removedItem.amount;
+                state.localCarts.totalPrice -= removedItem.price * removedItem.amount;
+                state.localCarts.items = updatedItems;
+              }
+            }
+          },
+    },
     extraReducers: (builder)=>{
         builder
         .addCase(fetchAddItemToCart.pending, (state)=>{
@@ -98,4 +129,5 @@ const cartsSlice = createSlice({
         })
     }
 });
+export const  {addItemInLocalCart, removeItemFromLocalCart} = cartsSlice.actions;
 export default cartsSlice.reducer;

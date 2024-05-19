@@ -1,18 +1,19 @@
 import { useEffect } from "react";
-import { BaseCart } from "../../features/carts/cartsType";
+import { BaseCart } from '../../features/carts/cartsType';
 import { Bounce, toast } from "react-toastify";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import { fetchDeleteItemInCart, fetchItemInCart } from "../../features/carts/cartsSlice";
+import { fetchDeleteItemInCart, fetchItemInCart, removeItemFromLocalCart } from "../../features/carts/cartsSlice";
 export const MiniHeaderCart = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth.auth);
   const authCarts = useAppSelector((state) => state.carts.carts);
+  const LocalCarts = useAppSelector((state)=>state.carts.localCarts);
   useEffect(() => {
     if (auth) {
       dispatch(fetchItemInCart({ userId: auth.id }));
     }
   }, [dispatch, auth]);
-  const deleteItemFromCart = async (cartId: string) =>{
+  const deleteItemFromAuthCart = async (cartId: string) =>{
     if(auth && auth !== null){
       try{
         await dispatch(fetchDeleteItemInCart({userId: auth.id, cartId: cartId})).unwrap();
@@ -40,9 +41,34 @@ export const MiniHeaderCart = () => {
           transition: Bounce,
           });
       }
-      
-    }else{
-      console.log(auth);
+    }
+  }
+  const deleteItemFromLocalCart = async (clothDetailId: string) =>{
+    try{
+      await dispatch(removeItemFromLocalCart(clothDetailId));
+      toast.info('Đã xóa sản phẩm khỏi giỏ hàng', {
+        position: "bottom-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
+    }catch(err){
+      toast.error(<>{err}</>, {
+        position: "bottom-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
     }
   }
   return (
@@ -79,7 +105,7 @@ export const MiniHeaderCart = () => {
                           <span className="cart-product-qty"></span>{ac.clothDetails.color.name}/{ac.clothDetails.size.name}
                           <br />
                           <span className="cart-product-qty">{ac.amount}</span>x
-                          $84.00
+                          price
                         </span>
                       </div>
                       {/* End .product-cart-details */}
@@ -92,7 +118,7 @@ export const MiniHeaderCart = () => {
                           />
                         </a>
                       </figure>
-                      <a onClick={()=>deleteItemFromCart(ac.id)} className="btn-remove" title="Remove Product">
+                      <a onClick={()=>deleteItemFromAuthCart(ac.id)} className="btn-remove" title="Remove Product">
                         <i className="icon-close"></i>
                       </a>
                     </div>
@@ -106,7 +132,41 @@ export const MiniHeaderCart = () => {
               )
             ) : (
               <>
-                <div>Bạn chưa đăng nhập</div>
+                {LocalCarts && LocalCarts.items && LocalCarts.items.length > 0 ? LocalCarts.items.map((lc)=>(
+                  <>
+                  {/* Start .product */}
+                  <div className="product">
+                    <div className="product-cart-details">
+                      <h4 className="product-title">
+                        <a href="product.html">{lc.clothesName}</a>
+                      </h4>
+
+                      <span className="cart-product-info">
+                        <span className="cart-product-qty"></span>{lc.colorName}/{lc.sizeName}
+                        <br />
+                        <span className="cart-product-qty">{lc.amount}</span>x
+                        {lc.price} đ
+                      </span>
+                    </div>
+                    {/* End .product-cart-details */}
+
+                    <figure className="product-image-container">
+                      <a href="product.html" className="product-image">
+                        <img
+                          src="assets/images/products/cart/product-1.jpg"
+                          alt="product"
+                        />
+                      </a>
+                    </figure>
+                    <a onClick={()=> deleteItemFromLocalCart(lc.clothDetailId)} className="btn-remove" title="Remove Product">
+                      <i className="icon-close"></i>
+                    </a>
+                  </div>
+                  {/* End .product-cart-details */}
+                </>
+                )) : <>
+                  <div>Giỏ hàng của bạn đang trống</div>
+                </>}
               </>
             )}
             {/* End .product */}
