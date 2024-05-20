@@ -13,6 +13,7 @@ export interface BaseCart{
         },
         cloth:{
             name: string;
+            price: number;
         }
     }
 }
@@ -35,7 +36,7 @@ export interface DeleteItemInput {
 }
 export interface LocalCarts{
     items: ItemInLocalCarts[];
-    amount: number;
+    totalAmount: number;
     totalPrice: number;
 }
 export interface ItemInLocalCarts{

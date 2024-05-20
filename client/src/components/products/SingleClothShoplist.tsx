@@ -86,7 +86,7 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
         });
       }
     } else {
-      // khách hàng chưa đăng nhập
+      //khách hàng chưa đăng nhập
       try {
         const clothInfo = clothDetails.find((cd) => cd.id === clothDetailId);
         const result = {
