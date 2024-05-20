@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { ClothesFilter } from "../../features/products/clothesTypes";
-import { Bounce, toast } from "react-toastify";
 import _ from "lodash";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import {
@@ -10,6 +9,8 @@ import {
 interface Props {
   clothes: ClothesFilter;
 }
+import { showToast } from "../../utils/showToast";
+import { formatMoney } from "../../utils/formatMoney";
 export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
   const { clothDetails, ...rest } = clothes;
   const dispatch = useAppDispatch();
@@ -61,29 +62,9 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
         await dispatch(
           fetchAddItemToCart({ userId: auth.id, clothDetailId })
         ).unwrap();
-        toast.success(<>Đã thêm sản phẩm vào giỏ hàng</>, {
-          position: "bottom-right",
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
+        showToast(<>Đã thêm sản phẩm vào giỏ hàng</>,"success")
       } catch (error) {
-        toast.error(<>Lỗi</>, {
-          position: "bottom-right",
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
+        showToast(<>Lỗi khi thêm sản phẩm vào giỏ hàng</>, "error")
       }
     } else {
       //khách hàng chưa đăng nhập
@@ -103,29 +84,9 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
             price: result.price,
           })
         );
-        toast.success(<>Đã thêm sản phẩm vào giỏ hàng</>, {
-          position: "bottom-right",
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
+        showToast(<>Đã thêm sản phẩm vào giỏ hàng</>,"success")
       } catch (error) {
-        toast.error(<>Lỗi</>, {
-          position: "bottom-right",
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
+        showToast(<>Lỗi khi thêm sản phẩm vào giỏ hàng</>, "error")
       }
     }
   };
@@ -203,7 +164,7 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
               <a href="product.html">{clothes.name}</a>
             </h3>
             {/* End .product-title */}
-            <div className="product-price">{clothes.price} vnd</div>
+            <div className="product-price">{formatMoney(clothes.price)}đ</div>
             {/* End .product-price */}
             <div className="ratings-container">
               <div className="ratings">

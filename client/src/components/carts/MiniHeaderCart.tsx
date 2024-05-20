@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { BaseCart } from "../../features/carts/cartsType";
-import { Bounce, toast } from "react-toastify";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import {
   fetchDeleteItemInCart,
@@ -8,6 +7,8 @@ import {
   removeItemFromLocalCart,
   resetLocalCarts,
 } from "../../features/carts/cartsSlice";
+import { formatMoney } from "../../utils/formatMoney";
+import {showToast} from "../../utils/showToast";
 export const MiniHeaderCart = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth.auth);
@@ -44,58 +45,18 @@ export const MiniHeaderCart = () => {
         await dispatch(
           fetchDeleteItemInCart({ userId: auth.id, cartId: cartId })
         ).unwrap();
-        toast.info("Đã xóa sản phẩm khỏi giỏ hàng", {
-          position: "bottom-right",
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
+       showToast("Đã xóa sản phẩm khỏi giỏ hàng","info")
       } catch (err) {
-        toast.error(<>{err}</>, {
-          position: "bottom-right",
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
+       showToast("Lỗi khi thêm sản phẩm","error")
       }
     }
   };
   const deleteItemFromLocalCart = async (clothDetailId: string) => {
     try {
       await dispatch(removeItemFromLocalCart(clothDetailId));
-      toast.info("Đã xóa sản phẩm khỏi giỏ hàng", {
-        position: "bottom-right",
-        autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      showToast("Đã xóa sản phẩm khỏi giỏ hàng","info")
     } catch (err) {
-      toast.error(<>{err}</>, {
-        position: "bottom-right",
-        autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      showToast("Lỗi khi thêm sản phẩm","error")
     }
   };
   const resetCart = () =>{
@@ -117,14 +78,14 @@ export const MiniHeaderCart = () => {
           {auth ? (
             <>
               <span className="cart-count">{authTotalAmount}</span>
-              <span className="cart-txt">{authTotalPrice} đ</span>
+              <span className="cart-txt">{formatMoney(authTotalPrice)}đ</span>
             </>
           ) : (
             <>
               <span className="cart-count">{LocalCarts.totalAmount}</span>
               <span className="cart-txt">
                 {LocalCarts.totalPrice !== 0
-                  ? `${LocalCarts.totalPrice} đ`
+                  ? `${formatMoney(LocalCarts.totalPrice)}đ`
                   : null}
               </span>
             </>
@@ -152,7 +113,7 @@ export const MiniHeaderCart = () => {
                           {ac.clothDetails.size.name }
                           <br />
                           <span className="cart-product-qty">{ac.amount}</span>x
-                          {ac.clothDetails.cloth.price}
+                          {ac.clothDetails.cloth.price}đ
                         </span>
                       </div>
                       {/* End .product-cart-details */}
@@ -202,7 +163,7 @@ export const MiniHeaderCart = () => {
                             <span className="cart-product-qty">
                               {lc.amount}
                             </span>
-                            x{lc.price} đ
+                            x{formatMoney(lc.price)}đ
                           </span>
                         </div>
                         {/* End .product-cart-details */}
@@ -241,8 +202,8 @@ export const MiniHeaderCart = () => {
 
           <div className="dropdown-cart-total">
             <span>Total</span>
-
-            <span className="cart-total-price">$160.00</span>
+            {auth ? (<span className="cart-total-price">{formatMoney(authTotalPrice)}đ</span>) : (<span className="cart-total-price">{formatMoney(LocalCarts.totalPrice)}đ</span>)}
+            
           </div>
           {/* End .dropdown-cart-total */}
 
