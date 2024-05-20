@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BaseCart } from "../../features/carts/cartsType";
 import { Bounce, toast } from "react-toastify";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
@@ -13,6 +13,25 @@ export const MiniHeaderCart = () => {
   const auth = useAppSelector((state) => state.auth.auth);
   const authCarts = useAppSelector((state) => state.carts.carts);
   const LocalCarts = useAppSelector((state) => state.carts.localCarts);
+  const [authTotalAmount, setAuthTotalAmount] = useState<number>(0);
+  const [authTotalPrice, setAuthTotalPrice] = useState<number>(0);
+  useEffect(() => {
+    if (auth && authCarts) {
+      const totalAmount: number = authCarts.reduce(
+        (accumulator, currentValue) => accumulator + currentValue.amount,
+        0,
+      );
+      const totalPrice: number = authCarts.reduce(
+        (accumulator, currentValue) => accumulator + currentValue.amount*currentValue.clothDetails.cloth.price,
+        0,
+      );
+      setAuthTotalAmount(totalAmount);
+      setAuthTotalPrice(totalPrice);
+    } else {
+      setAuthTotalAmount(0);
+      setAuthTotalPrice(0);
+    }
+  }, [auth, authCarts]);
   useEffect(() => {
     if (auth) {
       dispatch(fetchItemInCart({ userId: auth.id }));
@@ -21,6 +40,7 @@ export const MiniHeaderCart = () => {
   const deleteItemFromAuthCart = async (cartId: string) => {
     if (auth && auth !== null) {
       try {
+        console.log(authCarts);
         await dispatch(
           fetchDeleteItemInCart({ userId: auth.id, cartId: cartId })
         ).unwrap();
@@ -96,8 +116,8 @@ export const MiniHeaderCart = () => {
           <i className="icon-shopping-cart"></i>
           {auth ? (
             <>
-              <span className="cart-count">2</span>
-              <span className="cart-txt">$ 164,00</span>
+              <span className="cart-count">{authTotalAmount}</span>
+              <span className="cart-txt">{authTotalPrice} đ</span>
             </>
           ) : (
             <>
@@ -114,25 +134,25 @@ export const MiniHeaderCart = () => {
         <div className="dropdown-menu dropdown-menu-right">
           <div className="dropdown-cart-products">
             {auth ? (
-              authCarts && authCarts.length > 0 ? (
+              authCarts !== null && authCarts.length > 0 ? (
                 authCarts.map((ac: BaseCart) => (
                   <>
                     {/* Start .product */}
-                    <div className="product">
+                    <div className="product" key={ac.id}>
                       <div className="product-cart-details">
                         <h4 className="product-title">
                           <a href="product.html">
-                            {ac.clothDetails.cloth.name}
+                          {ac.clothDetails.cloth.name }
                           </a>
                         </h4>
 
                         <span className="cart-product-info">
                           <span className="cart-product-qty"></span>
-                          {ac.clothDetails.color.name}/
-                          {ac.clothDetails.size.name}
+                          {ac.clothDetails.color.name }/
+                          {ac.clothDetails.size.name }
                           <br />
                           <span className="cart-product-qty">{ac.amount}</span>x
-                          price
+                          {ac.clothDetails.cloth.price}
                         </span>
                       </div>
                       {/* End .product-cart-details */}

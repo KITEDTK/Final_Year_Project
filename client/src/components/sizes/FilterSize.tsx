@@ -1,7 +1,6 @@
 import  { useEffect, useState } from "react";
 import { useAppDispatch,useAppSelector } from "../../store/hooks";
 import { fetchAllSizes } from "../../features/sizes/sizesSlice";
-
 interface Props {
   onSelectSize: (sizeId: string[])=> void;
 }

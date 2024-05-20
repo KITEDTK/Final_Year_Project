@@ -31,15 +31,7 @@ async function fetchCartItem(userId: string){
             }
         }
     });
-    const totalAmount = data.reduce((accumulator, currentValue) => accumulator + currentValue.amount,
-    0,)
-    const result:any[] = data.map((item)=>{
-        return {
-            ...item
-        }
-    });
-    result.push({ totalAmount });
-    return result;
+    return data;
 }
 async function addToCarts(userId: string, clothDetailId: string){
     const check = await prisma.carts.findFirst({

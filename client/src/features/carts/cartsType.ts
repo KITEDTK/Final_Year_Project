@@ -22,7 +22,7 @@ export interface AddItemInput{
     clothDetailId: string;
 }
 export interface CartsState{
-    carts: BaseCart[] | null;
+    carts: BaseCart[];
     loading: boolean;
     error: string | null;
     localCarts : LocalCarts;
