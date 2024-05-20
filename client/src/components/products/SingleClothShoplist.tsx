@@ -62,9 +62,9 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
         await dispatch(
           fetchAddItemToCart({ userId: auth.id, clothDetailId })
         ).unwrap();
-        showToast(<>Đã thêm sản phẩm vào giỏ hàng</>,"success")
+        showToast(<>Đã thêm sản phẩm vào giỏ hàng</>, "success");
       } catch (error) {
-        showToast(<>Lỗi khi thêm sản phẩm vào giỏ hàng</>, "error")
+        showToast(<>Lỗi khi thêm sản phẩm vào giỏ hàng</>, "error");
       }
     } else {
       //khách hàng chưa đăng nhập
@@ -84,16 +84,11 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
             price: result.price,
           })
         );
-        showToast(<>Đã thêm sản phẩm vào giỏ hàng</>,"success")
+        showToast(<>Đã thêm sản phẩm vào giỏ hàng</>, "success");
       } catch (error) {
-        showToast(<>Lỗi khi thêm sản phẩm vào giỏ hàng</>, "error")
+        showToast(<>Lỗi khi thêm sản phẩm vào giỏ hàng</>, "error");
       }
     }
-  };
-
-  const buttonStyle: React.CSSProperties = {
-    cursor: "pointer",
-    padding: "2px", // Adjust padding as needed
   };
   return (
     <>
@@ -129,27 +124,20 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
               </a>
             </div>
             {/* End .product-action-vertical */}
-
-            <div className="product-action">
-              <a className="btn-product btn-cart">
-                <span>
-                  add to cart
-                  <br />
-                  {clothDetails &&
+            <div className="product-action action-icon-top">
+              {clothDetails &&
                     clothDetails.length > 0 &&
                     clothDetails
                       .filter((item) => item.colorId === activeColor)
                       .map((item, index) => (
-                        <button
+                        <a className="btn-product btn-cart"
                           onClick={() => addItemToCart(item.id)}
                           key={index}
-                          style={buttonStyle}
+                          style={{ cursor: 'pointer' }}
                         >
-                          size: {item.size.name}
-                        </button>
+                          <span>size: {item.size.name}</span>
+                        </a>
                       ))}
-                </span>
-              </a>
             </div>
             {/* End .product-action */}
           </figure>
