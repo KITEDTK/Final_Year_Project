@@ -3,6 +3,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { Footer } from "./components/common/Footer";
 import { Route, Routes } from "react-router-dom";
 import { Shoplist } from "./pages/Shoplist";
+import { Carts } from "./components/carts/Carts";
 import LoginAndRegister from './pages/LoginAndRegister';
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="" element={<Dashboard />} />
           <Route path="/shoplist" element={<Shoplist />} />
           <Route path="/login" element={<LoginAndRegister />} />
+          <Route path="/carts" element={<Carts />} />
         </Routes>
         <Footer/>
       </div>

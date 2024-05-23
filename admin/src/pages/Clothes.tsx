@@ -16,10 +16,11 @@ export function Clothes() {
       const fixedTable = removeColFromTables(table as HTMLTableElement,[6]);
       const wscols = [
         { width: 15 },
-        { width: 40 },
+        { width: 50 },
         { width: 15 },
         { width: 15 },
         { width: 13 },
+        { width: 15 },
       ];
       tableToExcel(fixedTable, "Clothes",wscols);
     } else {

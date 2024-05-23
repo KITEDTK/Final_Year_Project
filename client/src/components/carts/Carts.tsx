@@ -1,4 +1,9 @@
+import { useAppSelector } from "../../store/hooks";
+import { formatMoney } from "../../utils/formatMoney";
 export const Carts = () => {
+  const auth = useAppSelector((state)=> state.auth.auth);
+  const authCarts = useAppSelector((state)=> state.carts.carts);
+  const localCarts = useAppSelector((state)=> state.carts.localCarts);
   return (
     <>
       <main className="main">
@@ -43,17 +48,28 @@ export const Carts = () => {
                 <div className="col-lg-9">
                   <table className="table table-cart table-mobile">
                     <thead>
-                      <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
+                      {auth && auth !== null ? authCarts && authCarts.length > 0 ? (<> <tr>
+                        <th>Sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Tổng Giá</th>
                         <th></th>
                       </tr>
+                      </>) : (<>Vui lòng thêm sản phẩm vào giỏ hàng</>) : localCarts && localCarts.items && localCarts.items.length > 0 ? (<> <tr>
+                        <th>Sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Tổng Giá</th>
+                        <th></th>
+                      </tr>
+                      </>): (<>Vui lòng thêm sản phẩm vào giỏ hàng</>)}
+                     
                     </thead>
 
                     <tbody>
-                      <tr>
+                      {auth && auth !== null ? authCarts && authCarts.length > 0 ? authCarts.map((ac)=>(
+                        <>
+                        <tr>
                         <td className="product-col">
                           <div className="product">
                             <figure className="product-media">
@@ -66,19 +82,19 @@ export const Carts = () => {
                             </figure>
 
                             <h3 className="product-title">
-                              <a href="#">Beige knitted elastic runner shoes</a>
+                              <a href="#">{ac.clothDetails.cloth.name}<br/>{ac.clothDetails.color.name}/{ac.clothDetails.size.name}</a>
                             </h3>
                             {/* End .product-title */}
                           </div>
                           {/* End .product */}
                         </td>
-                        <td className="price-col">$84.00</td>
+                        <td className="price-col">{formatMoney(ac.clothDetails.cloth.price)} đ</td>
                         <td className="quantity-col">
                           <div className="cart-product-quantity">
                             <input
                               type="number"
                               className="form-control"
-                              value="1"
+                              value={ac.amount}
                               min="1"
                               max="10"
                               step="1"
@@ -88,39 +104,41 @@ export const Carts = () => {
                           </div>
                           {/* End .cart-product-quantity */}
                         </td>
-                        <td className="total-col">$84.00</td>
+                        <td className="total-col">{formatMoney(ac.clothDetails.cloth.price * ac.amount)}đ</td>
                         <td className="remove-col">
                           <button className="btn-remove">
                             <i className="icon-close"></i>
                           </button>
                         </td>
                       </tr>
-                      <tr>
+                        </>
+                      )):'Giỏ hàng của bạn đang trống' : localCarts && localCarts.items.length > 0 ? localCarts.items.map((lc)=>(
+                        <tr>
                         <td className="product-col">
                           <div className="product">
                             <figure className="product-media">
                               <a href="#">
                                 <img
-                                  src="assets/images/products/table/product-2.jpg"
+                                  src="assets/images/products/table/product-1.jpg"
                                   alt="Product image"
                                 />
                               </a>
                             </figure>
 
                             <h3 className="product-title">
-                              <a href="#">Blue utility pinafore denim dress</a>
+                              <a href="#">{lc.clothesName}<br/>{lc.colorName}/{lc.sizeName}</a>
                             </h3>
                             {/* End .product-title */}
                           </div>
                           {/* End .product */}
                         </td>
-                        <td className="price-col">$76.00</td>
+                        <td className="price-col">{formatMoney(lc.price)}</td>
                         <td className="quantity-col">
                           <div className="cart-product-quantity">
                             <input
                               type="number"
                               className="form-control"
-                              value="1"
+                              value={lc.amount}
                               min="1"
                               max="10"
                               step="1"
@@ -130,13 +148,16 @@ export const Carts = () => {
                           </div>
                           {/* End .cart-product-quantity */}
                         </td>
-                        <td className="total-col">$76.00</td>
+                        <td className="total-col">{formatMoney(lc.amount * lc.price)} đ</td>
                         <td className="remove-col">
                           <button className="btn-remove">
                             <i className="icon-close"></i>
                           </button>
                         </td>
                       </tr>
+                      )) : 'Giỏ hàng của bạn đang trống'}
+
+
                     </tbody>
                   </table>
                   {/* End .table table-wishlist */}
