@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchFilterClothes } from "../features/products/clothesSlice";
 import { SingleClothShoplist } from "../components/products/SingleClothShoplist";
 import { FilterSize } from "../components/sizes/FilterSize";
-import {FilterColor} from "../components/colors/FilterColor";
+import { FilterColor } from "../components/colors/FilterColor";
 import { FilterCategory } from "../components/categories/FilterCategory";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 export const Shoplist = () => {
@@ -11,19 +11,19 @@ export const Shoplist = () => {
   const clothes = useAppSelector((state) => state.clothes.clothes);
   // Filter
   const [filter, setFilter] = useState({
-    rootCategoryId: '' as string,
-    categoryId: '' as string,
+    rootCategoryId: "" as string,
+    categoryId: "" as string,
     sizeIds: [] as string[],
     colorIds: [] as string[],
   });
 
   const [sizesFilter, setSizesFilter] = useState<string[] | null>(null);
   const [colorsFilter, setColorsFilter] = useState<string[] | null>(null);
-  const [categoryFilter, setCategoryFilter] = useState<string| null>(null);
-  
-  const handleCategorySelect = (categoryId: string | null)=>{
+  const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
+
+  const handleCategorySelect = (categoryId: string | null) => {
     setCategoryFilter(categoryId);
-  }
+  };
   const handleSizeSelect = (sizeIds: string[]) => {
     setSizesFilter(sizeIds); // Set the size filter as an array
   };
@@ -37,21 +37,20 @@ export const Shoplist = () => {
       setFilter((prevFilter) => ({
         ...prevFilter,
         rootCategoryId: category.id,
-        categoryId: categoryFilter || '',
+        categoryId: categoryFilter || "",
         colorIds: colorsFilter || [],
         sizeIds: sizesFilter || [],
       }));
     } else {
       setFilter((prevFilter) => ({
         ...prevFilter,
-        rootCategoryId: '',
-        categoryId: categoryFilter || '',
+        rootCategoryId: "",
+        categoryId: categoryFilter || "",
         colorIds: colorsFilter || [],
         sizeIds: sizesFilter || [],
       }));
     }
-  }, [category, sizesFilter, colorsFilter,categoryFilter]);
-
+  }, [category, sizesFilter, colorsFilter, categoryFilter]);
   useEffect(() => {
     dispatch(fetchFilterClothes({ filter }));
   }, [dispatch, filter]);
@@ -246,7 +245,11 @@ export const Shoplist = () => {
                   </div>
                   {/* End .widget widget-clean */}
 
-                  <FilterCategory onSelectCategory={(categoryId)=> handleCategorySelect(categoryId)}/>
+                  <FilterCategory
+                    onSelectCategory={(categoryId) =>
+                      handleCategorySelect(categoryId)
+                    }
+                  />
 
                   <FilterSize onSelectSize={(size) => handleSizeSelect(size)} />
 

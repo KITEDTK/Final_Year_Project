@@ -2,16 +2,30 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchAllClothes } from "../features/clothes/clothesSlice";
 import type { Clothes } from "../features/clothes/clothesType";
-import { getHeaders } from "../utils/getHeaders";
-// import { objectToArrayCSV } from "../utils/objectToArrayCSV";
-// import { CSVLink } from "react-csv";
+import { removeColFromTables } from "../utils/removeColFromTable";
+import { tableToExcel } from "../utils/tableToExcels";
 export function Clothes() {
-    const dispatch = useAppDispatch();
-    const clothes = useAppSelector((state)=> state.clothes.clothes);
-    useEffect(()=>{
-        dispatch(fetchAllClothes())
-    },[dispatch, clothes]);
-    const headers = getHeaders(clothes);
+  const dispatch = useAppDispatch();
+  const clothes = useAppSelector((state) => state.clothes.clothes);
+  useEffect(() => {
+    dispatch(fetchAllClothes());
+  }, [dispatch, clothes]);
+  const handleExcel = () => {
+    const table = document.getElementById("clothes-table");
+    if (table) {
+      const fixedTable = removeColFromTables(table as HTMLTableElement,[6]);
+      const wscols = [
+        { width: 15 },
+        { width: 40 },
+        { width: 15 },
+        { width: 15 },
+        { width: 13 },
+      ];
+      tableToExcel(fixedTable, "Clothes",wscols);
+    } else {
+      console.log("Lỗi không tìm thấy bảng");
+    }
+  };
   return (
     <>
       <section className="content">
@@ -20,45 +34,55 @@ export function Clothes() {
             <div className="col-12">
               <div className="card">
                 <div className="card-header">
-                  <h3 className="card-title">
-                    Bảng Quần áo 
-                  </h3>
-                  {/* <CSVLink data={clothes}>Download me</CSVLink>; */}
+                  <h3 className="card-title">Bảng Quần áo</h3>
                 </div>
 
                 <div className="card-body">
+                  <button onClick={() => handleExcel()}>In ra excel</button>
                   <table
-                    id="example2"
+                    id="clothes-table"
                     className="table table-bordered table-hover"
                   >
                     <thead>
                       <tr>
-                        {headers && headers.map((header)=>(
-                            <th>{header}</th>
-                        ))}
+                        <th>STT</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Hãng</th>
+                        <th>Vị trí</th>
+                        <th>Danh mục</th>
+                        <th>Giá tiền</th>
+                        <th>Chỉnh sửa/Xóa</th>
                       </tr>
                     </thead>
                     <tbody>
-                        {clothes && clothes.length > 0 && clothes.map((cloth)=> (
-                            <>
-                             <tr>
-                        <td>{cloth.name}</td>
-                        <td>{cloth.brand}</td>
-                        <td>{cloth.location}</td>
-                        <td>{cloth.price}</td>
-                        <td>{cloth.categoryName}</td>
-                      </tr>
-                            </>
+                      {clothes &&
+                        clothes.length > 0 &&
+                        clothes.map((cloth,index) => (
+                          <>
+                            <tr>
+                              <td>{index+1}</td>
+                              <td>{cloth.name}</td>
+                              <td>{cloth.brand}</td>
+                              <td>{cloth.location}</td>
+                              <td>{cloth.categoryName}</td>
+                              <td>{cloth.price}</td>
+                              <td>
+                                <button>Xóa</button>
+                                <button>Sửa</button>
+                              </td>
+                            </tr>
+                          </>
                         ))}
-                     
                     </tbody>
-                    <tfoot>
+                    {/* <tfoot>
                       <tr>
-                      {headers && headers.map((header)=>(
-                            <th>{header}</th>
-                        ))}
+                        <th>Tên sản phẩm</th>
+                        <th>Hãng</th>
+                        <th>Vị trí</th>
+                        <th>Danh mục</th>
+                        <th>Giá tiền</th>
                       </tr>
-                    </tfoot>
+                    </tfoot> */}
                   </table>
                 </div>
               </div>
