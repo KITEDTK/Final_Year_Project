@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import ClothesService from "./ClothesService";
+import fs from 'fs';
+const excelToJson = require('convert-excel-to-json');
 
 async function filterClothes(req: Request, res: Response) {
   try {
@@ -25,4 +27,13 @@ async function getAllClothes(req: Request, res: Response){
     console.log(err);
   }
 }
-export default {filterClothes, clothesToCSV, getAllClothes};
+async function readExcelFile(req:Request, res: Response){
+  try{
+      const result = await ClothesService.readExcelFile(req.file)
+      res.status(200).send(result)
+    }
+  catch(err){
+      res.status(500);
+  }
+}
+export default {filterClothes, clothesToCSV, getAllClothes, readExcelFile};

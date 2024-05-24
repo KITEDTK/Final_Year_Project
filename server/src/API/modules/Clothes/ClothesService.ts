@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { filterClothes } from "./ClothesTypes";
-
+import fs from 'fs';
+const excelToJson = require('convert-excel-to-json');
 const prisma = new PrismaClient();
 
 async function filter(filter: filterClothes) {
@@ -86,4 +87,46 @@ async function getAllClothes(){
   }));
   return result;
 }
-export default { filter, exportClothesToCSV, getAllClothes };
+// async function readExcelFile(file: any){
+//   var filePath = "uploads/" + file.filename;
+
+//   const excelData = excelToJson({
+//     sourceFile : filePath,
+//     header:{
+//       rows: 1,
+//     }
+//   });
+//   fs.readFileSync(filePath);
+
+//   return excelData;
+// }
+async function readExcelFile(file: any) {
+  try {
+    const fileContent = await fs.promises.readFile(file.path);
+
+    // Convert Excel content to JSON to get the header row
+    const excelData = excelToJson({
+      source: fileContent,
+      header: {
+        rows: 1,
+      }
+    });
+
+    // Get the first row values
+    const firstRowValues = Object.values(excelData.Sheet1[0]);
+
+    // Convert Excel content to JSON starting from the row containing column names
+    const data = excelToJson({
+      source: fileContent,
+      header: {
+        cols: firstRowValues.length
+      }
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error reading Excel file:", error);
+    throw error;
+  }
+}
+export default { filter, exportClothesToCSV, getAllClothes, readExcelFile };
