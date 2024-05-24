@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { filterClothes } from "./ClothesTypes";
-import fs from 'fs';
-const excelToJson = require('convert-excel-to-json');
+import fs from "fs";
+const excelToJson = require("convert-excel-to-json");
 const prisma = new PrismaClient();
 
 async function filter(filter: filterClothes) {
@@ -67,66 +67,109 @@ async function exportClothesToCSV() {
 
   return csvArray.map((row) => `[${row.join(", ")}]`);
 }
-async function getAllClothes(){
+async function getAllClothes() {
   const data = await prisma.clothes.findMany({
-    select:{
+    select: {
       name: true,
       brand: true,
       location: true,
       price: true,
-      category:{
-        select:{
-          name: true
-        }
-      }
-    }
+      category: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
   const result = data.map(({ category, ...rest }) => ({
     ...rest,
-    categoryName: category.name
+    categoryName: category.name,
   }));
   return result;
 }
-// async function readExcelFile(file: any){
-//   var filePath = "uploads/" + file.filename;
-
-//   const excelData = excelToJson({
-//     sourceFile : filePath,
-//     header:{
-//       rows: 1,
-//     }
-//   });
-//   fs.readFileSync(filePath);
-
-//   return excelData;
-// }
-async function readExcelFile(file: any) {
-  try {
-    const fileContent = await fs.promises.readFile(file.path);
-
-    // Convert Excel content to JSON to get the header row
-    const excelData = excelToJson({
-      source: fileContent,
-      header: {
-        rows: 1,
-      }
-    });
-
-    // Get the first row values
-    const firstRowValues = Object.values(excelData.Sheet1[0]);
-
-    // Convert Excel content to JSON starting from the row containing column names
-    const data = excelToJson({
-      source: fileContent,
-      header: {
-        cols: firstRowValues.length
-      }
-    });
-
-    return data;
-  } catch (error) {
-    console.error("Error reading Excel file:", error);
-    throw error;
+async function readExcelFile(file: string) {
+  const excelData = excelToJson({
+    sourceFile: file,
+    header: {
+      rows: 1,
+    },
+  });
+  const firstRowValues = Object.values(excelData.Sheet1[0]);
+  const data = excelToJson({
+    sourceFile: file,
+    header: {
+      cols: firstRowValues.length,
+    },
+  });
+  fs.unlinkSync(file);
+  const keyMappings = data.Sheet1[0];
+  let validCheckNumber = 5;
+  const checkedValues: Set<string> = new Set();
+  for (const [key, value] of Object.entries(keyMappings)) {
+    if (
+      value === "Tên sản phẩm" ||
+      value === "Hãng" ||
+      value === "Vị trí" ||
+      value === "Danh mục" ||
+      value === "Giá tiền" && !checkedValues.has(value) // Kiểm tra xem giá trị đã được kiểm tra chưa
+    ) {
+      validCheckNumber -= 1;
+      checkedValues.add(value);
+    }
   }
+  if(validCheckNumber !== 0){
+    throw 'File không hợp lệ'
+  }
+  const newKeyMapping: { [key: string]: any } = {};
+
+  Object.entries(keyMappings).forEach(([key, value]) => {
+    // Kiểm tra nếu giá trị của trường là "Tên sản phẩm" thì đổi giá trị thành "name"
+    if (value === "Tên sản phẩm") {
+      newKeyMapping[key] = "name";
+    } else if (value === "Hãng") {
+      newKeyMapping[key] = "brand";
+    } else if (value === "Vị trí") {
+      newKeyMapping[key] = "location";
+    } else if (value === "Danh mục") {
+      newKeyMapping[key] = "categoryId";
+    } else if (value === "Giá tiền") {
+      newKeyMapping[key] = "price";
+    } else {
+      newKeyMapping[key] = value;
+    }
+  });
+
+  const newData = data.Sheet1.slice(1).map((item: any) => {
+    const newItem: { [key: string]: any } = {};
+    Object.entries(item).forEach(([oldKey, value]) => {
+      const newKey = newKeyMapping[oldKey] || oldKey;
+      newItem[newKey] = value;
+    });
+    const { STT,...rest } = newItem;
+    return rest;
+  });
+  const addData = await Promise.all(newData.map(async (item: any) => {
+    if (item.categoryId) {
+        const categoryId = await prisma.categories.findFirst({
+            where: {
+                name: item.categoryId
+            },
+            select: {
+                id: true
+            }
+        });
+        if (categoryId) {
+            item.categoryId = categoryId.id;
+        } else {
+            throw ('error: không tồn tại danh mục'); // Sử dụng new Error() để tạo một lỗi mới
+        }
+    }
+    return item;
+}));
+
+  const result = await prisma.cLothesAddExcelTest.createMany({
+    data: addData
+  });
+  return result;
 }
 export default { filter, exportClothesToCSV, getAllClothes, readExcelFile };

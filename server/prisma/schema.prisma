@@ -200,3 +200,11 @@ model Refunds {
   clotDetails   ClothDetails @relation(fields: [clothDetailId], references: [id])
   user          Users        @relation(fields: [userId], references: [id])
 }
+model CLothesAddExcelTest {
+  id           String         @id @default(uuid())
+  name         String?
+  categoryId   String?
+  brand        String?
+  location     String?
+  price        Int?
+}
