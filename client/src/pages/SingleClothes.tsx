@@ -59,7 +59,7 @@ export const SingleClothes: React.FC = () => {
 
         <div className="page-content">
           <div className="container">
-            { clothesId && <SingleClothSingleDetail clothesInfo={{rest: rest,clothDetails: clothDetails,category: category}}/>}
+            {<SingleClothSingleDetail clothesInfo={{rest: rest,clothDetails: clothDetails,category: category}}/>}
             {/*  End .product-details-top */}
 
             <div className="product-details-tab">

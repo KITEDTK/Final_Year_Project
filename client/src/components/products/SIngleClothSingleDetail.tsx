@@ -232,6 +232,7 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
                 </div>
                 {/*  End .product-details-quantity */}
               </div>
+              
               {/*  End .details-filter-row */}
 
               <div className="product-details-action">
