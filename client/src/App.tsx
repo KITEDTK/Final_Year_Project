@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import { Shoplist } from "./pages/Shoplist";
 import { Carts } from "./components/carts/Carts";
 import LoginAndRegister from './pages/LoginAndRegister';
+import { SingleClothes } from "./pages/SingleClothes";
 function App() {
   return (
     <>
@@ -16,6 +17,7 @@ function App() {
           <Route path="/shoplist" element={<Shoplist />} />
           <Route path="/login" element={<LoginAndRegister />} />
           <Route path="/carts" element={<Carts />} />
+          <Route path="/single-product/:clothesId" element={<SingleClothes/>} />
         </Routes>
         <Footer/>
       </div>

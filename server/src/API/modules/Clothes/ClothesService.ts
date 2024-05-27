@@ -172,4 +172,22 @@ async function readExcelFile(file: string) {
   });
   return result;
 }
-export default { filter, exportClothesToCSV, getAllClothes, readExcelFile };
+async function getSingleClothes(clothesId: string){
+  const result = await prisma.clothes.findUnique({
+    where:{
+      id: clothesId
+    },
+    include:{
+      clothDetails:{
+        include: {
+          size: { select: { name: true } },
+          color: { select: { name: true } },
+        }
+      },
+      category:{},
+      commets:{}
+    }
+  });
+  return result;
+}
+export default { filter, exportClothesToCSV, getAllClothes, readExcelFile, getSingleClothes };

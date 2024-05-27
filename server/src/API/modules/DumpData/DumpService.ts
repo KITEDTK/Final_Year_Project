@@ -46,14 +46,14 @@ async function updateClothes(){
 async function dumpClothes(){
     const input = [
         {
-            name: ''
-        },
-
+            name: 'Quần Jeans Nam Copper Denim Straight',
+            price: 549000
+        }
     ];
     const dataInput = input.map((c)=>{
         return {
             ...c,
-            categoryId : '',
+            categoryId : '02e4823e-c649-4879-a103-3eb28c2c3d3f',
             brand: 'KITE'
         }
     });
@@ -72,9 +72,9 @@ async function dumpClothDetails(){
     const dataInput = input.map((c,index)=>{
         return {
             ...c,
-            colorId: 'ee5e4d68-c3de-47bb-9b64-bb0829d327da',
-            clothId: '1ed358c0-3a33-40db-8190-7bf8833902fe',
-            codeBar: `${index}sdsss3232`,
+            colorId: '25780f3a-65d2-4f9e-8954-71b0b2d25e27',
+            clothId: '070e3e5f-5c20-4b06-8ab1-80c165faec9b',
+            codeBar: `${index}321321fdsf`,
             amount: 10
         }
     });

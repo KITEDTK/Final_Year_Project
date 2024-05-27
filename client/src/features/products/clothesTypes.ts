@@ -1,3 +1,6 @@
+import { Category } from "../categorires/categoriesTypes";
+import { SingleComment } from "../comments/comments";
+
 export interface ClothDetailsColorSize {
     id: string;
     sizeId: string;
@@ -37,6 +40,20 @@ export interface Filter {
 }
 export interface ClothesState {
     clothes: ClothesFilter[];
+    singleClothes: SingleClothes;
     loading: boolean;
     error: string | null;
+}
+export interface SingleClothes {
+  id: string;
+  name: string;
+  categoryId: string;
+  brand: string;
+  location: string;
+  createAt: Date;
+  isEnable: boolean;
+  clothDetails: ClothDetailsColorSize[];
+  price: number;
+  comments: SingleComment[];
+  category: Category;
 }

@@ -11,6 +11,7 @@ interface Props {
 }
 import { showToast } from "../../utils/showToast";
 import { formatMoney } from "../../utils/formatMoney";
+import { Link } from "react-router-dom";
 export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
   const { clothDetails, ...rest } = clothes;
   const dispatch = useAppDispatch();
@@ -42,13 +43,13 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
       colorInfo: [],
     };
   } else {
-    const colorUnqId = _.uniqBy(clothDetails, "colorId").map((item) => ({
+    const allClothColors = _.uniqBy(clothDetails, "colorId").map((item) => ({
       colorId: item.colorId,
       name: item.color.name,
     }));
     color = {
       clothId: clothes.id,
-      colorInfo: colorUnqId.map(({ colorId, name }) => ({ colorId, name })),
+      colorInfo: allClothColors.map(({ colorId, name }) => ({ colorId, name })),
     };
   }
   const chooseColor = (colorId: string) => {
@@ -96,23 +97,19 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
         <div className="product product-7 text-center">
           <figure className="product-media">
             <span className="product-label label-new">New</span>
-            <a href="product.html">
+            <Link to={`/single-product/${clothes.id}`}>
               <img
                 src="assets/images/products/product-4.jpg"
                 alt="Product image"
                 className="product-image"
               />
-            </a>
+            </Link>
 
             <div className="product-action-vertical">
               <a className="btn-product-icon btn-wishlist btn-expandable">
                 <span>add to wishlist</span>
               </a>
-              <a
-                href="popup/quickView.html"
-                className="btn-product-icon btn-quickview"
-                title="Quick view"
-              >
+              <a className="btn-product-icon btn-quickview" title="Quick view">
                 <span>Quick view</span>
               </a>
               <a
@@ -126,18 +123,19 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
             {/* End .product-action-vertical */}
             <div className="product-action action-icon-top">
               {clothDetails &&
-                    clothDetails.length > 0 &&
-                    clothDetails
-                      .filter((item) => item.colorId === activeColor)
-                      .map((item, index) => (
-                        <a className="btn-product btn-cart"
-                          onClick={() => addItemToCart(item.id)}
-                          key={index}
-                          style={{ cursor: 'pointer' }}
-                        >
-                          <span>size: {item.size.name}</span>
-                        </a>
-                      ))}
+                clothDetails.length > 0 &&
+                clothDetails
+                  .filter((item) => item.colorId === activeColor)
+                  .map((item, index) => (
+                    <a
+                      className="btn-product btn-cart"
+                      onClick={() => addItemToCart(item.id)}
+                      key={index}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <span>size: {item.size.name}</span>
+                    </a>
+                  ))}
             </div>
             {/* End .product-action */}
           </figure>
@@ -149,7 +147,7 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
             </div>
             {/* End .product-cat */}
             <h3 className="product-title">
-              <a href="product.html">{clothes.name}</a>
+              <Link to={`/single-product/${clothes.id}`}>{clothes.name}</Link>
             </h3>
             {/* End .product-title */}
             <div className="product-price">{formatMoney(clothes.price)}đ</div>

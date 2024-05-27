@@ -38,4 +38,13 @@ async function readExcelFile(req: Request, res: Response) {
     res.status(500).json("Internal server error");
   }
 }
-export default {filterClothes, clothesToCSV, getAllClothes, readExcelFile};
+async function getSingleCLothes(req: Request, res: Response){
+  try {
+    const {clothesId} = req.params;
+    const result = await ClothesService.getSingleClothes(clothesId);
+    res.send(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
+export default {filterClothes, clothesToCSV, getAllClothes, readExcelFile, getSingleCLothes};
