@@ -1,9 +1,31 @@
+import { useEffect, useState, ChangeEvent } from "react";
 import { useAppSelector } from "../../store/hooks";
 import { formatMoney } from "../../utils/formatMoney";
 export const Carts = () => {
-  const auth = useAppSelector((state)=> state.auth.auth);
-  const authCarts = useAppSelector((state)=> state.carts.carts);
-  const localCarts = useAppSelector((state)=> state.carts.localCarts);
+  const auth = useAppSelector((state) => state.auth.auth);
+  const authCarts = useAppSelector((state) => state.carts.carts);
+  const localCarts = useAppSelector((state) => state.carts.localCarts);
+  const [authTotalPrice, setAuthTotalPrice] = useState<number>(0);
+  useEffect(() => {
+    if (auth && authCarts) {
+      const totalPrice: number = authCarts.reduce(
+        (accumulator, currentValue) =>
+          accumulator +
+          currentValue.amount * currentValue.clothDetails.cloth.price,
+        0
+      );
+      setAuthTotalPrice(totalPrice);
+    } else {
+      setAuthTotalPrice(0);
+    }
+  }, [auth, authCarts]);
+  const handleChangeLocalQuatity = (
+    event: ChangeEvent<HTMLInputElement>,
+    clothDetailId: string
+  ) => {
+    console.log(">>>quantity: ", event.target);
+    console.log(">>>clothDetailId: ", clothDetailId);
+  };
   return (
     <>
       <main className="main">
@@ -11,9 +33,9 @@ export const Carts = () => {
           className="page-header text-center"
           style={{
             backgroundImage: "url('assets/images/page-header-bg.jpg')",
-            backgroundSize: 'cover', // Thêm thuộc tính nếu cần
-            backgroundPosition: 'center', // Thêm thuộc tính nếu cần
-          }}    
+            backgroundSize: "cover", // Thêm thuộc tính nếu cần
+            backgroundPosition: "center", // Thêm thuộc tính nếu cần
+          }}
         >
           <div className="container">
             <h1 className="page-title">
@@ -48,116 +70,173 @@ export const Carts = () => {
                 <div className="col-lg-9">
                   <table className="table table-cart table-mobile">
                     <thead>
-                      {auth && auth !== null ? authCarts && authCarts.length > 0 ? (<> <tr>
-                        <th>Sản phẩm</th>
-                        <th>Giá</th>
-                        <th>Số lượng</th>
-                        <th>Tổng Giá</th>
-                        <th></th>
-                      </tr>
-                      </>) : (<>Vui lòng thêm sản phẩm vào giỏ hàng</>) : localCarts && localCarts.items && localCarts.items.length > 0 ? (<> <tr>
-                        <th>Sản phẩm</th>
-                        <th>Giá</th>
-                        <th>Số lượng</th>
-                        <th>Tổng Giá</th>
-                        <th></th>
-                      </tr>
-                      </>): (<>Vui lòng thêm sản phẩm vào giỏ hàng</>)}
-                     
+                      {auth && auth !== null ? (
+                        authCarts && authCarts.length > 0 ? (
+                          <>
+                            {" "}
+                            <tr>
+                              <th>Sản phẩm</th>
+                              <th>Giá</th>
+                              <th>Số lượng</th>
+                              <th>Tổng Giá</th>
+                              <th></th>
+                            </tr>
+                          </>
+                        ) : (
+                          <>Vui lòng thêm sản phẩm vào giỏ hàng</>
+                        )
+                      ) : localCarts &&
+                        localCarts.items &&
+                        localCarts.items.length > 0 ? (
+                        <>
+                          {" "}
+                          <tr>
+                            <th>Sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Tổng Giá</th>
+                            <th></th>
+                          </tr>
+                        </>
+                      ) : (
+                        <>Vui lòng thêm sản phẩm vào giỏ hàng</>
+                      )}
                     </thead>
 
                     <tbody>
-                      {auth && auth !== null ? authCarts && authCarts.length > 0 ? authCarts.map((ac)=>(
-                        <>
-                        <tr>
-                        <td className="product-col">
-                          <div className="product">
-                            <figure className="product-media">
-                              <a href="#">
-                                <img
-                                  src="assets/images/products/table/product-1.jpg"
-                                  alt="Product image"
-                                />
-                              </a>
-                            </figure>
+                      {auth && auth !== null
+                        ? authCarts && authCarts.length > 0
+                          ? authCarts.map((ac) => (
+                              <>
+                                <tr>
+                                  <td className="product-col">
+                                    <div className="product">
+                                      <figure className="product-media">
+                                        <a href="#">
+                                          <img
+                                            src="assets/images/products/table/product-1.jpg"
+                                            alt="Product image"
+                                          />
+                                        </a>
+                                      </figure>
 
-                            <h3 className="product-title">
-                              <a href="#">{ac.clothDetails.cloth.name}<br/>{ac.clothDetails.color.name}/{ac.clothDetails.size.name}</a>
-                            </h3>
-                            {/* End .product-title */}
-                          </div>
-                          {/* End .product */}
-                        </td>
-                        <td className="price-col">{formatMoney(ac.clothDetails.cloth.price)} đ</td>
-                        <td className="quantity-col">
-                          <div className="cart-product-quantity">
-                            <input
-                              type="number"
-                              className="form-control"
-                              value={ac.amount}
-                              min="1"
-                              max="10"
-                              step="1"
-                              data-decimals="0"
-                              required
-                            />
-                          </div>
-                          {/* End .cart-product-quantity */}
-                        </td>
-                        <td className="total-col">{formatMoney(ac.clothDetails.cloth.price * ac.amount)}đ</td>
-                        <td className="remove-col">
-                          <button className="btn-remove">
-                            <i className="icon-close"></i>
-                          </button>
-                        </td>
-                      </tr>
-                        </>
-                      )):'Giỏ hàng của bạn đang trống' : localCarts && localCarts.items.length > 0 ? localCarts.items.map((lc)=>(
-                        <tr>
-                        <td className="product-col">
-                          <div className="product">
-                            <figure className="product-media">
-                              <a href="#">
-                                <img
-                                  src="assets/images/products/table/product-1.jpg"
-                                  alt="Product image"
-                                />
-                              </a>
-                            </figure>
+                                      <h3 className="product-title">
+                                        <a href="#">
+                                          {ac.clothDetails.cloth.name}
+                                          <br />
+                                          {ac.clothDetails.color.name}/
+                                          {ac.clothDetails.size.name}
+                                        </a>
+                                      </h3>
+                                      {/* End .product-title */}
+                                    </div>
+                                    {/* End .product */}
+                                  </td>
+                                  <td className="price-col">
+                                    {formatMoney(ac.clothDetails.cloth.price)} đ
+                                  </td>
+                                  <td className="quantity-col">
+                                    <div className="cart-product-quantity">
+                                      <input
+                                        type="number"
+                                        className="form-control"
+                                        value={ac.amount}
+                                        min="1"
+                                        max="10"
+                                        step="1"
+                                        data-decimals="0"
+                                        required
+                                      />
+                                    </div>
+                                    {/* End .cart-product-quantity */}
+                                  </td>
+                                  <td className="total-col">
+                                    {formatMoney(
+                                      ac.clothDetails.cloth.price * ac.amount
+                                    )}
+                                    đ
+                                  </td>
+                                  <td className="remove-col">
+                                    <button className="btn-remove">
+                                      <i className="icon-close"></i>
+                                    </button>
+                                  </td>
+                                </tr>
+                              </>
+                            ))
+                          : "Giỏ hàng của bạn đang trống"
+                        : localCarts && localCarts.items.length > 0
+                        ? localCarts.items.map((lc) => (
+                            <tr>
+                              <td className="product-col">
+                                <div className="product">
+                                  <figure className="product-media">
+                                    <a href="#">
+                                      <img
+                                        src="assets/images/products/table/product-1.jpg"
+                                        alt="Product image"
+                                      />
+                                    </a>
+                                  </figure>
 
-                            <h3 className="product-title">
-                              <a href="#">{lc.clothesName}<br/>{lc.colorName}/{lc.sizeName}</a>
-                            </h3>
-                            {/* End .product-title */}
-                          </div>
-                          {/* End .product */}
-                        </td>
-                        <td className="price-col">{formatMoney(lc.price)}</td>
-                        <td className="quantity-col">
-                          <div className="cart-product-quantity">
-                            <input
-                              type="number"
-                              className="form-control"
-                              value={lc.amount}
-                              min="1"
-                              max="10"
-                              step="1"
-                              data-decimals="0"
-                              required
-                            />
-                          </div>
-                          {/* End .cart-product-quantity */}
-                        </td>
-                        <td className="total-col">{formatMoney(lc.amount * lc.price)} đ</td>
-                        <td className="remove-col">
-                          <button className="btn-remove">
-                            <i className="icon-close"></i>
-                          </button>
-                        </td>
-                      </tr>
-                      )) : 'Giỏ hàng của bạn đang trống'}
-
-
+                                  <h3 className="product-title">
+                                    <a href="#">
+                                      {lc.clothesName}
+                                      <br />
+                                      {lc.colorName}/{lc.sizeName}
+                                    </a>
+                                  </h3>
+                                  {/* End .product-title */}
+                                </div>
+                                {/* End .product */}
+                              </td>
+                              <td className="price-col">
+                                {formatMoney(lc.price)}đ
+                              </td>
+                              <td className="quantity-col">
+                                <div className="cart-product-quantity">
+                                  <div className="input-group input-spinner">
+                                    <div className="input-group-prepend">
+                                      <button
+                                        style={{ minWidth: "26px" }}
+                                        className="btn btn-decrement btn-spinner"
+                                        type="button"
+                                      >
+                                        <i className="icon-minus"></i>
+                                      </button>
+                                    </div>
+                                    <input
+                                      onChange={(event)=>handleChangeLocalQuatity(event,lc.clothDetailId)}
+                                      type="text"
+                                      style={{ textAlign: "center" }}
+                                      className="form-control"
+                                      value={lc.amount}
+                                      required
+                                      placeholder=""
+                                    />
+                                    <div className="input-group-append">
+                                      <button
+                                        style={{ minWidth: "26px" }}
+                                        className="btn btn-increment btn-spinner"
+                                        type="button"
+                                      >
+                                        <i className="icon-plus"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="total-col">
+                                {formatMoney(lc.amount * lc.price)}đ
+                              </td>
+                              <td className="remove-col">
+                                <button className="btn-remove">
+                                  <i className="icon-close"></i>
+                                </button>
+                              </td>
+                            </tr>
+                          ))
+                        : "Giỏ hàng của bạn đang trống"}
                     </tbody>
                   </table>
                   {/* End .table table-wishlist */}
@@ -186,11 +265,6 @@ export const Carts = () => {
                       </form>
                     </div>
                     {/* End .cart-discount */}
-
-                    <a href="#" className="btn btn-outline-dark-2">
-                      <span>UPDATE CART</span>
-                      <i className="icon-refresh"></i>
-                    </a>
                   </div>
                   {/* End .cart-bottom */}
                 </div>
@@ -203,8 +277,14 @@ export const Carts = () => {
                     <table className="table table-summary">
                       <tbody>
                         <tr className="summary-subtotal">
-                          <td>Subtotal:</td>
-                          <td>$160.00</td>
+                          <td>Tổng giá trị:</td>
+                          <td>
+                            {auth && auth !== null ? (
+                              <>{formatMoney(authTotalPrice)}đ</>
+                            ) : (
+                              <>{formatMoney(localCarts.totalPrice)}đ</>
+                            )}
+                          </td>
                         </tr>
                         {/* End .summary-subtotal */}
                         <tr className="summary-shipping">

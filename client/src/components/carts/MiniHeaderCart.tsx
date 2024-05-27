@@ -4,11 +4,11 @@ import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import {
   fetchDeleteItemInCart,
   fetchItemInCart,
-  removeItemFromLocalCart,
-  resetLocalCarts,
+  removeItemFromLocalCart
 } from "../../features/carts/cartsSlice";
 import { formatMoney } from "../../utils/formatMoney";
 import {showToast} from "../../utils/showToast";
+import { Link } from "react-router-dom";
 export const MiniHeaderCart = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth.auth);
@@ -59,14 +59,11 @@ export const MiniHeaderCart = () => {
       showToast("Lỗi khi thêm sản phẩm","error")
     }
   };
-  const resetCart = () =>{
-    dispatch(resetLocalCarts());
-  }
   return (
     <>
       <div className="dropdown cart-dropdown">
-        <a
-          href="#"
+        <Link
+          to={'/carts'}
           className="dropdown-toggle"
           role="button"
           data-toggle="dropdown"
@@ -74,7 +71,8 @@ export const MiniHeaderCart = () => {
           aria-expanded="false"
           data-display="static"
         >
-          <i className="icon-shopping-cart"></i>
+          <Link
+          to={'/carts'} className="icon-shopping-cart"></Link>
           {auth ? (
             <>
               <span className="cart-count">{authTotalAmount}</span>
@@ -90,7 +88,7 @@ export const MiniHeaderCart = () => {
               </span>
             </>
           )}
-        </a>
+        </Link>
 
         <div className="dropdown-menu dropdown-menu-right">
           <div className="dropdown-cart-products">
@@ -201,17 +199,17 @@ export const MiniHeaderCart = () => {
           {/* End .cart-product */}
 
           <div className="dropdown-cart-total">
-            <span>Total</span>
+            <span>Tổng giá:</span>
             {auth ? (<span className="cart-total-price">{formatMoney(authTotalPrice)}đ</span>) : (<span className="cart-total-price">{formatMoney(LocalCarts.totalPrice)}đ</span>)}
             
           </div>
           {/* End .dropdown-cart-total */}
 
           <div className="dropdown-cart-action">
-            <a href="cart.html" className="btn btn-primary">
+            <Link to={'/carts'} className="btn btn-primary">
               View Cart
-            </a>
-            <a onClick={()=> resetCart()} className="btn btn-outline-primary-2">
+            </Link>
+            <a className="btn btn-outline-primary-2">
               <span>Checkout</span>
               <i className="icon-long-arrow-right"></i>
             </a>
