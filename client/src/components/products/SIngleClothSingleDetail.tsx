@@ -3,6 +3,7 @@ import type { Category } from "../../features/categorires/categoriesTypes";
 import type { ClothDetailsColorSize } from "../../features/products/clothesTypes";
 import { formatMoney } from "../../utils/formatMoney";
 import { useEffect, useState } from "react";
+import '../../../public/assets/js/jquery.elevateZoom.min'
 interface Props {
   clothesInfo: {
     rest: {
@@ -30,7 +31,7 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
       return clothDetails[0] ? clothDetails[0].colorId : "";
     }
   });
-  useEffect(()=>{
+  useEffect(() => {
     setActiveColor(() => {
       if (!clothDetails || clothDetails.length === 0) {
         return "";
@@ -38,10 +39,10 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
         return clothDetails[0] ? clothDetails[0].colorId : "";
       }
     });
-  },[clothDetails]);
-  const handleChooseColor = (colorId: string)=>{
+  }, [clothDetails]);
+  const handleChooseColor = (colorId: string) => {
     setActiveColor(colorId);
-  }
+  };
   return (
     <>
       <div className="product-details-top">
@@ -51,7 +52,7 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
               <div className="row">
                 <figure className="product-main-image">
                   <img
-                    id="product-zoom"
+                    id="product-zoom-1"
                     src="assets/images/products/single/1.jpg"
                     data-zoom-image="assets/images/products/single/1-big.jpg"
                     alt="product image"
@@ -170,8 +171,10 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
                     allClothColors.map((item) => (
                       <>
                         <a
-                        onClick={()=>handleChooseColor(item.colorId)}
-                          className={activeColor === item.colorId ? "active" : ""}
+                          onClick={() => handleChooseColor(item.colorId)}
+                          className={
+                            activeColor === item.colorId ? "active" : ""
+                          }
                           style={{ background: item.color.name }}
                         >
                           <span className="sr-only">{item.color.name}</span>
@@ -218,21 +221,38 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
               <div className="details-filter-row details-row-size">
                 <label htmlFor="qty">Qty:</label>
                 <div className="product-details-quantity">
-                  <input
-                    type="number"
-                    id="qty"
-                    className="form-control"
-                    value="1"
-                    min="1"
-                    max="10"
-                    step="1"
-                    data-decimals="0"
-                    required
-                  />
+                  <div className="input-group input-spinner">
+                    <div className="input-group-prepend">
+                      <button
+                        style={{ minWidth: "26px" }}
+                        className="btn btn-decrement btn-spinner"
+                        type="button"
+                      >
+                        <i className="icon-minus"></i>
+                      </button>
+                    </div>
+                    <input
+                      type="text"
+                      style={{ textAlign: "center" }}
+                      className="form-control"
+                      required
+                      value="1"
+                      placeholder=""
+                    />
+                    <div className="input-group-append">
+                      <button
+                        style={{ minWidth: "26px" }}
+                        className="btn btn-increment btn-spinner"
+                        type="button"
+                      >
+                        <i className="icon-plus"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
                 {/*  End .product-details-quantity */}
               </div>
-              
+
               {/*  End .details-filter-row */}
 
               <div className="product-details-action">
@@ -311,6 +331,7 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
           {/*  End .col-md-6 */}
         </div>
         {/*  End .row */}
+        
       </div>
     </>
   );

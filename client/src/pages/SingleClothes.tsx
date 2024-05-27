@@ -3,16 +3,18 @@ import { useParams } from 'react-router-dom';
 import { SingleClothSingleDetail } from '../components/products/SIngleClothSingleDetail';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchSingleClothes } from '../features/products/clothesSlice';
+
+
 export const SingleClothes: React.FC = () => {
   const dispatch = useAppDispatch();
   const { clothesId } = useParams<string>();
-  const singleClothes = useAppSelector((state)=>state.clothes.singleClothes);
-  const {clothDetails,category, ...rest} = singleClothes;
   useEffect(()=>{
     if(clothesId){
       dispatch(fetchSingleClothes(clothesId));
     }
   },[clothesId, dispatch])
+  const singleClothes = useAppSelector((state)=>state.clothes.singleClothes);
+  const {clothDetails,category, ...rest} = singleClothes;
   return (
     <>
       <main className="main">
