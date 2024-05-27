@@ -1,45 +1,78 @@
-import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
 
-import { ClothesFilter, Filter, ClothesState } from "./clothesTypes";
+import {
+  ClothesFilter,
+  Filter,
+  ClothesState,
+  SingleClothes,
+} from "./clothesTypes";
 
 const BASE_URL = "http://localhost:4000/clothes";
 
 export const fetchFilterClothes = createAsyncThunk<ClothesFilter[], Filter>(
-    "cloths/filter",
-    async ({filter})=>{
-      const response: AxiosResponse<ClothesFilter[]> = await axios.post(
-        `${BASE_URL}/filter`,
-        { ...filter },
-        {
-          headers: { "Content-Type": "application/json" }
-        }
+  "cloths/filter",
+  async ({ filter }) => {
+    const response: AxiosResponse<ClothesFilter[]> = await axios.post(
+      `${BASE_URL}/filter`,
+      { ...filter },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.data;
+  }
+);
+export const fetchSingleClothes = createAsyncThunk<SingleClothes, string>(
+  "cloth/single",
+  async (clothesId: string) => {
+    try {
+      const response: AxiosResponse<SingleClothes> = await axios.get(
+        `${BASE_URL}/${clothesId}`,
+        { headers: { "Content-Type": "application/json" } }
       );
       return response.data;
+    } catch (err) {
+      console.error("Thêm vào giỏ hàng thất bại", err);
+      throw err;
     }
+  }
 );
 const clothesSlice = createSlice({
-    name: "clothes",
-    initialState:{
-        clothes: [],
-        loading: false,
-        error: null
-    } as ClothesState,
-    reducers:{},
-    extraReducers: (builder)=>{
-        builder
-        .addCase(fetchFilterClothes.pending, (state) => {
-            state.loading = true;
-            state.error = null;
-          })
-          .addCase(fetchFilterClothes.fulfilled, (state, action) => {
-            state.loading = false;
-            state.clothes = action.payload;
-          })
-          .addCase(fetchFilterClothes.rejected, (state, action)=>{
-            state.loading = false;
-            state.error = action.error.message ?? "Unknown error";
-          })
-    }
+  name: "clothes",
+  initialState: {
+    clothes: [],
+    singleClothes: {} as SingleClothes,
+    loading: false,
+    error: null,
+  } as ClothesState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchFilterClothes.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchFilterClothes.fulfilled, (state, action) => {
+        state.loading = false;
+        state.clothes = action.payload;
+      })
+      .addCase(fetchFilterClothes.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Unknown error";
+      })
+      .addCase(fetchSingleClothes.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchSingleClothes.fulfilled, (state, action) => {
+        state.loading = false;
+        state.singleClothes = action.payload;
+      })
+      .addCase(fetchSingleClothes.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Unknown error";
+      });
+  },
 });
 export default clothesSlice.reducer;
