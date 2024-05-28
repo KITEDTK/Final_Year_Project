@@ -4,6 +4,9 @@ import type { ClothDetailsColorSize } from "../../features/products/clothesTypes
 import { formatMoney } from "../../utils/formatMoney";
 import { useEffect, useState } from "react";
 import "../../../public/assets/js/jquery.elevateZoom.min";
+import { showToast } from "../../utils/showToast";
+import { useAppDispatch } from "../../store/hooks";
+import { addItemInLocalCart } from "../../features/carts/cartsSlice";
 interface Props {
   clothesInfo: {
     rest: {
@@ -21,6 +24,7 @@ interface Props {
   };
 }
 export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
+  const dispatch = useAppDispatch();
   const { clothDetails } = clothesInfo;
   const allClothColors = _.uniqBy(clothDetails, "colorId");
   const allClothSizes = _.uniqBy(clothDetails, "sizeId");
@@ -41,20 +45,49 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
       }
     });
   }, [clothDetails]);
+  const [quantity, setQuantity] = useState<number>(1);
   const handleChooseColor = (colorId: string) => {
     setActiveColor(colorId);
   };
   const handleChooseSize = (sizeId: string)=>{
     setActiveSize(sizeId);
   }
-  const handleAddToCart = () =>{
+  const handleChangeQuantity = (value: string) => {
+    const parsedValue = parseInt(value, 10);
+    if (!isNaN(parsedValue) && parsedValue >= 1) {
+      setQuantity(parsedValue);
+    } else {
+      setQuantity(1); // Set to 1 if the input is invalid or less than 1
+    }
+  };
+  const handleButtonQuantity = (value: number) => {
+    setQuantity((prev) => {
+      const newQuantity = prev + value;
+      return newQuantity < 1 ? 1 : newQuantity; // Ensure quantity does not go below 1
+    });
+  };
+  const handleAddToCart = async () =>{
     const itemToAdd = clothDetails.find((item) => {
       return item.sizeId === activeSize && item.colorId === activeColor;
   });
     if(itemToAdd){
-      console.log(itemToAdd);
+      try{
+        await dispatch(
+          addItemInLocalCart({
+            clothDetailId: itemToAdd.id,
+            sizeName: itemToAdd.size.name,
+            colorName: itemToAdd.color.name,
+            clothesName: clothesInfo.rest.name,
+            amount: quantity,
+            price: clothesInfo.rest.price,
+          })
+        );
+      }catch(err){
+        showToast('Lỗi khi thêm sản phẩm vào giỏ hàng','error');
+      }
+      showToast('Đã thêm sản phẩm vào giỏ hàng','success');
     }else{
-      console.log(itemToAdd);
+      showToast('Vui lòng chọn kích thước','info');
     }
   }
   return (
@@ -239,6 +272,7 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
                   <div className="input-group input-spinner">
                     <div className="input-group-prepend">
                       <button
+                      onClick={()=>handleButtonQuantity(-1)}
                         style={{ minWidth: "26px" }}
                         className="btn btn-decrement btn-spinner"
                         type="button"
@@ -247,15 +281,17 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
                       </button>
                     </div>
                     <input
+                    onChange={(event)=>handleChangeQuantity(event.target.value)}
                       type="text"
                       style={{ textAlign: "center" }}
                       className="form-control"
                       required
-                      value="1"
+                      value={quantity}
                       placeholder=""
                     />
                     <div className="input-group-append">
                       <button
+                      onClick={()=>handleButtonQuantity(1)}
                         style={{ minWidth: "26px" }}
                         className="btn btn-increment btn-spinner"
                         type="button"
