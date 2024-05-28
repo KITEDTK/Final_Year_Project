@@ -4,7 +4,6 @@ import { SingleClothSingleDetail } from '../components/products/SIngleClothSingl
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchSingleClothes } from '../features/products/clothesSlice';
 
-
 export const SingleClothes: React.FC = () => {
   const dispatch = useAppDispatch();
   const { clothesId } = useParams<string>();
@@ -345,7 +344,6 @@ export const SingleClothes: React.FC = () => {
 
             <h2 className="title text-center mb-4">You May Also Like</h2>
             {/*  End .title text-center */}
-
             <div
               className="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
               data-toggle="owl"

@@ -3,7 +3,7 @@ import type { Category } from "../../features/categorires/categoriesTypes";
 import type { ClothDetailsColorSize } from "../../features/products/clothesTypes";
 import { formatMoney } from "../../utils/formatMoney";
 import { useEffect, useState } from "react";
-import '../../../public/assets/js/jquery.elevateZoom.min'
+import "../../../public/assets/js/jquery.elevateZoom.min";
 interface Props {
   clothesInfo: {
     rest: {
@@ -31,6 +31,7 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
       return clothDetails[0] ? clothDetails[0].colorId : "";
     }
   });
+  const [activeSize, setActiveSize] = useState<string>();
   useEffect(() => {
     setActiveColor(() => {
       if (!clothDetails || clothDetails.length === 0) {
@@ -43,6 +44,9 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
   const handleChooseColor = (colorId: string) => {
     setActiveColor(colorId);
   };
+  const handleChooseSize = (sizeId: string)=>{
+    setActiveSize(sizeId);
+  }
   return (
     <>
       <div className="product-details-top">
@@ -193,7 +197,18 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
                     allClothSizes.length > 0 &&
                     allClothSizes.map((item) => (
                       <>
-                        <a>{item.size.name}</a>
+                        <a 
+                        onClick={()=> handleChooseSize(item.sizeId)}
+                          className={
+                            clothDetails
+                              .filter((item1) => item1.colorId === activeColor)
+                              .find((item2) => item2.sizeId === item.sizeId)
+                              ? `${item.sizeId === activeSize ? 'active' : ''}`
+                              : "disabled"
+                          }
+                        >
+                          {item.size.name}
+                        </a>
                       </>
                     ))}
                   {/* <a title="Small">
@@ -331,7 +346,6 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
           {/*  End .col-md-6 */}
         </div>
         {/*  End .row */}
-        
       </div>
     </>
   );

@@ -6,7 +6,6 @@ import { Shoplist } from "./pages/Shoplist";
 import { Carts } from "./components/carts/Carts";
 import LoginAndRegister from './pages/LoginAndRegister';
 import { SingleClothes } from "./pages/SingleClothes";
-import '../public/assets/css/style.css';
 
 function App() {
   return (
