@@ -47,6 +47,16 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
   const handleChooseSize = (sizeId: string)=>{
     setActiveSize(sizeId);
   }
+  const handleAddToCart = () =>{
+    const itemToAdd = clothDetails.find((item) => {
+      return item.sizeId === activeSize && item.colorId === activeColor;
+  });
+    if(itemToAdd){
+      console.log(itemToAdd);
+    }else{
+      console.log(itemToAdd);
+    }
+  }
   return (
     <>
       <div className="product-details-top">
@@ -198,6 +208,8 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
                     allClothSizes.map((item) => (
                       <>
                         <a 
+                        style={{ cursor: 'pointer' }}
+                        title={item.size.name}
                         onClick={()=> handleChooseSize(item.sizeId)}
                           className={
                             clothDetails
@@ -211,18 +223,6 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
                         </a>
                       </>
                     ))}
-                  {/* <a title="Small">
-                    S
-                  </a>
-                  <a title="Medium" className="active">
-                    M
-                  </a>
-                  <a title="Large" className="disabled">
-                    L
-                  </a>
-                  <a title="Extra Large">
-                    XL
-                  </a> */}
                 </div>
                 {/* End .product-size */}
 
@@ -271,7 +271,7 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
               {/*  End .details-filter-row */}
 
               <div className="product-details-action">
-                <a href="#" className="btn-product btn-cart">
+                <a style={{cursor: 'pointer'}} onClick={()=>handleAddToCart()} className="btn-product btn-cart">
                   <span>add to cart</span>
                 </a>
 
