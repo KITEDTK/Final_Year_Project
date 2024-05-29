@@ -1,8 +1,10 @@
-import { useEffect, useState, ChangeEvent } from "react";
-import { useAppSelector } from "../../store/hooks";
+import { useEffect, useState } from "react";
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { formatMoney } from "../../utils/formatMoney";
+import { updateQuantityInLocalCart } from "../../features/carts/cartsSlice";
 export const Carts = () => {
   const auth = useAppSelector((state) => state.auth.auth);
+  const dispatch = useAppDispatch();
   const authCarts = useAppSelector((state) => state.carts.carts);
   const localCarts = useAppSelector((state) => state.carts.localCarts);
   const [authTotalPrice, setAuthTotalPrice] = useState<number>(0);
@@ -19,12 +21,25 @@ export const Carts = () => {
       setAuthTotalPrice(0);
     }
   }, [auth, authCarts]);
-  const handleChangeLocalQuatity = (
-    event: ChangeEvent<HTMLInputElement>,
-    clothDetailId: string
-  ) => {
-    console.log(">>>quantity: ", event.target);
-    console.log(">>>clothDetailId: ", clothDetailId);
+  const [localQuantities, setLocalQuantities] = useState(() => 
+    localCarts.items.map((item) => ({
+      clothDetailId: item.clothDetailId,
+      quantity: item.amount,
+    }))
+  );
+  const handleChangeLocalQuantity = (event: React.ChangeEvent<HTMLInputElement>, clothDetailId: string) => {
+    const newQuantity = parseInt(event.target.value, 10);
+    const localQuantityClothDetail = localQuantities.find((item)=>item.clothDetailId === clothDetailId);
+    setLocalQuantities((prevQuantities) =>
+      prevQuantities.map((item) =>
+        item.clothDetailId === clothDetailId
+          ? { ...item, quantity: isNaN(newQuantity) || newQuantity < 1 ? 1 : newQuantity }
+          : item
+      )
+    );
+    if(localQuantityClothDetail){
+      dispatch(updateQuantityInLocalCart({clothDetailId: clothDetailId, amount: newQuantity}))
+    }
   };
   return (
     <>
@@ -136,18 +151,36 @@ export const Carts = () => {
                                     {formatMoney(ac.clothDetails.cloth.price)} đ
                                   </td>
                                   <td className="quantity-col">
-                                    <div className="cart-product-quantity">
-                                      <input
-                                        type="number"
-                                        className="form-control"
-                                        value={ac.amount}
-                                        min="1"
-                                        max="10"
-                                        step="1"
-                                        data-decimals="0"
-                                        required
-                                      />
+                                  <div className="cart-product-quantity">
+                                  <div className="input-group input-spinner">
+                                    <div className="input-group-prepend">
+                                      <button
+                                        style={{ minWidth: "26px" }}
+                                        className="btn btn-decrement btn-spinner"
+                                        type="button"
+                                      >
+                                        <i className="icon-minus"></i>
+                                      </button>
                                     </div>
+                                    <input
+                                      type="text"
+                                      style={{ textAlign: "center" }}
+                                      className="form-control"
+                                      value={ac.amount}
+                                      required
+                                      placeholder=""
+                                    />
+                                    <div className="input-group-append">
+                                      <button
+                                        style={{ minWidth: "26px" }}
+                                        className="btn btn-increment btn-spinner"
+                                        type="button"
+                                      >
+                                        <i className="icon-plus"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
                                     {/* End .cart-product-quantity */}
                                   </td>
                                   <td className="total-col">
@@ -206,11 +239,11 @@ export const Carts = () => {
                                       </button>
                                     </div>
                                     <input
-                                      onChange={(event)=>handleChangeLocalQuatity(event,lc.clothDetailId)}
+                                      onChange={(event)=>handleChangeLocalQuantity(event,lc.clothDetailId)}
                                       type="text"
                                       style={{ textAlign: "center" }}
                                       className="form-control"
-                                      value={lc.amount}
+                                      value={localQuantities.find((item)=>item.clothDetailId === lc.clothDetailId)?.quantity}
                                       required
                                       placeholder=""
                                     />

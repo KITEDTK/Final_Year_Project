@@ -33,7 +33,7 @@ async function fetchCartItem(userId: string){
     });
     return data;
 }
-async function addToCarts(userId: string, clothDetailId: string){
+async function addToCarts(userId: string, clothDetailId: string, amount: number){
     const check = await prisma.carts.findFirst({
         where:{
             userId: userId,
@@ -47,7 +47,7 @@ async function addToCarts(userId: string, clothDetailId: string){
                 id: check.id
             },
             data:{
-                amount: check.amount + 1
+                amount: check.amount + amount
             }
         })
     }else{
@@ -56,7 +56,7 @@ async function addToCarts(userId: string, clothDetailId: string){
                 userId: userId,
                 clothDetailId: clothDetailId,
                 isCheckout: false,
-                amount: 1
+                amount: amount
             }
         })
     }

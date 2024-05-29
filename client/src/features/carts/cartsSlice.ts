@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
+import { updateItemInLocalCartInput } from './cartsType';
 import {
   AddItemInput,
   BaseCart,
@@ -8,16 +9,17 @@ import {
   DeleteItemInput,
   ItemInLocalCarts,
   LocalCarts,
+
 } from "./cartsType";
 
 const BASE_URL = "http://localhost:4000/carts";
 export const fetchAddItemToCart = createAsyncThunk<BaseCart[], AddItemInput>(
   "carts/add-to-cart",
-  async ({ userId, clothDetailId }) => {
+  async ({ userId, clothDetailId, amount }) => {
     try {
       const response: AxiosResponse<BaseCart[]> = await axios.post(
         `${BASE_URL}/users/${userId}`,
-        { clothDetailId },
+        { clothDetailId, amount },
         { headers: { "Content-Type": "application/json" } }
       );
       return response.data;
@@ -102,6 +104,18 @@ const cartsSlice = createSlice({
         }
       }
     },
+    updateQuantityInLocalCart(state, action:PayloadAction<updateItemInLocalCartInput>){
+      const { clothDetailId, amount } = action.payload;
+      const item = state.localCarts.items.find((item)=>item.clothDetailId === clothDetailId);
+      const previousAmount = item?.amount;
+      if(item && previousAmount){
+        item.amount = amount;
+        state.localCarts.totalAmount += amount - previousAmount;
+        state.localCarts.totalPrice += (amount - previousAmount) * item.price;
+      }else{
+        console.log('Không tìm thấy sản phẩm trong giỏ hàng');
+      }
+    },
     resetLocalCarts(state){
         state.localCarts.items = [];
         state.localCarts.totalAmount = 0;
@@ -148,6 +162,6 @@ const cartsSlice = createSlice({
       });
   },
 });
-export const { addItemInLocalCart, removeItemFromLocalCart, resetLocalCarts } =
+export const { addItemInLocalCart, removeItemFromLocalCart, resetLocalCarts, updateQuantityInLocalCart } =
   cartsSlice.actions;
 export default cartsSlice.reducer;

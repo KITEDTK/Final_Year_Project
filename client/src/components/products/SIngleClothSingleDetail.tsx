@@ -5,8 +5,8 @@ import { formatMoney } from "../../utils/formatMoney";
 import { useEffect, useState } from "react";
 import "../../../public/assets/js/jquery.elevateZoom.min";
 import { showToast } from "../../utils/showToast";
-import { useAppDispatch } from "../../store/hooks";
-import { addItemInLocalCart } from "../../features/carts/cartsSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { addItemInLocalCart, fetchAddItemToCart } from "../../features/carts/cartsSlice";
 interface Props {
   clothesInfo: {
     rest: {
@@ -28,6 +28,7 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
   const { clothDetails } = clothesInfo;
   const allClothColors = _.uniqBy(clothDetails, "colorId");
   const allClothSizes = _.uniqBy(clothDetails, "sizeId");
+  const auth = useAppSelector((state)=>state.auth.auth)
   const [activeColor, setActiveColor] = useState<string>(() => {
     if (!clothDetails || clothDetails.length === 0) {
       return "";
@@ -57,13 +58,13 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
     if (!isNaN(parsedValue) && parsedValue >= 1) {
       setQuantity(parsedValue);
     } else {
-      setQuantity(1); // Set to 1 if the input is invalid or less than 1
+      setQuantity(1); 
     }
   };
   const handleButtonQuantity = (value: number) => {
     setQuantity((prev) => {
       const newQuantity = prev + value;
-      return newQuantity < 1 ? 1 : newQuantity; // Ensure quantity does not go below 1
+      return newQuantity < 1 ? 1 : newQuantity; 
     });
   };
   const handleAddToCart = async () =>{
@@ -71,21 +72,30 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
       return item.sizeId === activeSize && item.colorId === activeColor;
   });
     if(itemToAdd){
-      try{
-        await dispatch(
-          addItemInLocalCart({
-            clothDetailId: itemToAdd.id,
-            sizeName: itemToAdd.size.name,
-            colorName: itemToAdd.color.name,
-            clothesName: clothesInfo.rest.name,
-            amount: quantity,
-            price: clothesInfo.rest.price,
-          })
-        );
-      }catch(err){
-        showToast('Lỗi khi thêm sản phẩm vào giỏ hàng','error');
-      }
-      showToast('Đã thêm sản phẩm vào giỏ hàng','success');
+      if(auth){
+        try{
+          await dispatch(fetchAddItemToCart({userId: auth.id, clothDetailId: itemToAdd.id, amount: quantity}));
+          showToast('Đã thêm sản phẩm vào giỏ hàng','success');
+        }catch(err){
+          showToast('Lỗi khi thêm sản phẩm vào giỏ hàng','error');
+        }
+      }else{
+        try{
+          await dispatch(
+            addItemInLocalCart({
+              clothDetailId: itemToAdd.id,
+              sizeName: itemToAdd.size.name,
+              colorName: itemToAdd.color.name,
+              clothesName: clothesInfo.rest.name,
+              amount: quantity,
+              price: clothesInfo.rest.price,
+            })
+          );
+          showToast('Đã thêm sản phẩm vào giỏ hàng','success');
+        }catch(err){
+          showToast('Lỗi khi thêm sản phẩm vào giỏ hàng','error');
+        }
+      } 
     }else{
       showToast('Vui lòng chọn kích thước','info');
     }

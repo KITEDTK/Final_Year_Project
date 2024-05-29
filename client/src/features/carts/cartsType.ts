@@ -1,3 +1,5 @@
+import { StringNullableChain } from "lodash";
+
 export interface BaseCart{
     id: string;
     userId: string;
@@ -20,6 +22,7 @@ export interface BaseCart{
 export interface AddItemInput{
     userId: string;
     clothDetailId: string;
+    amount: number;
 }
 export interface CartsState{
     carts: BaseCart[];
@@ -46,4 +49,8 @@ export interface ItemInLocalCarts{
     clothDetailId: string;
     amount: number;
     price: number;
+}
+export interface updateItemInLocalCartInput{
+    clothDetailId: string;
+    amount: number;
 }

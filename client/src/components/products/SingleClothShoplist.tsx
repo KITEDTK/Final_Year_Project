@@ -61,7 +61,7 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
       // Khách hàng đã đăng nhập
       try {
         await dispatch(
-          fetchAddItemToCart({ userId: auth.id, clothDetailId })
+          fetchAddItemToCart({ userId: auth.id, clothDetailId, amount: 1 })
         ).unwrap();
         showToast(<>Đã thêm sản phẩm vào giỏ hàng</>, "success");
       } catch (error) {

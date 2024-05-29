@@ -3,9 +3,9 @@ import CartsService from "./CartsService";
 
 async function addItemToCarts(req: Request, res: Response){
     try {
-        const {clothDetailId} = req.body;
+        const {clothDetailId, amount} = req.body;
         const {userId} = req.params;
-        const result = await CartsService.addToCarts(userId, clothDetailId);
+        const result = await CartsService.addToCarts(userId, clothDetailId, amount);
         res.json(result);
       } catch (err) {
         console.log(err);

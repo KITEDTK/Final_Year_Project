@@ -4,7 +4,8 @@ import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import {
   fetchDeleteItemInCart,
   fetchItemInCart,
-  removeItemFromLocalCart
+  removeItemFromLocalCart,
+  resetLocalCarts
 } from "../../features/carts/cartsSlice";
 import { formatMoney } from "../../utils/formatMoney";
 import {showToast} from "../../utils/showToast";
@@ -59,6 +60,9 @@ export const MiniHeaderCart = () => {
       showToast("Lỗi khi thêm sản phẩm","error")
     }
   };
+  const handleOnClickCheckout = ()=>{
+    dispatch(resetLocalCarts());
+  }
   return (
     <>
       <div className="dropdown cart-dropdown">
@@ -111,7 +115,7 @@ export const MiniHeaderCart = () => {
                           {ac.clothDetails.size.name }
                           <br />
                           <span className="cart-product-qty">{ac.amount}</span>x
-                          {ac.clothDetails.cloth.price}đ
+                          {formatMoney(ac.clothDetails.cloth.price)}đ
                         </span>
                       </div>
                       {/* End .product-cart-details */}
@@ -209,7 +213,7 @@ export const MiniHeaderCart = () => {
             <Link to={'/carts'} className="btn btn-primary">
               View Cart
             </Link>
-            <a className="btn btn-outline-primary-2">
+            <a onClick={()=>handleOnClickCheckout()} className="btn btn-outline-primary-2">
               <span>Checkout</span>
               <i className="icon-long-arrow-right"></i>
             </a>
