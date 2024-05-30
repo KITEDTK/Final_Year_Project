@@ -10,7 +10,7 @@ import sizesSlice from "../features/sizes/sizesSlice";
 import colorsSilce from "../features/colors/colorsSilce";
 import authSlice from "../features/auth/authSlice";
 import cartsSlice from "../features/carts/cartsSlice";
-
+import paymentsSlice from "../features/payments/paymentsSlice";
 const persitConfig = {
   key : "root",
   version: 1,
@@ -22,7 +22,8 @@ const reducer = combineReducers({
   sizes: sizesSlice,
   colors: colorsSilce,
   auth: authSlice,
-  carts: cartsSlice
+  carts: cartsSlice,
+  payments: paymentsSlice
 });
 const persistedReducer = persistReducer(persitConfig, reducer);
 

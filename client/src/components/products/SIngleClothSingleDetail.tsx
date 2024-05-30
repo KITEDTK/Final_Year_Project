@@ -55,18 +55,28 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
   }
   const handleChangeQuantity = (value: string) => {
     const parsedValue = parseInt(value, 10);
-    if (!isNaN(parsedValue) && parsedValue >= 1) {
+    if (!isNaN(parsedValue) && parsedValue >= 1 && parsedValue <= 10) {
       setQuantity(parsedValue);
+    } else if (parsedValue > 10) {
+      setQuantity(10);
     } else {
       setQuantity(1); 
     }
   };
+  
   const handleButtonQuantity = (value: number) => {
     setQuantity((prev) => {
       const newQuantity = prev + value;
-      return newQuantity < 1 ? 1 : newQuantity; 
+      if (newQuantity < 1) {
+        return 1;
+      } else if (newQuantity > 10) {
+        return 10;
+      } else {
+        return newQuantity;
+      }
     });
   };
+  
   const handleAddToCart = async () =>{
     const itemToAdd = clothDetails.find((item) => {
       return item.sizeId === activeSize && item.colorId === activeColor;

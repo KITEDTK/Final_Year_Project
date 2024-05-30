@@ -6,6 +6,7 @@ import { Shoplist } from "./pages/Shoplist";
 import { Carts } from "./components/carts/Carts";
 import LoginAndRegister from './pages/LoginAndRegister';
 import { SingleClothes } from "./pages/SingleClothes";
+import { Checkout } from "./pages/Checkout";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/login" element={<LoginAndRegister />} />
           <Route path="/carts" element={<Carts />} />
           <Route path="/single-product/:clothesId" element={<SingleClothes/>} />
+          <Route path="/checkout" element={<Checkout/>}/>
         </Routes>
         <Footer/>
       </div>

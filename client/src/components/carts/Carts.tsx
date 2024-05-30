@@ -27,20 +27,46 @@ export const Carts = () => {
       quantity: item.amount,
     }))
   );
+  const handleOnclickQuantities = (clothDetailId: string, amount: number) => {
+    setLocalQuantities((prevQuantities) => {
+      const updatedQuantities = prevQuantities.map((item) =>
+        item.clothDetailId === clothDetailId
+          ? { ...item, quantity: Math.max(1, Math.min(10, item.quantity + amount)) }
+          : item
+      );
+  
+      const localQuantityClothDetail = updatedQuantities.find((item) => item.clothDetailId === clothDetailId);
+      
+      if (localQuantityClothDetail) {
+        dispatch(updateQuantityInLocalCart({ clothDetailId, amount: localQuantityClothDetail.quantity }));
+      }
+  
+      return updatedQuantities;
+    });
+  };
+  
+  
+  
   const handleChangeLocalQuantity = (event: React.ChangeEvent<HTMLInputElement>, clothDetailId: string) => {
     const newQuantity = parseInt(event.target.value, 10);
-    const localQuantityClothDetail = localQuantities.find((item)=>item.clothDetailId === clothDetailId);
+    
+    const validatedQuantity = isNaN(newQuantity) || newQuantity < 1 ? 1 : Math.min(newQuantity, 10);
+  
     setLocalQuantities((prevQuantities) =>
       prevQuantities.map((item) =>
         item.clothDetailId === clothDetailId
-          ? { ...item, quantity: isNaN(newQuantity) || newQuantity < 1 ? 1 : newQuantity }
+          ? { ...item, quantity: validatedQuantity }
           : item
       )
     );
-    if(localQuantityClothDetail){
-      dispatch(updateQuantityInLocalCart({clothDetailId: clothDetailId, amount: newQuantity}))
+  
+    const localQuantityClothDetail = localQuantities.find((item) => item.clothDetailId === clothDetailId);
+    
+    if (localQuantityClothDetail) {
+      dispatch(updateQuantityInLocalCart({ clothDetailId, amount: validatedQuantity }));
     }
   };
+  
   return (
     <>
       <main className="main">
@@ -231,6 +257,7 @@ export const Carts = () => {
                                   <div className="input-group input-spinner">
                                     <div className="input-group-prepend">
                                       <button
+                                      onClick={()=> handleOnclickQuantities(lc.clothDetailId, -1)}
                                         style={{ minWidth: "26px" }}
                                         className="btn btn-decrement btn-spinner"
                                         type="button"
@@ -249,6 +276,7 @@ export const Carts = () => {
                                     />
                                     <div className="input-group-append">
                                       <button
+                                      onClick={()=> handleOnclickQuantities(lc.clothDetailId, 1)}
                                         style={{ minWidth: "26px" }}
                                         className="btn btn-increment btn-spinner"
                                         type="button"
