@@ -137,16 +137,20 @@ model UserVouchers {
 
 model Payments {
   id             String           @id @default(uuid())
-  userId         String
-  voucherId      String
+  userId         String?
+  voucherId      String?
   total          Int
+  fullname       String
+  address        String
+  phoneNumber    String
+  email          String
   isPaid         Boolean          @default(false)
   createAt       DateTime         @default(now())
   updateAt       DateTime?
   isEnable       Boolean          @default(true)
   paymentDetails PaymentDetails[]
-  user           Users            @relation(fields: [userId], references: [id])
-  voucher        Vouchers         @relation(fields: [voucherId], references: [id])
+  user           Users?            @relation(fields: [userId], references: [id])
+  voucher        Vouchers?         @relation(fields: [voucherId], references: [id])
 }
 
 model PaymentDetails {

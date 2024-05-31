@@ -1,6 +1,6 @@
 import moment = require("moment");
 import { sortObject } from "./sortObject";
-export const generateURL = (req: any) => {
+export const generateURL = (req: any, orderId: string, totalAmount: number) => {
     process.env.TZ = 'Asia/Ho_Chi_Minh';
     let date = new Date();
     let createDate = moment(date).format('YYYYMMDDHHmmss');
@@ -14,7 +14,7 @@ export const generateURL = (req: any) => {
     let secretKey = "XWSSNAPCHGECJYUNQEOLBAESMEPOOGDR";
     let vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     let returnUrl = "http://localhost:3000/donepay";
-    let orderId = moment(date).format('DDHHmmss');
+    //let orderId = moment(date).format('DDHHmmss');
     let amount = 100;
     //let bankCode = req.body.bankCode;
     
@@ -33,7 +33,7 @@ export const generateURL = (req: any) => {
     vnp_Params['vnp_TxnRef'] = orderId;
     vnp_Params['vnp_OrderInfo'] = 'Thanh toan cho ma GD:' + orderId;
     vnp_Params['vnp_OrderType'] = 'other';
-    vnp_Params['vnp_Amount'] = 100000 * amount ;
+    vnp_Params['vnp_Amount'] = totalAmount * amount ;
     vnp_Params['vnp_ReturnUrl'] = returnUrl;
     vnp_Params['vnp_IpAddr'] = ipAddr;
     vnp_Params['vnp_CreateDate'] = createDate;
