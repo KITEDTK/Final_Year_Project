@@ -1,17 +1,25 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
 import { PaymentsState } from "./paymentsType";
-
+import { PaymentInput } from "./paymentsType";
 
 const BASE_URL = "http://localhost:4000/payments";
 
-export const fetchPaybyVNPAY = createAsyncThunk<string>(
+export const fetchPaybyVNPAY = createAsyncThunk<string, PaymentInput>(
   "payments/vn_pay",
-  async () => {
+  async ({userId,voucherId,total, address, email, phoneNumber, fullName}) => {
     try {
       const response: AxiosResponse<string> = await axios.post(
         `${BASE_URL}/vnpay`,
-        {},
+        { 
+          userId: userId,
+          voucherId: voucherId,
+          total: total,
+          address: address,
+          email: email,
+          phoneNumber: phoneNumber,
+          fullname: fullName
+        },
         { headers: { "Content-Type": "application/json" } }
       );
       return response.data;

@@ -11,9 +11,12 @@ export const Order = () => {
   const [authTotalPrice, setAuthTotalPrice] = useState<number>(0);
   const paymentUrl = useAppSelector((state) => state.payments.paymentUrl);
   const handleSubmitButton = async () => {
-    await dispatch(fetchPaybyVNPAY());
     try {
-      await dispatch(fetchPaybyVNPAY()).unwrap();
+      if(auth && auth!== null){
+        await dispatch(fetchPaybyVNPAY({userId: auth.id, total: authTotalPrice, address: 'Hà Nội',email: auth.email, phoneNumber: auth.phoneNumber, fullName: auth.fullname})).unwrap();
+      }else{
+        console.log('Khách hàng chưa đăng nhập');
+      }
       window.location.href = paymentUrl;
     } catch (err) {
       console.log(err);

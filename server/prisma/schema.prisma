@@ -145,6 +145,8 @@ model Payments {
   phoneNumber    String
   email          String
   isPaid         Boolean          @default(false)
+  vnpay          Boolean
+  onlinePay      Boolean
   createAt       DateTime         @default(now())
   updateAt       DateTime?
   isEnable       Boolean          @default(true)

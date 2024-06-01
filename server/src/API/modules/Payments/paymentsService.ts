@@ -1,10 +1,17 @@
 import { PrismaClient } from "@prisma/client";
 import { generateURL } from "../../../utils/vnpay";
+import { uuid } from "uuidv4";
 
 const prisma = new PrismaClient();
 
 async function vnpay(req: any) {
-    const {userId, voucherId, total, fullname, address, phoneNumber, email} = req.body;
+    const {total} = req.body;
+    const uniqueId = uuid();
+    const url = generateURL(req, uniqueId , total);
+    return url;
+}
+async function createPayment(req: any){
+    const {id,userId, voucherId, total, fullname, address, phoneNumber, email} = req.body;
     const createPayment = await prisma.payments.create({
         data:{
             ...(userId ? {userId: userId} : {}),
@@ -15,11 +22,11 @@ async function vnpay(req: any) {
             email: email,
             phoneNumber: phoneNumber,
             isPaid: false,
-            isEnable: true
+            isEnable: true,
+            vnpay: true,
+            onlinePay: true
         }
-    })
-    const url = generateURL(req, createPayment.id, createPayment.total);
-    return url;
+    });
+    return createPayment;
 }
-
-export default { vnpay };
+export default { vnpay, createPayment };
