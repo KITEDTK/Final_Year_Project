@@ -1,26 +1,26 @@
 import { Request, Response, NextFunction } from "express";
 import paymentsService from "./paymentsService";
 import { returnUrl } from "../../../utils/vnpay";
-let paymentData: string = '';
+import axios from "axios";
+let paymentData: any = {};
 async function paidByVnPay(req: Request, res: Response){
     try {
         const result = await paymentsService.vnpay(req);
-        paymentData = result;
         res.json(result);
+        returnVnpay(result.data, req, res);
       } catch (err) {
         console.log(err);
       }
 }
-async function returnVnpay(req: Request, res: Response){
+async function returnVnpay(data: any, req: Request, res: Response){
   try {
     const result = await paymentsService.returnVnpay(req,res);
-    //Check trùng paymentId thì không thêm vào nữa
-    // if(result === 'success'){
-    //   res.redirect(`http://localhost:3000/donepay/success/${paymentData}`);
-    // }else{
-    //   res.redirect('http://localhost:3000/donepay/fail');
-    // }
-    res.json(result);
+    if(result === 'success'){
+      await axios.post('http://localhost:4000/payment',data);
+      res.redirect(`http://localhost:3000/donepay/success`);
+    }else{
+      res.redirect('http://localhost:3000/donepay/fail');
+    }
   } catch (err) {
     console.log(err);
   }

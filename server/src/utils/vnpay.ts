@@ -1,6 +1,5 @@
 import moment = require("moment");
 import { sortObject } from "./sortObject";
-import { Request } from "express";
 export const generateURL = (req: any, orderId: string, totalAmount: number) => {
     process.env.TZ = 'Asia/Ho_Chi_Minh';
     let date = new Date();

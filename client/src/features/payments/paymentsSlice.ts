@@ -1,15 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { PaymentsState } from "./paymentsType";
+import { PaymentsState, PaymentVnpayOutput } from "./paymentsType";
 import { PaymentInput } from "./paymentsType";
 
 const BASE_URL = "http://localhost:4000/payments";
 
-export const fetchPaybyVNPAY = createAsyncThunk<string, PaymentInput>(
+export const fetchPaybyVNPAY = createAsyncThunk<PaymentVnpayOutput, PaymentInput>(
   "payments/vn_pay",
-  async ({userId,voucherId,total, address, email, phoneNumber, fullName}) => {
+  async ({userId,voucherId,total, address, email, phoneNumber, fullName, clothDetailId}) => {
     try {
-      const response: AxiosResponse<string> = await axios.post(
+      const response: AxiosResponse<PaymentVnpayOutput> = await axios.post(
         `${BASE_URL}/vnpay`,
         { 
           userId: userId,
@@ -18,7 +18,8 @@ export const fetchPaybyVNPAY = createAsyncThunk<string, PaymentInput>(
           address: address,
           email: email,
           phoneNumber: phoneNumber,
-          fullname: fullName
+          fullname: fullName,
+          clothDetailId: clothDetailId
         },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -45,7 +46,7 @@ const paymentsSlice = createSlice({
       })
       .addCase(fetchPaybyVNPAY.fulfilled, (state, action) => {
         state.loading = false;
-        window.location.href = action.payload;
+        window.location.href = action.payload.url;
       })
       .addCase(fetchPaybyVNPAY.rejected, (state, action) => {
         state.loading = false;

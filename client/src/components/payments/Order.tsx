@@ -20,6 +20,7 @@ export const Order = () => {
         email: auth.email,
         phoneNumber: auth.phoneNumber,
         fullName: auth.fullname,
+        clothDetailId: authCart.map((item)=>{return item.clothDetailId})
       })
     )
    }else{

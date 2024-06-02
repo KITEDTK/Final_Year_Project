@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from 'cors';
 import { Request, Response, NextFunction } from "express";
-var session = require('express-session')
+var session = require('express-session');
 
 //Router
 import UsersRoute from "./API/modules/Users/UsersRoute";

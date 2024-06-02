@@ -9,10 +9,18 @@ async function vnpay(req: any) {
     const {total} = req.body;
     const uniqueId = uuid();
     const url = generateURL(req, uniqueId , total);
-    return url;
+    return {url: url , data: req.body};
 }
 async function createPayment(req: any){
-    const {id,userId, voucherId, total, fullname, address, phoneNumber, email} = req.body;
+    const {id,userId, voucherId, total, fullname, address, phoneNumber, email, clothDetailId} = req.body;
+    const checkExist = await prisma.payments.findUnique({
+        where:{
+            id: id
+        }
+    });
+    if(checkExist){
+        throw 'Đơn hàng đã được xử lí';
+    }
     const createPayment = await prisma.payments.create({
         data:{
             id: id,
@@ -28,6 +36,16 @@ async function createPayment(req: any){
             vnpay: true,
             onlinePay: true
         }
+    });
+    const data: any = [];
+    clothDetailId.array.forEach((item: string)=>{
+        data.push({
+            paymentId: id,
+            clothId: item
+        })
+    });
+    await prisma.paymentDetails.createMany({
+        data: data
     });
     return createPayment;
 }

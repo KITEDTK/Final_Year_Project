@@ -13,6 +13,7 @@ export interface PaymentInput{
     address: string;
     email: string;
     phoneNumber: string;
+    clothDetailId: string[];
 }
 export interface PaymentVnpayOutput{
     url: string;
