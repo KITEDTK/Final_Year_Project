@@ -14,3 +14,7 @@ export interface PaymentInput{
     email: string;
     phoneNumber: string;
 }
+export interface PaymentVnpayOutput{
+    url: string;
+    data: number;
+}

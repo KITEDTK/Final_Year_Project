@@ -9,19 +9,24 @@ export const Order = () => {
   const authCart = useAppSelector((state) => state.carts.carts);
   const localCart = useAppSelector((state) => state.carts.localCarts);
   const [authTotalPrice, setAuthTotalPrice] = useState<number>(0);
-  const paymentUrl = useAppSelector((state) => state.payments.paymentUrl);
+  //const paymentUrl = useAppSelector((state) => state.payments.paymentUrl);
   const handleSubmitButton = async () => {
-    try {
-      if(auth && auth!== null){
-        await dispatch(fetchPaybyVNPAY({userId: auth.id, total: authTotalPrice, address: 'Hà Nội',email: auth.email, phoneNumber: auth.phoneNumber, fullName: auth.fullname})).unwrap();
-      }else{
-        console.log('Khách hàng chưa đăng nhập');
-      }
-      window.location.href = paymentUrl;
-    } catch (err) {
-      console.log(err);
-    }
+   if(auth && auth !==null){
+    dispatch(
+      fetchPaybyVNPAY({
+        userId: auth.id,
+        total: authTotalPrice,
+        address: "Hà Nội",
+        email: auth.email,
+        phoneNumber: auth.phoneNumber,
+        fullName: auth.fullname,
+      })
+    )
+   }else{
+    console.log('Khách hàng chưa đăng nhập')
+   }
   };
+
   useEffect(() => {
     if (auth && authCart) {
       const totalPrice: number = authCart.reduce(

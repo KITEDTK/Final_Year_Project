@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from 'cors';
 import { Request, Response, NextFunction } from "express";
-
+var session = require('express-session')
 
 //Router
 import UsersRoute from "./API/modules/Users/UsersRoute";
@@ -13,7 +13,17 @@ import ColorsRoute from "./API/modules/Colors/ColorsRoute";
 import CartsRoute from "./API/modules/Carts/CartsRoute";
 import PaymentsRoute from "./API/modules/Payments/paymentsRoute";
 
+
+
 const app = express();
+
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // Đặt secure: true nếu sử dụng HTTPS
+}));
+
 app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 }, cors({ maxAge: 84600 }));

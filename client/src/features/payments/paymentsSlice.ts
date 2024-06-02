@@ -45,7 +45,7 @@ const paymentsSlice = createSlice({
       })
       .addCase(fetchPaybyVNPAY.fulfilled, (state, action) => {
         state.loading = false;
-        state.paymentUrl = action.payload;
+        window.location.href = action.payload;
       })
       .addCase(fetchPaybyVNPAY.rejected, (state, action) => {
         state.loading = false;
