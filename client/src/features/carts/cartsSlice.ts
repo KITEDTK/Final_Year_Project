@@ -120,7 +120,7 @@ const cartsSlice = createSlice({
         state.localCarts.items = [];
         state.localCarts.totalAmount = 0;
         state.localCarts.totalPrice = 0;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder

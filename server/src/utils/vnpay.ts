@@ -13,7 +13,7 @@ export const generateURL = (req: any, orderId: string, totalAmount: number) => {
     let tmnCode = "KHBLVREA";
     let secretKey = "XWSSNAPCHGECJYUNQEOLBAESMEPOOGDR";
     let vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    let returnUrl = "http://localhost:4000/payments/return_vnpay";
+    let returnUrl = `http://localhost:4000/payments/return_vnpay`;
     let amount = 100;
     
     let locale = 'vn';
@@ -49,30 +49,4 @@ export const generateURL = (req: any, orderId: string, totalAmount: number) => {
     vnp_Params['vnp_SecureHash'] = signed;
     vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
     return vnpUrl;
-}
-export const returnUrl = (req: any,res: any)=>{
-    let vnp_Params = req.query;
-
-    let secureHash = vnp_Params['vnp_SecureHash'];
-
-    delete vnp_Params['vnp_SecureHash'];
-    delete vnp_Params['vnp_SecureHashType'];
-
-    vnp_Params = sortObject(vnp_Params);
-
-    let tmnCode = "KHBLVREA";
-    let secretKey = "XWSSNAPCHGECJYUNQEOLBAESMEPOOGDR";
-
-    let querystring = require('qs');
-    let signData = querystring.stringify(vnp_Params, { encode: false });
-    let crypto = require("crypto");     
-    let hmac = crypto.createHmac("sha512", secretKey);
-    let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");     
-
-    if(secureHash === signed){
-        //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
-        return 'success';
-    } else{
-        return 'fail';
-    }
 }

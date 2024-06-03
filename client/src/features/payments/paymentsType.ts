@@ -1,6 +1,7 @@
 
 
 export interface PaymentsState{
+    localPaymentInfo : LocalPaymentInfo
     paymentUrl: string;
     loading: boolean;
     error: string | null;
@@ -18,4 +19,11 @@ export interface PaymentInput{
 export interface PaymentVnpayOutput{
     url: string;
     data: number;
+}
+export interface LocalPaymentInfo{
+    voucherId? : string;
+    fullName: string;
+    address: string;
+    email: string;
+    phoneNumber: string;
 }

@@ -9,10 +9,12 @@ async function vnpay(req: any) {
     const {total} = req.body;
     const uniqueId = uuid();
     const url = generateURL(req, uniqueId , total);
-    return {url: url , data: req.body};
+    const dataCreate = {id: uniqueId, ...req.body};
+    await createPayment(dataCreate);
+    return url;
 }
-async function createPayment(req: any){
-    const {id,userId, voucherId, total, fullname, address, phoneNumber, email, clothDetailId} = req.body;
+async function createPayment(input: any){
+    const {id,userId, voucherId, total, fullname, address, phoneNumber, email, clothDetailId} = input;
     const checkExist = await prisma.payments.findUnique({
         where:{
             id: id
@@ -38,7 +40,7 @@ async function createPayment(req: any){
         }
     });
     const data: any = [];
-    clothDetailId.array.forEach((item: string)=>{
+    clothDetailId.forEach((item: string)=>{
         data.push({
             paymentId: id,
             clothId: item
@@ -70,8 +72,26 @@ async function returnVnpay(req: any, res: any){
 
     if(secureHash === signed){
         //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
+        await prisma.payments.update({
+            where:{
+                id:  vnp_Params['vnp_TxnRef']
+            },
+            data:{
+                isPaid: true
+            }
+        })
         return 'success';
     } else{
+        await prisma.paymentDetails.deleteMany({
+            where:{
+                id:  vnp_Params['vnp_TxnRef']
+            }
+        })
+        await prisma.payments.delete({
+            where:{
+                id:  vnp_Params['vnp_TxnRef']
+            }
+        })
         return 'fail';
     }
 }

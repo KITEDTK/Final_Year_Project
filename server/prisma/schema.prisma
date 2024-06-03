@@ -151,8 +151,8 @@ model Payments {
   updateAt       DateTime?
   isEnable       Boolean          @default(true)
   paymentDetails PaymentDetails[]
-  user           Users?            @relation(fields: [userId], references: [id])
-  voucher        Vouchers?         @relation(fields: [voucherId], references: [id])
+  user           Users?           @relation(fields: [userId], references: [id])
+  voucher        Vouchers?        @relation(fields: [voucherId], references: [id])
 }
 
 model PaymentDetails {
@@ -161,6 +161,7 @@ model PaymentDetails {
   clothId     String
   createAt    DateTime     @default(now())
   updateAt    DateTime?
+  amount      Int?
   isEnable    Boolean      @default(true)
   clothDetail ClothDetails @relation(fields: [clothId], references: [id])
   payment     Payments     @relation(fields: [paymentId], references: [id])
@@ -206,11 +207,12 @@ model Refunds {
   clotDetails   ClothDetails @relation(fields: [clothDetailId], references: [id])
   user          Users        @relation(fields: [userId], references: [id])
 }
+
 model CLothesAddExcelTest {
-  id           String         @id @default(uuid())
-  name         String?
-  categoryId   String?
-  brand        String?
-  location     String?
-  price        Int?
+  id         String  @id @default(uuid())
+  name       String?
+  categoryId String?
+  brand      String?
+  location   String?
+  price      Int?
 }

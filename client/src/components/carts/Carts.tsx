@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { formatMoney } from "../../utils/formatMoney";
 import { updateQuantityInLocalCart } from "../../features/carts/cartsSlice";
+import { Link } from "react-router-dom";
 export const Carts = () => {
   const auth = useAppSelector((state) => state.auth.auth);
   const dispatch = useAppDispatch();
@@ -437,12 +438,11 @@ export const Carts = () => {
                     </table>
                     {/* End .table table-summary */}
 
-                    <a
-                      href="checkout.html"
+                    <Link to="/checkout"
                       className="btn btn-outline-primary-2 btn-order btn-block"
                     >
                       PROCEED TO CHECKOUT
-                    </a>
+                    </Link>
                   </div>
                   {/* End .summary */}
 
