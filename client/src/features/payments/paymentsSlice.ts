@@ -7,7 +7,7 @@ const BASE_URL = "http://localhost:4000/payments";
 
 export const fetchPaybyVNPAY = createAsyncThunk<string, PaymentInput>(
   "payments/vn_pay",
-  async ({userId,voucherId,total, address, email, phoneNumber, fullName, clothDetailId}) => {
+  async ({userId,voucherId,total, address, email, phoneNumber, fullName, clothDetail}) => {
     try {
       const response: AxiosResponse<string> = await axios.post(
         `${BASE_URL}/vnpay`,
@@ -19,7 +19,7 @@ export const fetchPaybyVNPAY = createAsyncThunk<string, PaymentInput>(
           email: email,
           phoneNumber: phoneNumber,
           fullname: fullName,
-          clothDetailId: clothDetailId
+          clothDetail: clothDetail
         },
         { headers: { "Content-Type": "application/json" } }
       );

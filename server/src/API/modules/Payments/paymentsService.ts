@@ -14,7 +14,7 @@ async function vnpay(req: any) {
     return url;
 }
 async function createPayment(input: any){
-    const {id,userId, voucherId, total, fullname, address, phoneNumber, email, clothDetailId} = input;
+    const {id,userId, voucherId, total, fullname, address, phoneNumber, email, clothDetail} = input;
     const checkExist = await prisma.payments.findUnique({
         where:{
             id: id
@@ -40,10 +40,11 @@ async function createPayment(input: any){
         }
     });
     const data: any = [];
-    clothDetailId.forEach((item: string)=>{
+    clothDetail.forEach((item: any)=>{
         data.push({
             paymentId: id,
-            clothId: item
+            clothId: item.id,
+            amount: item.amount
         })
     });
     await prisma.paymentDetails.createMany({

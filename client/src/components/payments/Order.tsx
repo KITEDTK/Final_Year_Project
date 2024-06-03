@@ -4,15 +4,27 @@ import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../store/hooks";
 import { fetchPaybyVNPAY } from "../../features/payments/paymentsSlice";
 import { showToast } from "../../utils/showToast";
+interface clothDetailItem {
+  id: string;
+  amount: number;
+}
 export const Order = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth.auth);
   const authCart = useAppSelector((state) => state.carts.carts);
   const localCart = useAppSelector((state) => state.carts.localCarts);
   const [authTotalPrice, setAuthTotalPrice] = useState<number>(0);
-  const localPaymentInfo = useAppSelector((state)=> state.payments.localPaymentInfo);
+  const localPaymentInfo = useAppSelector(
+    (state) => state.payments.localPaymentInfo
+  );
   const handleSubmitButton = async () => {
     if (auth && auth !== null) {
+      const authClothDetail: clothDetailItem[] = authCart.map((item) => {
+        return {
+          id: item.id,
+          amount: item.amount,
+        };
+      });
       dispatch(
         fetchPaybyVNPAY({
           userId: auth.id,
@@ -21,27 +33,32 @@ export const Order = () => {
           email: auth.email,
           phoneNumber: auth.phoneNumber,
           fullName: auth.fullname,
-          clothDetailId: authCart.map((item) => {
-            return item.clothDetailId;
-          }),
+          clothDetail: authClothDetail,
         })
       );
     } else {
-      const hasEmptyField = Object.values(localPaymentInfo).some(value => value === '');
-      if(hasEmptyField){
-        showToast('Vui lòng điền đủ thông tin cá nhân','error');
-      }else{
+      const hasEmptyField = Object.values(localPaymentInfo).some(
+        (value) => value === ""
+      );
+      if (hasEmptyField) {
+        showToast("Vui lòng điền đủ thông tin cá nhân", "error");
+      } else {
+        const localClothDetail: clothDetailItem[] = localCart.items.map(
+          (item) => {
+            return {
+              id: item.clothDetailId,
+              amount: item.amount,
+            };
+          }
+        );
         dispatch(
           fetchPaybyVNPAY({
             total: localCart.totalPrice,
             ...localPaymentInfo,
-            clothDetailId: localCart.items.map((item) => {
-              return item.clothDetailId;
-            }),
+            clothDetail: localClothDetail,
           })
         );
       }
-      
     }
   };
 
