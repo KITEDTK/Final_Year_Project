@@ -45,9 +45,6 @@ export const Carts = () => {
       return updatedQuantities;
     });
   };
-  
-  
-  
   const handleChangeLocalQuantity = (event: React.ChangeEvent<HTMLInputElement>, clothDetailId: string) => {
     const newQuantity = parseInt(event.target.value, 10);
     
@@ -60,9 +57,7 @@ export const Carts = () => {
           : item
       )
     );
-  
     const localQuantityClothDetail = localQuantities.find((item) => item.clothDetailId === clothDetailId);
-    
     if (localQuantityClothDetail) {
       dispatch(updateQuantityInLocalCart({ clothDetailId, amount: validatedQuantity }));
     }

@@ -32,7 +32,8 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
   const allClothColors = _.uniqBy(clothDetails, "colorId");
   const allClothSizes = _.uniqBy(clothDetails, "sizeId");
   const auth = useAppSelector((state) => state.auth.auth);
-  const authCarts = useAppSelector((state)=>state.carts.carts);
+  const authCarts = useAppSelector((state) => state.carts.carts);
+  const LocalCarts = useAppSelector((state)=>state.carts.localCarts);
   const [activeColor, setActiveColor] = useState<string>(() => {
     if (!clothDetails || clothDetails.length === 0) {
       return "";
@@ -63,12 +64,52 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
       return item.sizeId === activeSize && item.colorId === activeColor;
     });
     if (itemToAdd) {
-      if (!isNaN(parsedValue) && parsedValue >= 1 && parsedValue <= 10) {
-        setQuantity(parsedValue);
-      } else if (parsedValue > 10) {
-        setQuantity(10);
-      } else {
-        setQuantity(1);
+      if (auth && auth !== null) {
+        const cartItem = authCarts.find(
+          (item) => item.clothDetailId === itemToAdd.id
+        );
+        const maxQuantity: number =
+          cartItem !== undefined
+            ? itemToAdd.amount - cartItem.amount
+            : itemToAdd.amount;
+        if (
+          !isNaN(parsedValue) &&
+          parsedValue >= 1 &&
+          parsedValue <= maxQuantity
+        ) {
+          setQuantity(parsedValue);
+        } else if (parsedValue > maxQuantity) {
+          if (maxQuantity === 0) {
+            setQuantity(1);
+          } else {
+            setQuantity(maxQuantity);
+          }
+        } else {
+          setQuantity(1);
+        }
+      }else{
+        const cartItem = LocalCarts.items.find(
+          (item) => item.clothDetailId === itemToAdd.id
+        );
+        const maxQuantity: number =
+          cartItem !== undefined
+            ? itemToAdd.amount - cartItem.amount
+            : itemToAdd.amount;
+        if (
+          !isNaN(parsedValue) &&
+          parsedValue >= 1 &&
+          parsedValue <= maxQuantity
+        ) {
+          setQuantity(parsedValue);
+        } else if (parsedValue > maxQuantity) {
+          if (maxQuantity === 0) {
+            setQuantity(1);
+          } else {
+            setQuantity(maxQuantity);
+          }
+        } else {
+          setQuantity(1);
+        }
       }
     } else {
       showToast("Vui lòng chọn kích thước", "info");
@@ -79,20 +120,45 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
       return item.sizeId === activeSize && item.colorId === activeColor;
     });
     if (itemToAdd) {
-      if(auth && auth !== null){
-        const maxQuantity: number = authCarts.find((item)=>item.clothDetailId === itemToAdd.id)?.amount !== undefined ? authCarts.find((item)=>item.clothDetailId === itemToAdd.id)?.amount - itemToAdd.amount : itemToAdd.amount;
+      if (auth && auth !== null) {
+        const cartItem = authCarts.find(
+          (item) => item.clothDetailId === itemToAdd.id
+        );
+        const maxQuantity: number =
+          cartItem !== undefined
+            ? itemToAdd.amount - cartItem.amount
+            : itemToAdd.amount;
+        console.log(maxQuantity);
         setQuantity((prev) => {
           const newQuantity = prev + value;
           if (newQuantity < 1) {
             return 1;
-          } else if (newQuantity > maxQuantity ) {
-            return maxQuantity;
+          } else if (newQuantity > maxQuantity) {
+            return maxQuantity === 0 ? 1 : maxQuantity;
+          } else {
+            return newQuantity;
+          }
+        });
+      }else{
+        const cartItem = LocalCarts.items.find(
+          (item) => item.clothDetailId === itemToAdd.id
+        );
+        const maxQuantity: number =
+          cartItem !== undefined
+            ? itemToAdd.amount - cartItem.amount
+            : itemToAdd.amount;
+        console.log(maxQuantity);
+        setQuantity((prev) => {
+          const newQuantity = prev + value;
+          if (newQuantity < 1) {
+            return 1;
+          } else if (newQuantity > maxQuantity) {
+            return maxQuantity === 0 ? 1 : maxQuantity;
           } else {
             return newQuantity;
           }
         });
       }
-      
     } else {
       showToast("Vui lòng chọn kích thước", "info");
     }
@@ -105,30 +171,48 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
     if (itemToAdd) {
       if (auth) {
         try {
-          await dispatch(
-            fetchAddItemToCart({
-              userId: auth.id,
-              clothDetailId: itemToAdd.id,
-              amount: quantity,
-            })
+          const cartItem = authCarts.find(
+            (item) => item.clothDetailId === itemToAdd.id
           );
-          showToast("Đã thêm sản phẩm vào giỏ hàng", "success");
+          const cartItemQuantity: number =
+            cartItem !== undefined ? cartItem.amount : 0;
+          if (cartItemQuantity + quantity > itemToAdd.amount) {
+            showToast("Trong kho không có đủ số lượng cho bạn", "info");
+          } else {
+            await dispatch(
+              fetchAddItemToCart({
+                userId: auth.id,
+                clothDetailId: itemToAdd.id,
+                amount: quantity,
+              })
+            );
+            showToast("Đã thêm sản phẩm vào giỏ hàng", "success");
+          }
         } catch (err) {
           showToast("Lỗi khi thêm sản phẩm vào giỏ hàng", "error");
         }
       } else {
         try {
-          await dispatch(
-            addItemInLocalCart({
-              clothDetailId: itemToAdd.id,
-              sizeName: itemToAdd.size.name,
-              colorName: itemToAdd.color.name,
-              clothesName: clothesInfo.rest.name,
-              amount: quantity,
-              price: clothesInfo.rest.price,
-            })
+          const cartItem = LocalCarts.items.find(
+            (item) => item.clothDetailId === itemToAdd.id
           );
-          showToast("Đã thêm sản phẩm vào giỏ hàng", "success");
+          const cartItemQuantity: number =
+            cartItem !== undefined ? cartItem.amount : 0;
+            if (cartItemQuantity + quantity > itemToAdd.amount) {
+              showToast("Trong kho không có đủ số lượng cho bạn", "info");
+            }else{
+              await dispatch(
+                addItemInLocalCart({
+                  clothDetailId: itemToAdd.id,
+                  sizeName: itemToAdd.size.name,
+                  colorName: itemToAdd.color.name,
+                  clothesName: clothesInfo.rest.name,
+                  amount: quantity,
+                  price: clothesInfo.rest.price,
+                })
+              );
+              showToast("Đã thêm sản phẩm vào giỏ hàng", "success");
+            }
         } catch (err) {
           showToast("Lỗi khi thêm sản phẩm vào giỏ hàng", "error");
         }
