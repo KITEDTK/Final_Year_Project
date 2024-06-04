@@ -6,7 +6,10 @@ import { useEffect, useState } from "react";
 import "../../../public/assets/js/jquery.elevateZoom.min";
 import { showToast } from "../../utils/showToast";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { addItemInLocalCart, fetchAddItemToCart } from "../../features/carts/cartsSlice";
+import {
+  addItemInLocalCart,
+  fetchAddItemToCart,
+} from "../../features/carts/cartsSlice";
 interface Props {
   clothesInfo: {
     rest: {
@@ -28,7 +31,8 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
   const { clothDetails } = clothesInfo;
   const allClothColors = _.uniqBy(clothDetails, "colorId");
   const allClothSizes = _.uniqBy(clothDetails, "sizeId");
-  const auth = useAppSelector((state)=>state.auth.auth)
+  const auth = useAppSelector((state) => state.auth.auth);
+  const authCarts = useAppSelector((state)=>state.carts.carts);
   const [activeColor, setActiveColor] = useState<string>(() => {
     if (!clothDetails || clothDetails.length === 0) {
       return "";
@@ -50,47 +54,70 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
   const handleChooseColor = (colorId: string) => {
     setActiveColor(colorId);
   };
-  const handleChooseSize = (sizeId: string)=>{
+  const handleChooseSize = (sizeId: string) => {
     setActiveSize(sizeId);
-  }
+  };
   const handleChangeQuantity = (value: string) => {
     const parsedValue = parseInt(value, 10);
-    if (!isNaN(parsedValue) && parsedValue >= 1 && parsedValue <= 10) {
-      setQuantity(parsedValue);
-    } else if (parsedValue > 10) {
-      setQuantity(10);
-    } else {
-      setQuantity(1); 
-    }
-  };
-  
-  const handleButtonQuantity = (value: number) => {
-    setQuantity((prev) => {
-      const newQuantity = prev + value;
-      if (newQuantity < 1) {
-        return 1;
-      } else if (newQuantity > 10) {
-        return 10;
-      } else {
-        return newQuantity;
-      }
-    });
-  };
-  
-  const handleAddToCart = async () =>{
     const itemToAdd = clothDetails.find((item) => {
       return item.sizeId === activeSize && item.colorId === activeColor;
-  });
-    if(itemToAdd){
-      if(auth){
-        try{
-          await dispatch(fetchAddItemToCart({userId: auth.id, clothDetailId: itemToAdd.id, amount: quantity}));
-          showToast('Đã thêm sản phẩm vào giỏ hàng','success');
-        }catch(err){
-          showToast('Lỗi khi thêm sản phẩm vào giỏ hàng','error');
+    });
+    if (itemToAdd) {
+      if (!isNaN(parsedValue) && parsedValue >= 1 && parsedValue <= 10) {
+        setQuantity(parsedValue);
+      } else if (parsedValue > 10) {
+        setQuantity(10);
+      } else {
+        setQuantity(1);
+      }
+    } else {
+      showToast("Vui lòng chọn kích thước", "info");
+    }
+  };
+  const handleButtonQuantity = (value: number) => {
+    const itemToAdd = clothDetails.find((item) => {
+      return item.sizeId === activeSize && item.colorId === activeColor;
+    });
+    if (itemToAdd) {
+      if(auth && auth !== null){
+        const maxQuantity: number = authCarts.find((item)=>item.clothDetailId === itemToAdd.id)?.amount !== undefined ? authCarts.find((item)=>item.clothDetailId === itemToAdd.id)?.amount - itemToAdd.amount : itemToAdd.amount;
+        setQuantity((prev) => {
+          const newQuantity = prev + value;
+          if (newQuantity < 1) {
+            return 1;
+          } else if (newQuantity > maxQuantity ) {
+            return maxQuantity;
+          } else {
+            return newQuantity;
+          }
+        });
+      }
+      
+    } else {
+      showToast("Vui lòng chọn kích thước", "info");
+    }
+  };
+
+  const handleAddToCart = async () => {
+    const itemToAdd = clothDetails.find((item) => {
+      return item.sizeId === activeSize && item.colorId === activeColor;
+    });
+    if (itemToAdd) {
+      if (auth) {
+        try {
+          await dispatch(
+            fetchAddItemToCart({
+              userId: auth.id,
+              clothDetailId: itemToAdd.id,
+              amount: quantity,
+            })
+          );
+          showToast("Đã thêm sản phẩm vào giỏ hàng", "success");
+        } catch (err) {
+          showToast("Lỗi khi thêm sản phẩm vào giỏ hàng", "error");
         }
-      }else{
-        try{
+      } else {
+        try {
           await dispatch(
             addItemInLocalCart({
               clothDetailId: itemToAdd.id,
@@ -101,15 +128,15 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
               price: clothesInfo.rest.price,
             })
           );
-          showToast('Đã thêm sản phẩm vào giỏ hàng','success');
-        }catch(err){
-          showToast('Lỗi khi thêm sản phẩm vào giỏ hàng','error');
+          showToast("Đã thêm sản phẩm vào giỏ hàng", "success");
+        } catch (err) {
+          showToast("Lỗi khi thêm sản phẩm vào giỏ hàng", "error");
         }
-      } 
-    }else{
-      showToast('Vui lòng chọn kích thước','info');
+      }
+    } else {
+      showToast("Vui lòng chọn kích thước", "info");
     }
-  }
+  };
   return (
     <>
       <div className="product-details-top">
@@ -260,15 +287,15 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
                     allClothSizes.length > 0 &&
                     allClothSizes.map((item) => (
                       <>
-                        <a 
-                        style={{ cursor: 'pointer' }}
-                        title={item.size.name}
-                        onClick={()=> handleChooseSize(item.sizeId)}
+                        <a
+                          style={{ cursor: "pointer" }}
+                          title={item.size.name}
+                          onClick={() => handleChooseSize(item.sizeId)}
                           className={
                             clothDetails
                               .filter((item1) => item1.colorId === activeColor)
                               .find((item2) => item2.sizeId === item.sizeId)
-                              ? `${item.sizeId === activeSize ? 'active' : ''}`
+                              ? `${item.sizeId === activeSize ? "active" : ""}`
                               : "disabled"
                           }
                         >
@@ -292,7 +319,7 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
                   <div className="input-group input-spinner">
                     <div className="input-group-prepend">
                       <button
-                      onClick={()=>handleButtonQuantity(-1)}
+                        onClick={() => handleButtonQuantity(-1)}
                         style={{ minWidth: "26px" }}
                         className="btn btn-decrement btn-spinner"
                         type="button"
@@ -301,7 +328,9 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
                       </button>
                     </div>
                     <input
-                    onChange={(event)=>handleChangeQuantity(event.target.value)}
+                      onChange={(event) =>
+                        handleChangeQuantity(event.target.value)
+                      }
                       type="text"
                       style={{ textAlign: "center" }}
                       className="form-control"
@@ -311,7 +340,7 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
                     />
                     <div className="input-group-append">
                       <button
-                      onClick={()=>handleButtonQuantity(1)}
+                        onClick={() => handleButtonQuantity(1)}
                         style={{ minWidth: "26px" }}
                         className="btn btn-increment btn-spinner"
                         type="button"
@@ -327,7 +356,11 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
               {/*  End .details-filter-row */}
 
               <div className="product-details-action">
-                <a style={{cursor: 'pointer'}} onClick={()=>handleAddToCart()} className="btn-product btn-cart">
+                <a
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleAddToCart()}
+                  className="btn-product btn-cart"
+                >
                   <span>add to cart</span>
                 </a>
 
