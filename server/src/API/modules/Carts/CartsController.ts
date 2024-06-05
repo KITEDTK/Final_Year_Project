@@ -29,4 +29,14 @@ async function deleteItemInCart(req: Request, res: Response){
     console.log(err);
   }
 }
-export default {addItemToCarts, getCartInfo,deleteItemInCart}
+async function updateCartQuantity(req: Request, res: Response){
+  try{
+    const {cartId} = req.params;
+    const {amount} = req.body;
+    const result = await CartsService.updateCartQuantity(cartId,amount);
+    res.json(result);
+  }catch(err){
+    console.log(err)
+  }
+}
+export default {addItemToCarts, getCartInfo,deleteItemInCart, updateCartQuantity}

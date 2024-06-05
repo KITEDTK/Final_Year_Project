@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { updateItemInLocalCartInput } from './cartsType';
+import { UpdateItemQuantityAuthCartInput, updateItemInLocalCartInput } from './cartsType';
 import {
   AddItemInput,
   BaseCart,
@@ -59,6 +59,22 @@ export const fetchDeleteItemInCart = createAsyncThunk<
     throw err;
   }
 });
+export const fetchUpdateCartQuantity = createAsyncThunk<BaseCart[], UpdateItemQuantityAuthCartInput>(
+  "cart/update-quantity",
+  async ({amount, cartId})=>{
+    try {
+      const response: AxiosResponse<BaseCart[]> = await axios.put(
+        `${BASE_URL}/${cartId}`,
+        {amount},
+        { headers: { "Content-Type": "application/json" } }
+      );
+      return response.data;
+    } catch (err) {
+      console.error("Xóa giỏ hàng thất bại", err);
+      throw err;
+    }
+  }
+)
 const cartsSlice = createSlice({
   name: "carts",
   initialState: {
@@ -159,7 +175,20 @@ const cartsSlice = createSlice({
       .addCase(fetchDeleteItemInCart.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message ?? "Unknown error";
+      })
+      .addCase(fetchUpdateCartQuantity.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUpdateCartQuantity.fulfilled, (state, action) => {
+        state.loading = false;
+        state.carts = action.payload;
+      })
+      .addCase(fetchUpdateCartQuantity.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Unknown error";
       });
+      
   },
 });
 export const { addItemInLocalCart, removeItemFromLocalCart, resetLocalCarts, updateQuantityInLocalCart } =
