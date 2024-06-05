@@ -3,12 +3,17 @@ import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { formatMoney } from "../../utils/formatMoney";
 import { updateQuantityInLocalCart } from "../../features/carts/cartsSlice";
 import { Link } from "react-router-dom";
+import { fetchAllClothDetails} from "../../features/products/clothesSlice";
 export const Carts = () => {
   const auth = useAppSelector((state) => state.auth.auth);
   const dispatch = useAppDispatch();
   const authCarts = useAppSelector((state) => state.carts.carts);
   const localCarts = useAppSelector((state) => state.carts.localCarts);
   const [authTotalPrice, setAuthTotalPrice] = useState<number>(0);
+  const clothDetails = useAppSelector((state)=>state.clothes.allClothDetails);
+  useEffect(()=>{
+    dispatch(fetchAllClothDetails());
+  },[dispatch]);
   useEffect(() => {
     if (auth && authCarts) {
       const totalPrice: number = authCarts.reduce(
@@ -22,30 +27,45 @@ export const Carts = () => {
       setAuthTotalPrice(0);
     }
   }, [auth, authCarts]);
+
   const [localQuantities, setLocalQuantities] = useState(() => 
     localCarts.items.map((item) => ({
       clothDetailId: item.clothDetailId,
       quantity: item.amount,
     }))
   );
+  const [authQuantities, setAuthQuantities] = useState(()=>{
+    authCarts.map((item)=>({
+      clothDetailId: item.clothDetailId,
+      quantity: item.amount
+    }))
+  });
   const handleOnclickQuantities = (clothDetailId: string, amount: number) => {
-    setLocalQuantities((prevQuantities) => {
-      const updatedQuantities = prevQuantities.map((item) =>
-        item.clothDetailId === clothDetailId
-          ? { ...item, quantity: Math.max(1, Math.min(10, item.quantity + amount)) }
-          : item
-      );
-  
-      const localQuantityClothDetail = updatedQuantities.find((item) => item.clothDetailId === clothDetailId);
-      
-      if (localQuantityClothDetail) {
-        dispatch(updateQuantityInLocalCart({ clothDetailId, amount: localQuantityClothDetail.quantity }));
-      }
-  
-      return updatedQuantities;
-    });
+    //console.log(clothDetails);
+    if(auth && auth !== null){
+      console.log(clothDetails);
+    }else{
+      const itemInCart = clothDetails.find((item)=> item.id === clothDetailId);
+      const maxQuantity = itemInCart !== undefined ? itemInCart.amount : 0;
+      setLocalQuantities((prevQuantities) => {
+        const updatedQuantities = prevQuantities.map((item) =>
+          item.clothDetailId === clothDetailId
+            ? { ...item, quantity: Math.max(1, Math.min(maxQuantity, item.quantity + amount)) }
+            : item
+        );
+    
+        const localQuantityClothDetail = updatedQuantities.find((item) => item.clothDetailId === clothDetailId);
+        
+        if (localQuantityClothDetail) {
+          dispatch(updateQuantityInLocalCart({ clothDetailId, amount: localQuantityClothDetail.quantity }));
+        }
+    
+        return updatedQuantities;
+      });
+    }
+    
   };
-  const handleChangeLocalQuantity = (event: React.ChangeEvent<HTMLInputElement>, clothDetailId: string) => {
+  const handleChangeQuantity = (event: React.ChangeEvent<HTMLInputElement>, clothDetailId: string) => {
     const newQuantity = parseInt(event.target.value, 10);
     
     const validatedQuantity = isNaN(newQuantity) || newQuantity < 1 ? 1 : Math.min(newQuantity, 10);
@@ -262,7 +282,7 @@ export const Carts = () => {
                                       </button>
                                     </div>
                                     <input
-                                      onChange={(event)=>handleChangeLocalQuantity(event,lc.clothDetailId)}
+                                      onChange={(event)=>handleChangeQuantity(event,lc.clothDetailId)}
                                       type="text"
                                       style={{ textAlign: "center" }}
                                       className="form-control"

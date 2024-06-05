@@ -41,6 +41,7 @@ export interface Filter {
 export interface ClothesState {
     clothes: ClothesFilter[];
     singleClothes: SingleClothes;
+    allClothDetails: ClothDetails[];
     loading: boolean;
     error: string | null;
 }
@@ -56,4 +57,12 @@ export interface SingleClothes {
   price: number;
   comments: SingleComment[];
   category: Category;
+}
+export interface ClothDetails {
+  id: string;
+  sizeId: string;
+  colorId: string;
+  codeBar: string;
+  clothId: string;
+  amount: number;
 }

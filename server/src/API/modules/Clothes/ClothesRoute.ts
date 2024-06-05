@@ -13,6 +13,8 @@ router.post(
   uploads.upload.single("file"),
   ClothesController.readExcelFile
 );
+router.get("/clothDetails", ClothesController.getAllClothDetail);
 router.get("/:clothesId", ClothesController.getSingleCLothes);
+
 
 export default router;

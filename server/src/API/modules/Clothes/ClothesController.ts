@@ -47,4 +47,12 @@ async function getSingleCLothes(req: Request, res: Response){
     console.log(err);
   }
 }
-export default {filterClothes, clothesToCSV, getAllClothes, readExcelFile, getSingleCLothes};
+async function getAllClothDetail(req: Request, res: Response){
+  try {
+    const result = await ClothesService.getAllClothesDetail();
+    res.send(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
+export default {filterClothes, clothesToCSV, getAllClothes, readExcelFile, getSingleCLothes, getAllClothDetail};

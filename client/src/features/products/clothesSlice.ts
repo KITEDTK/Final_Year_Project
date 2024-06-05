@@ -6,6 +6,7 @@ import {
   Filter,
   ClothesState,
   SingleClothes,
+  ClothDetails,
 } from "./clothesTypes";
 
 const BASE_URL = "http://localhost:4000/clothes";
@@ -38,11 +39,27 @@ export const fetchSingleClothes = createAsyncThunk<SingleClothes, string>(
     }
   }
 );
+export const fetchAllClothDetails = createAsyncThunk<ClothDetails[]>(
+  "clothDetails/all",
+  async()=>{
+    try {
+      const response: AxiosResponse<ClothDetails[]> = await axios.get(
+        `${BASE_URL}/clothDetails`,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      return response.data;
+    } catch (err) {
+      console.error("Thêm vào giỏ hàng thất bại", err);
+      throw err;
+    }
+  }
+)
 const clothesSlice = createSlice({
   name: "clothes",
   initialState: {
     clothes: [],
     singleClothes: {} as SingleClothes,
+    allClothDetails: [] as ClothDetails[],
     loading: false,
     error: null,
   } as ClothesState,
@@ -72,7 +89,20 @@ const clothesSlice = createSlice({
       .addCase(fetchSingleClothes.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message ?? "Unknown error";
-      });
+      })
+      .addCase(fetchAllClothDetails.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllClothDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allClothDetails = action.payload;
+      })
+      .addCase(fetchAllClothDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Unknown error";
+      })
+      ;
   },
 });
 export default clothesSlice.reducer;

@@ -67,6 +67,10 @@ async function exportClothesToCSV() {
 
   return csvArray.map((row) => `[${row.join(", ")}]`);
 }
+async function getAllClothesDetail(){
+  const result = await prisma.clothDetails.findMany({});
+  return result;
+}
 async function getAllClothes() {
   const data = await prisma.clothes.findMany({
     select: {
@@ -190,4 +194,4 @@ async function getSingleClothes(clothesId: string){
   });
   return result;
 }
-export default { filter, exportClothesToCSV, getAllClothes, readExcelFile, getSingleClothes };
+export default { filter, exportClothesToCSV, getAllClothes, readExcelFile, getSingleClothes, getAllClothesDetail };
