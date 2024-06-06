@@ -21,7 +21,7 @@ export const Order = () => {
     if (auth && auth !== null) {
       const authClothDetail: clothDetailItem[] = authCart.map((item) => {
         return {
-          id: item.id,
+          id: item.clothDetailId,
           amount: item.amount,
         };
       });
