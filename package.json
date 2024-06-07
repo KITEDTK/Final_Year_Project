@@ -2,7 +2,7 @@
     "name": "your-project-name",
     "version": "1.0.0",
     "scripts": {
-        "dev": "concurrently \"cd client && npm run dev\" \"cd server && npm run dev\" \"cd admin && npm run dev\" \"cd vnpay_nodejs && npm start app.js\""
+        "dev": "concurrently \"cd client && npm run dev\" \"cd server && npm run dev\" \"cd admin && npm run dev\""
     },
     "dependencies": {
         "@prisma/client": "^5.14.0",

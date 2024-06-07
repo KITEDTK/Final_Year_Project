@@ -18,123 +18,48 @@ export const Header = () => {
       {/* <button onClick={()=> handleLogout()}>signOut</button> */}
       <header className="header header-6">
         <div className="header-top">
-          <div className="container">
-            <div className="header-left">
-              <ul className="top-menu top-link-menu d-none d-md-block">
-                <li>
-                  <a href="#">Links</a>
-                  <ul>
-                    <li>
-                      <a href="tel:#">
-                        <i className="icon-phone"></i>Call: +0123 456 789
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-              {/* End .top-menu */}
+        <div className="header-top">
+                <div className="container">
+                    <div className="header-left">
+                        <div className="header-dropdown">
+                            <a href="#">Usd</a>
+                            <div className="header-menu">
+                                <ul>
+                                    <li><a href="#">Eur</a></li>
+                                    <li><a href="#">Usd</a></li>
+                                </ul>
+                            </div>{/* End .header-menu */}
+                        </div>{/* End .header-dropdown */}
+
+                        <div className="header-dropdown">
+                            <a href="#">Eng</a>
+                            <div className="header-menu">
+                                <ul>
+                                    <li><a href="#">English</a></li>
+                                    <li><a href="#">French</a></li>
+                                    <li><a href="#">Spanish</a></li>
+                                </ul>
+                            </div>{/* End .header-menu */}
+                        </div>{/* End .header-dropdown */}
+                    </div>{/* End .header-left */}
+
+                    <div className="header-right">
+                        <ul className="top-menu">
+                            <li>
+                                <a href="#">Links</a>
+                                <ul>
+                                    <li><a href="tel:#"><i className="icon-phone"></i>Call: +0123 456 789</a></li>
+                                    <li><a href="wishlist.html"><i className="icon-heart-o"></i>Wishlist <span>(3)</span></a></li>
+                                    <li><a href="about.html">About Us</a></li>
+                                    {auth ? <li><Link to="/user" style={{cursor: 'pointer'}} data-toggle="modal"><i className="icon-user"></i>{auth.fullname}</Link></li> : <li><Link to="/login" style={{cursor: 'pointer'}} data-toggle="modal"><i className="icon-user"></i>Đăng nhập</Link></li>}
+                                    {auth ? <li><a onClick={()=>handleLogout()} style={{cursor: 'pointer'}}>Đăng xuất</a></li> : <></>}
+                                    
+                                </ul>
+                            </li>
+                        </ul>{/* End .top-menu */}
+                    </div>{/* End .header-right */}
+                </div>{/* End .container */}
             </div>
-            {/* End .header-left */}
-
-            <div className="header-right">
-              <div className="social-icons social-icons-color">
-                <a
-                  href="#"
-                  className="social-icon social-facebook"
-                  title="Facebook"
-                  target="_blank"
-                >
-                  <i className="icon-facebook-f"></i>
-                </a>
-                <a
-                  href="#"
-                  className="social-icon social-twitter"
-                  title="Twitter"
-                  target="_blank"
-                >
-                  <i className="icon-twitter"></i>
-                </a>
-                <a
-                  href="#"
-                  className="social-icon social-pinterest"
-                  title="Instagram"
-                  target="_blank"
-                >
-                  <i className="icon-pinterest-p"></i>
-                </a>
-                <a
-                  href="#"
-                  className="social-icon social-instagram"
-                  title="Pinterest"
-                  target="_blank"
-                >
-                  <i className="icon-instagram"></i>
-                </a>
-              </div>
-              {/* End .soial-icons */}
-              <ul className="top-menu top-link-menu">
-                <li>
-                  {/* <a href="#">Links</a> */}
-                  <ul>
-                    <li>
-                      {auth && Object.keys(auth).length !== 0 ? (
-                        // If isAuthenticated is true, render the link to the user profile
-                        <Link to="/login" data-toggle="modal">
-                          <i className="icon-user"></i>
-                          {auth.fullname}
-                        </Link>
-                      ) : (
-                        // If isAuthenticated is false or undefined, render the link to the login page
-                        <Link to="/login" data-toggle="modal">
-                          <i className="icon-user"></i>Login
-                        </Link>
-                      )}
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-              {/* End .top-menu */}
-
-              {/* <div className="header-dropdown">
-                <a href="#">USD</a>
-                <div className="header-menu">
-                  <ul>
-                    <li>
-                      <a href="#">Eur</a>
-                    </li>
-                    <li>
-                      <a href="#">Usd</a>
-                    </li>
-                  </ul>
-                </div>
-              </div> */}
-              {/* End .header-dropdown */}
-
-              <div className="header-dropdown">
-                <a href="#">Về KITESHOP</a>
-                <div className="header-menu">
-                  <ul>
-                    <li>
-                      <a href="#">English</a>
-                    </li>
-                    <li>
-                      <a href="#">French</a>
-                    </li>
-                    <li>
-                      <a href="#">Spanish</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              {/* End .header-dropdown */}
-              <div className="" style={{cursor: "pointer"}}>
-                {auth && <a onClick={() => handleLogout()}>Đăng xuất</a>}
-                {/* End .header-menu */}
-              </div>
-              {/* End .header-dropdown */}
-            </div>
-            {/* End .header-right */}
-          </div>
         </div>
         <div className="header-middle">
           <div className="container">

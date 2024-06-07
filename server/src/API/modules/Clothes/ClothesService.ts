@@ -67,7 +67,7 @@ async function exportClothesToCSV() {
 
   return csvArray.map((row) => `[${row.join(", ")}]`);
 }
-async function getAllClothesDetail(){
+async function getAllClothesDetail() {
   const result = await prisma.clothDetails.findMany({});
   return result;
 }
@@ -115,14 +115,14 @@ async function readExcelFile(file: string) {
       value === "Hãng" ||
       value === "Vị trí" ||
       value === "Danh mục" ||
-      value === "Giá tiền" && !checkedValues.has(value) // Kiểm tra xem giá trị đã được kiểm tra chưa
+      (value === "Giá tiền" && !checkedValues.has(value)) // Kiểm tra xem giá trị đã được kiểm tra chưa
     ) {
       validCheckNumber -= 1;
       checkedValues.add(value);
     }
   }
-  if(validCheckNumber !== 0){
-    throw 'File không hợp lệ'
+  if (validCheckNumber !== 0) {
+    throw "File không hợp lệ";
   }
   const newKeyMapping: { [key: string]: any } = {};
 
@@ -149,49 +149,99 @@ async function readExcelFile(file: string) {
       const newKey = newKeyMapping[oldKey] || oldKey;
       newItem[newKey] = value;
     });
-    const { STT,...rest } = newItem;
+    const { STT, ...rest } = newItem;
     return rest;
   });
-  const addData = await Promise.all(newData.map(async (item: any) => {
-    if (item.categoryId) {
+  const addData = await Promise.all(
+    newData.map(async (item: any) => {
+      if (item.categoryId) {
         const categoryId = await prisma.categories.findFirst({
-            where: {
-                name: item.categoryId
-            },
-            select: {
-                id: true
-            }
+          where: {
+            name: item.categoryId,
+          },
+          select: {
+            id: true,
+          },
         });
         if (categoryId) {
-            item.categoryId = categoryId.id;
+          item.categoryId = categoryId.id;
         } else {
-            throw ('error: không tồn tại danh mục'); // Sử dụng new Error() để tạo một lỗi mới
+          throw "error: không tồn tại danh mục"; // Sử dụng new Error() để tạo một lỗi mới
         }
-    }
-    return item;
-}));
+      }
+      return item;
+    })
+  );
 
   const result = await prisma.cLothesAddExcelTest.createMany({
-    data: addData
+    data: addData,
   });
   return result;
 }
-async function getSingleClothes(clothesId: string){
+async function getSingleClothes(clothesId: string) {
   const result = await prisma.clothes.findUnique({
-    where:{
-      id: clothesId
+    where: {
+      id: clothesId,
     },
-    include:{
-      clothDetails:{
+    include: {
+      clothDetails: {
         include: {
           size: { select: { name: true } },
           color: { select: { name: true } },
-        }
+        },
       },
-      category:{},
-      commets:{}
-    }
+      category: {},
+      commets: {},
+    },
   });
   return result;
 }
-export default { filter, exportClothesToCSV, getAllClothes, readExcelFile, getSingleClothes, getAllClothesDetail };
+async function addComment(clothesId: string, userId: string, content: string) {
+  const checkBuyer = await prisma.payments.findFirst({
+    where: {
+      userId: userId,
+      paymentDetails: {
+        some: {
+          clothDetail: {
+            clothId: clothesId,
+          },
+        },
+      },
+    },
+  });
+  if (!checkBuyer) {
+    throw new Error("Người dùng chưa mua mặt hàng này");
+  }
+  await prisma.comments.create({
+    data: {
+      clothId: clothesId,
+      userId: userId,
+      content: content,
+    },
+  });
+  const result = await prisma.clothes.findUnique({
+    where: {
+      id: clothesId,
+    },
+    include: {
+      clothDetails: {
+        include: {
+          size: { select: { name: true } },
+          color: { select: { name: true } },
+        },
+      },
+      category: {},
+      commets: {},
+    },
+  });
+  return result;
+}
+export default {
+  filter,
+  exportClothesToCSV,
+  getAllClothes,
+  readExcelFile,
+  getSingleClothes,
+  getAllClothesDetail,
+  addComment,
+};

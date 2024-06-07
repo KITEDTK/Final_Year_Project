@@ -1,5 +1,5 @@
 import { Category } from "../categorires/categoriesTypes";
-import { SingleComment } from "../comments/comments";
+import { SingleComment } from "../comments/commentsTypes";
 
 export interface ClothDetailsColorSize {
     id: string;
@@ -65,4 +65,9 @@ export interface ClothDetails {
   codeBar: string;
   clothId: string;
   amount: number;
+}
+export interface CommentInput {
+  userId: string;
+  content: string;
+  clothesId: string;
 }

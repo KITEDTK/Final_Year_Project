@@ -8,6 +8,7 @@ import LoginAndRegister from './pages/LoginAndRegister';
 import { SingleClothes } from "./pages/SingleClothes";
 import { Checkout } from "./pages/Checkout";
 import { DoneCheckout } from "./pages/DoneCheckout";
+import { UserProfile } from "./pages/UserProfile";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/single-product/:clothesId" element={<SingleClothes/>} />
           <Route path="/checkout" element={<Checkout/>}/>
           <Route path="/donepay/success" element={<DoneCheckout/>}/>
+          <Route path="/user" element={<UserProfile/>}/>
         </Routes>
         <Footer/>
       </div>
