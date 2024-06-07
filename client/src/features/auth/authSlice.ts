@@ -18,34 +18,34 @@ export const fetchLogin = createAsyncThunk<Auth, InputLogin>(
   }
 );
 const authSlice = createSlice({
-    name: "auth",
-    initialState:{
-        auth: {},
-        loading: false,
-        error: null
-    } as AuthState,
-    reducers:{
-      resetAuth: (state)=>{
-        state.auth = null;
-        state.loading = false;
-        state.error = null;
-      }
+  name: "auth",
+  initialState: {
+    auth: {},
+    loading: false,
+    error: null,
+  } as AuthState,
+  reducers: {
+    resetAuth: (state) => {
+      state.auth = null;
+      state.loading = false;
+      state.error = null;
     },
-    extraReducers: (builder)=>{
-        builder
-        .addCase(fetchLogin.pending, (state) => {
-            state.loading = true;
-            state.error = null;
-          })
-          .addCase(fetchLogin.fulfilled, (state, action) => {
-            state.loading = false;
-            state.auth = action.payload;
-          })
-          .addCase(fetchLogin.rejected, (state, action)=>{
-            state.loading = false;
-            state.error = action.error.message ?? "Unknown error";
-          })
-    }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchLogin.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchLogin.fulfilled, (state, action) => {
+        state.loading = false;
+        state.auth = action.payload;
+      })
+      .addCase(fetchLogin.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Unknown error";
+      });
+  },
 });
-export const {resetAuth} = authSlice.actions;
+export const { resetAuth } = authSlice.actions;
 export default authSlice.reducer;

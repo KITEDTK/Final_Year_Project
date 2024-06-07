@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAppDispatch,useAppSelector } from '../../store/hooks';
 import { fetchLogin } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
@@ -18,10 +18,12 @@ export const Login = () => {
   };
   const handleLogin = () =>{
     dispatch(fetchLogin({usernameOrEmail,password}));
-    if(auth){
-      navigate("/");
-    }
   };
+  useEffect(() => {
+    if (auth) {
+      navigate('/');
+    }
+  }, [auth, navigate]);
    return (
     <>
       <div

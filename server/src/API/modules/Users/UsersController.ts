@@ -20,6 +20,12 @@ async function getAllUsers(req: Request, res: Response) {
 async function login(req: Request, res: Response){
   try {
     const result = await UsersService.login(req.body);
+    // if(result){
+    //   res.redirect("http://localhost:3000");
+    //   res.send(result);
+    // }else{
+    //   res.send(result);
+    // } 
     res.send(result);
   } catch (err) {
     console.log(err);

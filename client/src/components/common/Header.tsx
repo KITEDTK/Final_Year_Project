@@ -4,11 +4,14 @@ import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { MiniHeaderCart } from "../carts/MiniHeaderCart";
 import { resetAuth } from "../../features/auth/authSlice";
 import { Search } from "./Search";
+import { useNavigate } from "react-router-dom";
 export const Header = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const auth = useAppSelector((state) => state.auth.auth);
   const handleLogout = () => {
     dispatch(resetAuth());
+    navigate("/");
   };
   return (
     <>
@@ -71,7 +74,7 @@ export const Header = () => {
               {/* End .soial-icons */}
               <ul className="top-menu top-link-menu">
                 <li>
-                  <a href="#">Links</a>
+                  {/* <a href="#">Links</a> */}
                   <ul>
                     <li>
                       {auth && Object.keys(auth).length !== 0 ? (
@@ -92,7 +95,7 @@ export const Header = () => {
               </ul>
               {/* End .top-menu */}
 
-              <div className="header-dropdown">
+              {/* <div className="header-dropdown">
                 <a href="#">USD</a>
                 <div className="header-menu">
                   <ul>
@@ -104,12 +107,11 @@ export const Header = () => {
                     </li>
                   </ul>
                 </div>
-                {/* End .header-menu */}
-              </div>
+              </div> */}
               {/* End .header-dropdown */}
 
               <div className="header-dropdown">
-                <a href="#">Eng</a>
+                <a href="#">Về KITESHOP</a>
                 <div className="header-menu">
                   <ul>
                     <li>
@@ -123,11 +125,10 @@ export const Header = () => {
                     </li>
                   </ul>
                 </div>
-                {/* End .header-menu */}
               </div>
               {/* End .header-dropdown */}
-              <div className="header-dropdown">
-                <a onClick={() => handleLogout()}>Đăng xuất</a>
+              <div className="" style={{cursor: "pointer"}}>
+                {auth && <a onClick={() => handleLogout()}>Đăng xuất</a>}
                 {/* End .header-menu */}
               </div>
               {/* End .header-dropdown */}
@@ -137,7 +138,7 @@ export const Header = () => {
         </div>
         <div className="header-middle">
           <div className="container">
-            <Search/>
+            <Search />
             <div className="header-center">
               <Link to="/" className="logo">
                 <img
