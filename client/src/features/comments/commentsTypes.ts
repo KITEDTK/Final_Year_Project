@@ -3,7 +3,11 @@ export interface SingleComment{
     userId: string;
     content: string;
     clothId: string;
-    parentId: string;
     createAt: Date;
-    isEnable: boolean;
+    user:{
+        fullname: string;
+    };
+    cloth: {
+        name: string;
+    }
 }

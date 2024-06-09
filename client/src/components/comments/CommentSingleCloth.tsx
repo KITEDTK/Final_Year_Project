@@ -1,20 +1,33 @@
+import { ChangeEvent, useState } from "react";
 import { SingleComment } from "../../features/comments/commentsTypes";
 import { fetchAddComment } from "../../features/products/clothesSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useParams } from "react-router-dom";
 interface Props {
-    commentInfo : SingleComment[];
+  commentInfo: SingleComment[];
 }
-export const CommentSingleCloth: React.FC<Props> = ({commentInfo}) => {
-    console.log(commentInfo);
-    const { clothesId } = useParams<string>();
-    const dispatch = useAppDispatch();
-    const auth = useAppSelector((state)=> state.auth.auth);
-    const handleOnClickAddComment = () =>{
-        if(auth && clothesId){
-            dispatch(fetchAddComment({clothesId: clothesId, content: '123', userId:auth.id}));
-        }
+export const CommentSingleCloth: React.FC<Props> = ({ commentInfo }) => {
+  console.log(commentInfo)
+  const { clothesId } = useParams<string>();
+  const dispatch = useAppDispatch();
+  const auth = useAppSelector((state) => state.auth.auth);
+  const [commentText, setCommentText] = useState<string>();
+  const handleOnClickAddComment = () => {
+    if (auth && clothesId) {
+      if(commentText){
+        dispatch(
+          fetchAddComment({
+            clothesId: clothesId,
+            content: commentText,
+            userId: auth.id,
+          })
+        );
+      }
     }
+  };
+  const handleOnChangeComment = (event:ChangeEvent<HTMLTextAreaElement>) =>{
+    setCommentText(event.target.value);
+  }
   return (
     <>
       <div
@@ -24,19 +37,22 @@ export const CommentSingleCloth: React.FC<Props> = ({commentInfo}) => {
         aria-labelledby="product-review-link"
       >
         <textarea
-            className="form-control"
-            cols={30}
-            rows={1}
-            placeholder="Notes about your order, e.g. special notes for delivery"
-          ></textarea>
-          <button onClick={()=>handleOnClickAddComment()}>thêm comment</button>
+          onChange={(event)=>handleOnChangeComment(event)}
+          value={commentText}
+          className="form-control"
+          cols={30}
+          rows={1}
+          placeholder="Notes about your order, e.g. special notes for delivery"
+        ></textarea>
+        <button onClick={() => handleOnClickAddComment()}>thêm comment</button>
         <div className="reviews">
-          <h3>Reviews (2)</h3>
-          <div className="review">
+          {commentInfo && commentInfo.length && commentInfo.map((item)=>(<>
+            <h3>Reviews ({commentInfo.length})</h3>
+            <div className="review">
             <div className="row no-gutters">
               <div className="col-auto">
                 <h4>
-                  <a href="#">Samanta J.</a>
+                  <a href="#">{item.user.fullname}</a>
                 </h4>
                 <div className="ratings-container">
                   <div className="ratings">
@@ -50,14 +66,10 @@ export const CommentSingleCloth: React.FC<Props> = ({commentInfo}) => {
               </div>
               {/*  End .col */}
               <div className="col">
-                <h4>Good, perfect size</h4>
+                <h4>{item.cloth.name}</h4>
                 <div className="review-content">
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Ducimus cum dolores assumenda asperiores facilis porro
-                    reprehenderit animi culpa atque blanditiis commodi
-                    perspiciatis doloremque, possimus, explicabo, autem fugit
-                    beatae quae voluptas!
+                    {item.content}
                   </p>
                 </div>
                 {/*  End .review-content */}
@@ -75,59 +87,60 @@ export const CommentSingleCloth: React.FC<Props> = ({commentInfo}) => {
               {/*  End .col-auto */}
             </div>
             {/*  End .row */}
-          </div>
+          </div></>))}
+          
           {/*  End .review */}
 
-          <div className="review">
-            <div className="row no-gutters">
-              <div className="col-auto">
-                <h4>
-                  <a href="#">John Doe</a>
-                </h4>
-                <div className="ratings-container">
-                  <div className="ratings">
-                    <div
-                      className="ratings-val"
-                      style={{ width: "100%" }}
-                    ></div>
-                    {/*  End .ratings-val */}
-                  </div>
-                  {/*  End .ratings */}
-                </div>
-                {/*  End .rating-container */}
-                <span className="review-date">5 days ago</span>
-              </div>
-              {/*  End .col */}
-              <div className="col">
-                <h4>Very good</h4>
-
-                <div className="review-content">
-                  <p>
-                    Sed, molestias, tempore? Ex dolor esse iure hic veniam
-                    laborum blanditiis laudantium iste amet. Cum non voluptate
-                    eos enim, ab cumque nam, modi, quas iure illum repellendus,
-                    blanditiis perspiciatis beatae!
-                  </p>
-                </div>
-                {/*  End .review-content */}
-
-                <div className="review-action">
-                  <a href="#">
-                    <i className="icon-thumbs-up"></i>Helpful (0)
-                  </a>
-                  <a href="#">
-                    <i className="icon-thumbs-down"></i>Unhelpful (0)
-                  </a>
-                </div>
-                {/*  End .review-action */}
-              </div>
-              {/*  End .col-auto */}
-            </div>
-            {/*  End .row */}
-          </div>
           {/*  End .review */}
         </div>
         {/*  End .reviews */}
+        <br />
+        <nav aria-label="Page navigation">
+          <ul className="pagination justify-content-center">
+            <li className="page-item disabled">
+              <a
+                className="page-link page-link-prev"
+                href="#"
+                aria-label="Previous"
+                tabIndex={-1}
+                aria-disabled={true}
+              >
+                <span aria-hidden="true">
+                  <i className="icon-long-arrow-left"></i>
+                </span>
+                Prev
+              </a>
+            </li>
+            <li className="page-item active" aria-current="page">
+              <a className="page-link" href="#">
+                1
+              </a>
+            </li>
+            <li className="page-item">
+              <a className="page-link" href="#">
+                2
+              </a>
+            </li>
+            <li className="page-item">
+              <a className="page-link" href="#">
+                3
+              </a>
+            </li>
+            <li className="page-item-total">of 6</li>
+            <li className="page-item">
+              <a
+                className="page-link page-link-next"
+                href="#"
+                aria-label="Next"
+              >
+                Next{" "}
+                <span aria-hidden="true">
+                  <i className="icon-long-arrow-right"></i>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </>
   );

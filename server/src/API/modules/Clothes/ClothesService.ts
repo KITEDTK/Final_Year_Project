@@ -191,7 +191,24 @@ async function getSingleClothes(clothesId: string) {
         },
       },
       category: {},
-      commets: {},
+      commets: {
+        select:{
+          id: true,
+          userId: true,
+          content: true,
+          createAt: true,
+          user:{
+            select:{
+              fullname: true
+            }
+          },
+          cloth:{
+            select:{
+              name: true
+            }
+          }
+        }
+      },
     },
   });
   return result;
@@ -219,22 +236,7 @@ async function addComment(clothesId: string, userId: string, content: string) {
       content: content,
     },
   });
-  const result = await prisma.clothes.findUnique({
-    where: {
-      id: clothesId,
-    },
-    include: {
-      clothDetails: {
-        include: {
-          size: { select: { name: true } },
-          color: { select: { name: true } },
-        },
-      },
-      category: {},
-      commets: {},
-    },
-  });
-  return result;
+  return getSingleClothes(clothesId);
 }
 export default {
   filter,
