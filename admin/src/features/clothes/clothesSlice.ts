@@ -24,6 +24,7 @@ const clothesSlice = createSlice({
     initialState:{
         clothes: [],
         loading: false,
+        singleClothes: {},
         error: null
     } as ClothesState,
     reducers:{},

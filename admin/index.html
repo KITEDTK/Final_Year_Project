@@ -5,29 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>AdminLTE 3 | Dashboard</title>
     <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback"
-  />
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback"
+    />
 
-  <link
-    rel="stylesheet"
-    href="../../plugins/fontawesome-free/css/all.min.css"
-  />
+    <link
+      rel="stylesheet"
+      href="../../plugins/fontawesome-free/css/all.min.css"
+    />
 
-  <link
-    rel="stylesheet"
-    href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"
-  />
-  <link
-    rel="stylesheet"
-    href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css"
-  />
-  <link
-    rel="stylesheet"
-    href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css"
-  />
+    <link
+      rel="stylesheet"
+      href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css"
+    />
 
-  <link rel="stylesheet" href="../../dist/css/adminlte.min2167.css?v=3.2.0" />
+    <link rel="stylesheet" href="../../dist/css/adminlte.min2167.css?v=3.2.0" />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback"
@@ -99,28 +99,19 @@
     <!-- <script src="dist/js/demo.js"></script> -->
 
     <script src="dist/js/pages/dashboard.js"></script>
-    <script>
-      $(function () {
-        $("#example1")
-          .DataTable({
-            responsive: true,
-            lengthChange: false,
-            autoWidth: false,
-            buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
-          })
-          .buttons()
-          .container()
-          .appendTo("#example1_wrapper .col-md-6:eq(0)");
-        $("#example2").DataTable({
-          paging: true,
-          lengthChange: false,
-          searching: false,
-          ordering: true,
-          info: true,
-          autoWidth: false,
-          responsive: true,
-        });
-      });
-    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/react/umd/react.production.min.js"
+      crossorigin
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/react-dom/umd/react-dom.production.min.js"
+      crossorigin
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/react-bootstrap@next/dist/react-bootstrap.min.js"
+      crossorigin
+    ></script>
   </body>
 </html>

@@ -74,6 +74,7 @@ async function getAllClothesDetail() {
 async function getAllClothes() {
   const data = await prisma.clothes.findMany({
     select: {
+      id: true,
       name: true,
       brand: true,
       location: true,
