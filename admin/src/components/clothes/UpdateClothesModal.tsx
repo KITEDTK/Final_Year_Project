@@ -167,10 +167,8 @@ export const UpdateClothesModal: React.FC<props> = ({ singleCloth }) => {
                           <tr>
                             <th>STT</th>
                             <th>Tên sản phẩm</th>
-                            <th>Hãng</th>
-                            <th>Vị trí</th>
-                            <th>Danh mục</th>
-                            <th>Giá tiền</th>
+                            <th>Tồn kho</th>
+                            <th>Khách đang đặt</th>
                             <th>Chỉnh sửa/Xóa</th>
                           </tr>
                         </thead>
@@ -178,10 +176,8 @@ export const UpdateClothesModal: React.FC<props> = ({ singleCloth }) => {
                           <tr>
                             <td>1</td>
                             <td>dump name</td>
-                            <td>dump brand</td>
-                            <td>dump location</td>
-                            <td>dump category</td>
-                            <td>dump price</td>
+                            <td>dump amount storage</td>
+                            <td>dump bill</td>
                             <td>
                               <button
                                 type="button"

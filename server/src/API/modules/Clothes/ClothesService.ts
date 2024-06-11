@@ -276,7 +276,20 @@ async function getSingleClothesAdmin(clothesId: string){
   });
   return result;
 }
+async function getAllClothesAdmin(){
+  const allClothDetails = await prisma.clothDetails.findMany({});
+  const order = allClothDetails.forEach(async (item)=>{
+    const orderPayment = await prisma.paymentDetails.findMany({
+      where:{
+        clothId: item.id
+      }
+    });
+    return orderPayment;
+  })
+  return order;
+}
 export default {
+  getAllClothesAdmin,
   filter,
   exportClothesToCSV,
   getAllClothes,

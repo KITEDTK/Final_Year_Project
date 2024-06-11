@@ -82,7 +82,20 @@ async function getSingleClothesAdmin(req: Request, res: Response){
     }
   }
 }
+async function getAllClothesAdmin(req: Request, res: Response){
+  try {
+    const result = await ClothesService.getAllClothesAdmin();
+    res.send(result);
+  } catch (err) {
+    if (err instanceof Error) {
+      res.status(400).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
+}
 export default {
+  getAllClothesAdmin,
   filterClothes,
   clothesToCSV,
   getAllClothes,
