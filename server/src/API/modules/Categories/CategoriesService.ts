@@ -63,4 +63,7 @@ async function getChildCategories(categoryId: string){
     });
     return modifiedResult;
 }
-export default {getAllCategories, getTreeCategoriesById, getChildCategories}
+async function getCategoriesModal(){
+    
+}
+export default {getAllCategories, getTreeCategoriesById, getChildCategories, getCategoriesModal}

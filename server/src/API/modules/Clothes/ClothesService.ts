@@ -79,6 +79,7 @@ async function getAllClothes() {
       brand: true,
       location: true,
       price: true,
+      initPrice: true,
       category: {
         select: {
           name: true,
@@ -239,6 +240,42 @@ async function addComment(clothesId: string, userId: string, content: string) {
   });
   return getSingleClothes(clothesId);
 }
+async function getSingleClothesAdmin(clothesId: string){
+  const result = await prisma.clothes.findUnique({
+    where:{
+      id: clothesId
+    },
+    select:{
+      name: true,
+      brand: true,
+      location: true,
+      category:{
+        select:{
+          name: true
+        }
+      },
+      price: true,
+      initPrice: true,
+      clothDetails:{
+        select:{
+          codeBar: true,
+          amount: true,
+          size:{
+            select:{
+              name: true
+            }
+          },
+          color:{
+            select:{
+              name: true
+            }
+          }
+        }
+      }
+    }
+  });
+  return result;
+}
 export default {
   filter,
   exportClothesToCSV,
@@ -247,4 +284,5 @@ export default {
   getSingleClothes,
   getAllClothesDetail,
   addComment,
+  getSingleClothesAdmin
 };

@@ -19,5 +19,6 @@ router.post(
   "/:clothesId/users/:userId/comments",
   ClothesController.addCommentInClothes
 );
+router.get("/:clothesId/admin",ClothesController.getSingleClothesAdmin);
 
 export default router;

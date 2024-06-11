@@ -69,6 +69,19 @@ async function addCommentInClothes(req: Request, res: Response) {
     }
   }
 }
+async function getSingleClothesAdmin(req: Request, res: Response){
+  try{
+    const {clothesId} = req.params;
+    const result = await ClothesService.getSingleClothesAdmin(clothesId);
+    res.send(result);
+  }catch(err){
+    if (err instanceof Error) {
+      res.status(400).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
+}
 export default {
   filterClothes,
   clothesToCSV,
@@ -77,4 +90,5 @@ export default {
   getSingleCLothes,
   getAllClothDetail,
   addCommentInClothes,
+  getSingleClothesAdmin
 };

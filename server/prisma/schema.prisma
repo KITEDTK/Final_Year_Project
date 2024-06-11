@@ -17,6 +17,7 @@ model Clothes {
   updateAt     DateTime?
   isEnable     Boolean        @default(true)
   price        Int?
+  initPrice    Int? 
   clothDetails ClothDetails[]
   category     Categories     @relation(fields: [categoryId], references: [id])
   commets      Comments[]
