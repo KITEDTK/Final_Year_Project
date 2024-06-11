@@ -27,4 +27,12 @@ async function getChildCategory(req:Request,res: Response){
     console.log(err);
   }
 }
-export default { getAllCategories, getCategoryById, getChildCategory };
+async function getModalCategories(req:Request,res: Response){
+  try {
+    const result = await CategoriesService.getCategoriesModal();
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
+export default { getAllCategories, getCategoryById, getChildCategory, getModalCategories };

@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SingleClothes } from "../../features/clothes/clothesType";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { fetchModalCategories } from "../../features/categories/categoriesSlice";
 interface props {
   singleCloth: SingleClothes;
 }
 export const UpdateClothesModal: React.FC<props> = ({ singleCloth }) => {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(fetchModalCategories());
+  }, [dispatch]);
+  const categoriesModal = useAppSelector(
+    (state) => state.categories.categoriesModal
+  );
   return (
     <>
       <ul className="nav nav-tabs" id="custom-content-below-tab" role="tablist">
@@ -115,25 +124,18 @@ export const UpdateClothesModal: React.FC<props> = ({ singleCloth }) => {
                 <div className="row">
                   <div className="col-sm-6">
                     <div className="form-group">
-                      <label>Danh mục cha</label>
+                      <label>Danh mục</label>
                       <select className="form-control">
-                        <option>option 1</option>
-                        <option selected={true}>option 2</option>
-                        <option>option 3</option>
-                        <option>option 4</option>
-                        <option>option 5</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <label>Danh mục con</label>
-                      <select className="form-control">
-                        <option>option 1</option>
-                        <option selected={true}>option 2</option>
-                        <option>option 3</option>
-                        <option>option 4</option>
-                        <option>option 5</option>
+                        {categoriesModal &&
+                          categoriesModal.map((item) => (
+                            <option
+                              key={item.id}
+                              value={item.name}
+                              selected={item.name === singleCloth.category.name ? true : false}
+                            >
+                              {item.name}
+                            </option>
+                          ))}
                       </select>
                     </div>
                   </div>

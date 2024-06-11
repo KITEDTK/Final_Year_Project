@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchAllClothes, fetchSingleClothes } from "../features/clothes/clothesSlice";
+import {
+  fetchAllClothes,
+  fetchSingleClothes,
+} from "../features/clothes/clothesSlice";
 import type { Clothes } from "../features/clothes/clothesType";
 import { removeColFromTables } from "../utils/removeColFromTable";
 import { tableToExcel } from "../utils/tableToExcels";
@@ -10,7 +13,7 @@ import { UpdateClothesModal } from "../components/clothes/UpdateClothesModal";
 export function Clothes() {
   const dispatch = useAppDispatch();
   const clothes = useAppSelector((state) => state.clothes.clothes);
-  const singleClothes = useAppSelector((state)=> state.clothes.singleClothes);
+  const singleClothes = useAppSelector((state) => state.clothes.singleClothes);
   useEffect(() => {
     dispatch(fetchAllClothes());
   }, [dispatch]);
@@ -109,6 +112,7 @@ export function Clothes() {
           </div>
         </div>
       </section>
+
       {show === true && (
         <Modal
           show={show}
@@ -116,10 +120,12 @@ export function Clothes() {
           aria-labelledby="contained-modal-title-vcenter"
         >
           <Modal.Header onClick={() => handleOnClickCloseModal()} closeButton>
-            <Modal.Title>{clothes.find((item)=>item.id === clothesIdModal)?.name}</Modal.Title>
+            <Modal.Title>
+              {clothes.find((item) => item.id === clothesIdModal)?.name}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-        <UpdateClothesModal singleCloth={singleClothes}/>
+            <UpdateClothesModal singleCloth={singleClothes} />
           </Modal.Body>
           <Modal.Footer>
             <button type="button" className="btn btn-block btn-outline-info">

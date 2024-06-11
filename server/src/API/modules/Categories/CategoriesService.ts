@@ -3,21 +3,21 @@ import buildTree from "../../../utils/buildTree";
 
 const prisma = new PrismaClient();
 
-async function getAllCategories(){
-    const categories = await prisma.categories.findMany({});
-    const result = buildTree.arrayToTree(categories);
-    return result;
+async function getAllCategories() {
+  const categories = await prisma.categories.findMany({});
+  const result = buildTree.arrayToTree(categories);
+  return result;
 }
-async function getTreeCategoriesById(categoryId: string){
-    const result = await prisma.categories.findUnique({
-        where:{
-            id: categoryId
-        }
-    })
-    return result;
+async function getTreeCategoriesById(categoryId: string) {
+  const result = await prisma.categories.findUnique({
+    where: {
+      id: categoryId,
+    },
+  });
+  return result;
 }
-async function getChildCategories(categoryId: string){
-    const getAllCategory: any =  await prisma.$queryRaw`WITH allCategory AS (
+async function getChildCategories(categoryId: string) {
+  const getAllCategory: any = await prisma.$queryRaw`WITH allCategory AS (
         SELECT *
         FROM Categories
         WHERE id = ${categoryId} 
@@ -26,44 +26,76 @@ async function getChildCategories(categoryId: string){
         FROM Categories c
         INNER JOIN allCategory s ON c.parent_id = s.id
       )SELECT * FROM allCategory`;
-      const categoryIdArray = getAllCategory.map((c: any)=> c.id);
-    const result = await prisma.categories.findMany({
+  const categoryIdArray = getAllCategory.map((c: any) => c.id);
+  const result = await prisma.categories.findMany({
+    where: {
+      parentId: categoryId,
+    },
+    include: {
+      Clothes: {
         where: {
-            parentId : categoryId
+          categoryId: {
+            in: categoryIdArray,
+          },
         },
-        include:{
-            Clothes:{
-                where:{
-                    categoryId: {
-                        in : categoryIdArray
-                    }
-                },
-                include:{
-                    clothDetails:{
-                        select:{
-                            amount: true
-                        }
-                    }
-                }
-            }
+        include: {
+          clothDetails: {
+            select: {
+              amount: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  const modifiedResult = result.map((category) => {
+    const totalAmount = category.Clothes.reduce((clothTotal, cloth) => {
+      // Cộng tổng số lượng
+      const clothAmount = cloth.clothDetails.reduce((detailTotal, detail) => {
+        return detailTotal + detail.amount;
+      }, 0);
+      return clothTotal + clothAmount;
+    }, 0);
+    const { Clothes, ...rest } = category; // chỉ lấy phần rest
+    return {
+      ...rest,
+      totalAmount: totalAmount,
+    };
+  });
+  return modifiedResult;
+}
+async function getCategoriesModal() {
+  const root = await prisma.categories.findMany({
+    where:{
+        parent:{
+            parentId: null
         }
-    });
-    const modifiedResult = result.map((category) => {
-        const totalAmount = category.Clothes.reduce((clothTotal, cloth) => { // Cộng tổng số lượng 
-            const clothAmount = cloth.clothDetails.reduce((detailTotal, detail) => {
-                return detailTotal + detail.amount;
-            }, 0);
-            return clothTotal + clothAmount;
-        }, 0);
-        const {Clothes, ...rest} = category; // chỉ lấy phần rest 
-        return {
-            ...rest,
-            totalAmount: totalAmount
-        };
-    });
-    return modifiedResult;
+    }
+  })
+  const lv1 = await prisma.categories.findMany({
+    where:{
+        parentId: {
+            in : root.map((item)=> item.id)
+        }
+    }
+  });
+  const lv2 = await prisma.categories.findMany({
+    where:{
+        parentId:{
+            in: lv1.map((item)=>item.id)
+        }
+    },
+    select:{
+      id: true,
+      name: true,
+      parentId: true
+    }
+  })
+  return lv2;
 }
-async function getCategoriesModal(){
-    
-}
-export default {getAllCategories, getTreeCategoriesById, getChildCategories, getCategoriesModal}
+export default {
+  getAllCategories,
+  getTreeCategoriesById,
+  getChildCategories,
+  getCategoriesModal,
+};
