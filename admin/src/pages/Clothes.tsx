@@ -56,7 +56,15 @@ export function Clothes() {
                 </div>
 
                 <div className="card-body">
-                  <button onClick={() => handleExcel()}>In ra excel</button>
+                  <button
+                    type="button"
+                    className="btn btn-block btn-success"
+                    style={{width:'10%' , marginLeft: 'auto', display: 'block'}}
+                    onClick={() => handleExcel()}
+                  >
+                    In ra excel
+                  </button>
+                  <br/>
                   <table
                     id="clothes-table"
                     className="table table-bordered table-hover"

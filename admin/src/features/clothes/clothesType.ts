@@ -25,12 +25,14 @@ export interface SingleClothes{
     price: string;
 }
 export interface ClothDetails{
+    id: string;
     codeBar: string;
     amount: number;
     size: {
         name: string;
-    },
+    };
     color: {
         name: string;
-    }
+    };
+    sumOrderAmount: number;
 }

@@ -131,7 +131,11 @@ export const UpdateClothesModal: React.FC<props> = ({ singleCloth }) => {
                             <option
                               key={item.id}
                               value={item.name}
-                              selected={item.name === singleCloth.category.name ? true : false}
+                              selected={
+                                item.name === singleCloth.category.name
+                                  ? true
+                                  : false
+                              }
                             >
                               {item.name}
                             </option>
@@ -165,34 +169,45 @@ export const UpdateClothesModal: React.FC<props> = ({ singleCloth }) => {
                       >
                         <thead>
                           <tr>
-                            <th>STT</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Tồn kho</th>
-                            <th>Khách đang đặt</th>
-                            <th>Chỉnh sửa/Xóa</th>
+                            <th style={{ width: "3%" }}>STT</th>
+                            <th style={{ width: "20%" }}>Tên sản phẩm</th>
+                            <th style={{ width: "10%" }}>Mã vạch</th>
+                            <th style={{ width: "10%" }}>Tồn kho</th>
+                            <th style={{ width: "15%" }}>Khách đang đặt</th>
+                            <th style={{ width: "10%" }}>Sửa/Xóa</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>1</td>
-                            <td>dump name</td>
-                            <td>dump amount storage</td>
-                            <td>dump bill</td>
-                            <td>
-                              <button
-                                type="button"
-                                className="btn btn-block btn-outline-info"
-                              >
-                                Chỉnh sửa
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-block btn-outline-danger"
-                              >
-                                Xóa
-                              </button>
-                            </td>
-                          </tr>
+                          {singleCloth &&
+                            singleCloth.clothDetails &&
+                            singleCloth.clothDetails.map((item, index) => (
+                              <>
+                                <tr>
+                                  <td>{index + 1}</td>
+                                  <td>
+                                    {singleCloth.name} <br></br>{" "}
+                                    {item.color.name}/{item.size.name}
+                                  </td>
+                                  <td>{item.codeBar}</td>
+                                  <td>{item.amount}</td>
+                                  <td>{item.sumOrderAmount}</td>
+                                  <td>
+                                    <button
+                                      type="button"
+                                      className="btn btn-block btn-outline-info"
+                                    >
+                                      Chỉnh sửa
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="btn btn-block btn-outline-danger"
+                                    >
+                                      Xóa
+                                    </button>
+                                  </td>
+                                </tr>
+                              </>
+                            ))}
                         </tbody>
                       </table>
                     </div>

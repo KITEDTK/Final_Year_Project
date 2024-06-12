@@ -19,7 +19,13 @@ async function clothesToCSV(req: Request, res: Response) {
 }
 async function getAllClothes(req: Request, res: Response) {
   try {
-    const result = await ClothesService.getAllClothes();
+    const {pages} = req.query;
+    const pageNumber = pages ? parseInt(pages, 10) : 1; // Mặc định là trang 1 nếu pages là undefined
+
+if (isNaN(pageNumber)) {
+  return res.status(400).send('Invalid page number');
+}
+    const result = await ClothesService.getAllClothes(pageNumber);
     res.send(result);
   } catch (err) {
     console.log(err);

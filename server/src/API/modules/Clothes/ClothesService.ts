@@ -71,8 +71,10 @@ async function getAllClothesDetail() {
   const result = await prisma.clothDetails.findMany({});
   return result;
 }
-async function getAllClothes() {
+async function getAllClothes(pages: number) {
   const data = await prisma.clothes.findMany({
+    skip:pages*5,
+    take:5,
     select: {
       id: true,
       name: true,
@@ -194,22 +196,22 @@ async function getSingleClothes(clothesId: string) {
       },
       category: {},
       commets: {
-        select:{
+        select: {
           id: true,
           userId: true,
           content: true,
           createAt: true,
-          user:{
-            select:{
-              fullname: true
-            }
+          user: {
+            select: {
+              fullname: true,
+            },
           },
-          cloth:{
-            select:{
-              name: true
-            }
-          }
-        }
+          cloth: {
+            select: {
+              name: true,
+            },
+          },
+        },
       },
     },
   });
@@ -240,53 +242,90 @@ async function addComment(clothesId: string, userId: string, content: string) {
   });
   return getSingleClothes(clothesId);
 }
-async function getSingleClothesAdmin(clothesId: string){
+async function getSingleClothesAdmin(clothesId: string) {
   const result = await prisma.clothes.findUnique({
-    where:{
-      id: clothesId
+    where: {
+      id: clothesId,
     },
-    select:{
+    select: {
       name: true,
       brand: true,
       location: true,
-      category:{
-        select:{
-          name: true
-        }
+      category: {
+        select: {
+          name: true,
+        },
       },
       price: true,
       initPrice: true,
-      clothDetails:{
-        select:{
+      clothDetails: {
+        select: {
+          id: true,
           codeBar: true,
           amount: true,
-          size:{
-            select:{
-              name: true
-            }
+          size: {
+            select: {
+              name: true,
+            },
           },
-          color:{
-            select:{
-              name: true
-            }
-          }
-        }
-      }
-    }
+          color: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
   });
+  if (result && result.clothDetails) {
+    result.clothDetails = await Promise.all(
+      result.clothDetails.map(async (item) => {
+        const orderPayments = await prisma.paymentDetails.findMany({
+          where: {
+            clothId: item.id,
+          },
+          select: {
+            amount: true,
+          },
+        });
+        const sumOrderAmount = orderPayments.reduce(
+          (accumulator, currentValue) => {
+            const value =
+              currentValue.amount !== null ? currentValue.amount : 0;
+            return accumulator + value;
+          },
+          0
+        );
+        return { ...item, sumOrderAmount };
+      })
+    );
+  }
+
   return result;
 }
-async function getAllClothesAdmin(){
+async function getAllClothesAdmin() {
   const allClothDetails = await prisma.clothDetails.findMany({});
-  const order = allClothDetails.forEach(async (item)=>{
-    const orderPayment = await prisma.paymentDetails.findMany({
-      where:{
-        clothId: item.id
-      }
-    });
-    return orderPayment;
-  })
-  return order;
+  const orders = await Promise.all(
+    allClothDetails.map(async (item) => {
+      const orderPayment = await prisma.paymentDetails.findMany({
+        where: {
+          clothId: item.id,
+        },
+        select: {
+          amount: true,
+        },
+      });
+      const sumOrderAmount = orderPayment.reduce(
+        (accumulator, currentValue) => {
+          const value = currentValue.amount !== null ? currentValue.amount : 0;
+          return accumulator + value;
+        },
+        0
+      );
+      return { ...item, sumOrderAmount };
+    })
+  );
+  return orders;
 }
 export default {
   getAllClothesAdmin,
@@ -297,5 +336,5 @@ export default {
   getSingleClothes,
   getAllClothesDetail,
   addComment,
-  getSingleClothesAdmin
+  getSingleClothesAdmin,
 };
