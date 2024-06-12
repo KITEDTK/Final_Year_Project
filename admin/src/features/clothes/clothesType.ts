@@ -10,6 +10,7 @@ export interface Clothes{
 export interface ClothesState{
     clothes: Clothes[];
     singleClothes: SingleClothes;
+    maxClothesQuantity: number;
     loading: boolean;
     error: string | null;
 }
@@ -35,4 +36,8 @@ export interface ClothDetails{
         name: string;
     };
     sumOrderAmount: number;
+}
+export interface PaginateInput{
+    clothesId: string;
+    page: number;
 }

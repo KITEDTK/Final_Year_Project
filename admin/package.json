@@ -24,6 +24,8 @@
     "react-bootstrap": "^2.10.2",
     "react-csv": "^2.2.2",
     "react-dom": "^18.2.0",
+    "react-infinite-scroll-component": "^6.1.0",
+    "react-lazyload": "^3.2.1",
     "react-plot": "^1.4.2",
     "react-plotly.js": "^2.6.0",
     "react-redux": "^9.1.2",

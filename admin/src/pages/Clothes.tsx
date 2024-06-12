@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   fetchAllClothes,
+  fetchMaxQuantityClothes,
   fetchSingleClothes,
 } from "../features/clothes/clothesSlice";
 import type { Clothes } from "../features/clothes/clothesType";
@@ -9,14 +10,16 @@ import { removeColFromTables } from "../utils/removeColFromTable";
 import { tableToExcel } from "../utils/tableToExcels";
 import { Modal } from "react-bootstrap";
 import { UpdateClothesModal } from "../components/clothes/UpdateClothesModal";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export function Clothes() {
   const dispatch = useAppDispatch();
   const clothes = useAppSelector((state) => state.clothes.clothes);
   const singleClothes = useAppSelector((state) => state.clothes.singleClothes);
-  useEffect(() => {
-    dispatch(fetchAllClothes());
-  }, [dispatch]);
+  const [page, setPage] = useState<number>(0);
+  const [clothesItems, setClothesItems] = useState<Clothes[]>([]);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const maxClothesQuantity = useAppSelector((state)=>state.clothes.maxClothesQuantity);
   const handleExcel = () => {
     const table = document.getElementById("clothes-table");
     if (table) {
@@ -44,6 +47,23 @@ export function Clothes() {
   const handleOnClickCloseModal = () => {
     setShow(false);
   };
+  useEffect(()=>{
+    dispatch(fetchMaxQuantityClothes());
+  },[dispatch]);
+  useEffect(() => {
+    dispatch(fetchAllClothes(page));
+  }, [dispatch, page]);
+
+  useEffect(() => { // mỗi lần clothes thay đổi thì push vào clothesItems
+    setClothesItems((prevItems) => [...prevItems, ...clothes]);
+    if(clothesItems.length === maxClothesQuantity){
+      setHasMore(false);
+    }
+  }, [clothes, maxClothesQuantity]);
+
+  const fetchMoreData = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
   return (
     <>
       <section className="content">
@@ -65,27 +85,36 @@ export function Clothes() {
                     In ra excel
                   </button>
                   <br/>
-                  <table
-                    id="clothes-table"
-                    className="table table-bordered table-hover"
+                  <InfiniteScroll
+                    dataLength={clothesItems.length}
+                    next={fetchMoreData}
+                    hasMore={hasMore}
+                    loader={<h4>Loading...</h4>}
+                    endMessage={
+                      <p style={{ textAlign: "center" }}>
+                        <b>Đã hết dữ liệu để xem</b>
+                      </p>
+                    }
                   >
-                    <thead>
-                      <tr>
-                        <th>STT</th>
-                        <th>Tên sản phẩm</th>
-                        <th>Hãng</th>
-                        <th>Vị trí</th>
-                        <th>Danh mục</th>
-                        <th>Giá tiền</th>
-                        <th>Chỉnh sửa/Xóa</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {clothes &&
-                        clothes.length > 0 &&
-                        clothes.map((cloth, index) => (
-                          <>
-                            <tr>
+                    <table
+                      id="clothes-table"
+                      className="table table-bordered table-hover"
+                    >
+                      <thead>
+                        <tr>
+                          <th>STT</th>
+                          <th>Tên sản phẩm</th>
+                          <th>Hãng</th>
+                          <th>Vị trí</th>
+                          <th>Danh mục</th>
+                          <th>Giá tiền</th>
+                          <th>Chỉnh sửa/Xóa</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {clothesItems &&
+                          clothesItems.map((cloth, index) => (
+                            <tr key={index}>
                               <td>{index + 1}</td>
                               <td>{cloth.name}</td>
                               <td>{cloth.brand}</td>
@@ -110,10 +139,10 @@ export function Clothes() {
                                 </button>
                               </td>
                             </tr>
-                          </>
-                        ))}
-                    </tbody>
-                  </table>
+                          ))}
+                      </tbody>
+                    </table>
+                  </InfiniteScroll>
                 </div>
               </div>
             </div>

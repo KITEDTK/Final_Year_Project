@@ -19,13 +19,8 @@ async function clothesToCSV(req: Request, res: Response) {
 }
 async function getAllClothes(req: Request, res: Response) {
   try {
-    const {pages} = req.query;
-    const pageNumber = pages ? parseInt(pages, 10) : 1; // Mặc định là trang 1 nếu pages là undefined
-
-if (isNaN(pageNumber)) {
-  return res.status(400).send('Invalid page number');
-}
-    const result = await ClothesService.getAllClothes(pageNumber);
+    const {page} = req.query;
+    const result = await ClothesService.getAllClothes(page);
     res.send(result);
   } catch (err) {
     console.log(err);
@@ -91,7 +86,7 @@ async function getSingleClothesAdmin(req: Request, res: Response){
 async function getAllClothesAdmin(req: Request, res: Response){
   try {
     const result = await ClothesService.getAllClothesAdmin();
-    res.send(result);
+    res.json(result);
   } catch (err) {
     if (err instanceof Error) {
       res.status(400).json({ message: err.message });
@@ -100,7 +95,16 @@ async function getAllClothesAdmin(req: Request, res: Response){
     }
   }
 }
+async function getMaxQuantityClothes(req: Request, res: Response){
+  try {
+    const result = await ClothesService.getMaxQuantityClothes();
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
 export default {
+  getMaxQuantityClothes,
   getAllClothesAdmin,
   filterClothes,
   clothesToCSV,

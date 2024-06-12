@@ -12,7 +12,7 @@ async function filter(filter: filterClothes) {
     const category: any = await prisma.$queryRaw`WITH allCategory AS (
         SELECT id
         FROM Categories
-        WHERE id = ${rootCategoryId} 
+        WHERE id = ${rootCategoryId}  
         UNION ALL
         SELECT c.id
         FROM Categories c
@@ -71,10 +71,11 @@ async function getAllClothesDetail() {
   const result = await prisma.clothDetails.findMany({});
   return result;
 }
-async function getAllClothes(pages: number) {
+async function getAllClothes(pages: any) {
+  const pageNumber = pages ? parseInt(pages, 10) : 0;
   const data = await prisma.clothes.findMany({
-    skip:pages*5,
-    take:5,
+    skip: pageNumber * 5,
+    take: 5,
     select: {
       id: true,
       name: true,
@@ -327,7 +328,12 @@ async function getAllClothesAdmin() {
   );
   return orders;
 }
+async function getMaxQuantityClothes(){
+  const result = await prisma.clothes.findMany();
+  return result.length;
+}
 export default {
+  getMaxQuantityClothes,
   getAllClothesAdmin,
   filter,
   exportClothesToCSV,
