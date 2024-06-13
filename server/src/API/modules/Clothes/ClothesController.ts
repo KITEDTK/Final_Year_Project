@@ -19,7 +19,7 @@ async function clothesToCSV(req: Request, res: Response) {
 }
 async function getAllClothes(req: Request, res: Response) {
   try {
-    const {page} = req.query;
+    const {page} = req.params;
     const result = await ClothesService.getAllClothes(page);
     res.send(result);
   } catch (err) {

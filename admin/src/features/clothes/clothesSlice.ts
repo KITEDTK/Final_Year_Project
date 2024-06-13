@@ -9,7 +9,7 @@ export const fetchAllClothes = createAsyncThunk<Clothes[], number>(
   "clothes/admin/get-all-clothes",
   async (page: number) => {
     try {
-      const response: AxiosResponse<Clothes[]> = await axios.get(`${BASE_URL}?page=${page}`, {
+      const response: AxiosResponse<Clothes[]> = await axios.get(`${BASE_URL}/page/${page}`, {
         headers: { "Content-Type": "application/json" },
       });
       return response.data;
@@ -62,7 +62,11 @@ const clothesSlice = createSlice({
     maxClothesQuantity: 0 as number,
     error: null,
   } as ClothesState,
-  reducers: {},
+  reducers: {
+    resetClothes(state) {
+      state.clothes = [];
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllClothes.pending, (state) => {
@@ -103,5 +107,5 @@ const clothesSlice = createSlice({
       });
   },
 });
-
+export const { resetClothes } = clothesSlice.actions;
 export default clothesSlice.reducer;

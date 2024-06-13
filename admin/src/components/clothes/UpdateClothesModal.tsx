@@ -175,7 +175,6 @@ export const UpdateClothesModal: React.FC<props> = ({ singleCloth }) => {
                             <th style={{ width: "10%" }}>Mã vạch</th>
                             <th style={{ width: "10%" }}>Tồn kho</th>
                             <th style={{ width: "15%" }}>Khách đang đặt</th>
-                            <th style={{ width: "10%" }}>Sửa/Xóa</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -192,20 +191,6 @@ export const UpdateClothesModal: React.FC<props> = ({ singleCloth }) => {
                                   <td>{item.codeBar}</td>
                                   <td>{item.amount}</td>
                                   <td>{item.sumOrderAmount}</td>
-                                  <td>
-                                    <button
-                                      type="button"
-                                      className="btn btn-block btn-outline-info"
-                                    >
-                                      Chỉnh sửa
-                                    </button>
-                                    <button
-                                      type="button"
-                                      className="btn btn-block btn-outline-danger"
-                                    >
-                                      Xóa
-                                    </button>
-                                  </td>
                                 </tr>
                               </>
                             ))}

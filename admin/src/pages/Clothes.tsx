@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   fetchAllClothes,
   fetchMaxQuantityClothes,
   fetchSingleClothes,
+  resetClothes,
 } from "../features/clothes/clothesSlice";
 import type { Clothes } from "../features/clothes/clothesType";
 import { removeColFromTables } from "../utils/removeColFromTable";
@@ -11,7 +12,6 @@ import { tableToExcel } from "../utils/tableToExcels";
 import { Modal } from "react-bootstrap";
 import { UpdateClothesModal } from "../components/clothes/UpdateClothesModal";
 import InfiniteScroll from "react-infinite-scroll-component";
-
 export function Clothes() {
   const dispatch = useAppDispatch();
   const clothes = useAppSelector((state) => state.clothes.clothes);
@@ -54,12 +54,18 @@ export function Clothes() {
     dispatch(fetchAllClothes(page));
   }, [dispatch, page]);
 
-  useEffect(() => { // mỗi lần clothes thay đổi thì push vào clothesItems
-    setClothesItems((prevItems) => [...prevItems, ...clothes]);
-    if(clothesItems.length === maxClothesQuantity){
-      setHasMore(false);
+  useEffect(() => {
+    if (clothes.length > 0) {
+      setClothesItems((prevItems) => {
+        const updatedItems = [...prevItems, ...clothes];
+        if (updatedItems.length >= maxClothesQuantity) {
+          setHasMore(false);
+          dispatch(resetClothes()); // nếu đã load max giá trị thì reset clothes để tránh reload lại trang thì lấy lại dữ liệu cũ
+        }
+        return updatedItems; //trả về giá trị mới đã cập nhật
+      });
     }
-  }, [clothes, maxClothesQuantity]);
+  }, [clothes, maxClothesQuantity, dispatch]);
 
   const fetchMoreData = () => {
     setPage((prevPage) => prevPage + 1);
@@ -75,7 +81,7 @@ export function Clothes() {
                   <h3 className="card-title">Bảng Quần áo</h3>
                 </div>
 
-                <div className="card-body">
+                <div className="card-body" style={{'minHeight': '101vh'}}>
                   <button
                     type="button"
                     className="btn btn-block btn-success"
@@ -158,7 +164,7 @@ export function Clothes() {
         >
           <Modal.Header onClick={() => handleOnClickCloseModal()} closeButton>
             <Modal.Title>
-              {clothes.find((item) => item.id === clothesIdModal)?.name}
+              {clothesItems.find((item) => item.id === clothesIdModal)?.name}
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
