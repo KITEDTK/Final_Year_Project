@@ -345,14 +345,14 @@ async function getMaxQuantityClothes() {
 }
 export default {
   getMaxQuantityClothesByRootCategory,
-  getMaxQuantityClothes,
-  getAllClothesAdmin,
   getClothesByRootCategory,
+  getSingleClothesAdmin,
+  getMaxQuantityClothes,
+  getAllClothesDetail,
+  getAllClothesAdmin,
   exportClothesToCSV,
+  getSingleClothes,
   getAllClothes,
   readExcelFile,
-  getSingleClothes,
-  getAllClothesDetail,
   addComment,
-  getSingleClothesAdmin,
 };
