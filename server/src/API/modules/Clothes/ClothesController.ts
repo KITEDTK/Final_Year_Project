@@ -3,7 +3,8 @@ import ClothesService from "./ClothesService";
 
 async function filterClothes(req: Request, res: Response) {
   try {
-    const result = await ClothesService.filter(req.body);
+    const {page, rootCategoryId} = req.params;
+    const result = await ClothesService.getClothesByRootCategory(rootCategoryId, page);
     res.send(result);
   } catch (err) {
     console.log(err);
@@ -103,7 +104,17 @@ async function getMaxQuantityClothes(req: Request, res: Response){
     console.log(err);
   }
 }
+async function getMaxQuantityClothesByRootCategory(req: Request, res: Response){
+  try {
+    const {categoryId} = req.params;
+    const result = await ClothesService.getMaxQuantityClothesByRootCategory(categoryId);
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
 export default {
+  getMaxQuantityClothesByRootCategory,
   getMaxQuantityClothes,
   getAllClothesAdmin,
   filterClothes,

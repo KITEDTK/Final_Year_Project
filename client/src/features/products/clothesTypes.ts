@@ -31,17 +31,14 @@ export interface ClothesFilter {
 }
 
 export interface Filter {
-  filter: {
-    rootCategoryId: string;
-    categoryId: string | null;
-    sizeIds: string[];
-    colorIds: string[];
-  };
+  rootCategoryId: string;
+  page?: number;
 }
 export interface ClothesState {
     clothes: ClothesFilter[];
     singleClothes: SingleClothes;
     allClothDetails: ClothDetails[];
+    maxQuantityByCategory: number;
     loading: boolean;
     error: string | null;
 }

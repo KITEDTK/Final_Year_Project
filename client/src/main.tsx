@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import { Provider } from "react-redux";
@@ -15,7 +14,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
     <BrowserRouter>
       <PersistGate persistor={persistStore(store)}>
-        <React.StrictMode>
           <AuthProvider
             store={createStore({
               authName: "_auth",
@@ -27,7 +25,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <App />
             <ToastContainer />
           </AuthProvider>
-        </React.StrictMode>
       </PersistGate>
     </BrowserRouter>
   </Provider>

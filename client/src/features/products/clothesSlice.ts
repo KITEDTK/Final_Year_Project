@@ -15,10 +15,9 @@ const BASE_URL = "http://localhost:4000/clothes";
 
 export const fetchFilterClothes = createAsyncThunk<ClothesFilter[], Filter>(
   "cloths/filter",
-  async ({ filter }) => {
-    const response: AxiosResponse<ClothesFilter[]> = await axios.post(
-      `${BASE_URL}/filter`,
-      { ...filter },
+  async ({rootCategoryId, page }) => {
+    const response: AxiosResponse<ClothesFilter[]> = await axios.get(
+      `${BASE_URL}/filter/page/${page}/categories/${rootCategoryId}`,
       {
         headers: { "Content-Type": "application/json" },
       }
@@ -72,16 +71,36 @@ export const fetchAllClothDetails = createAsyncThunk<ClothDetails[]>(
     }
   }
 )
+export const fetchMaxClothesQuantity = createAsyncThunk<number, string>(
+  "clothes/maxQuantity",
+  async(categoryId)=>{
+    try {
+      const response: AxiosResponse<number> = await axios.get(
+        `${BASE_URL}/categories/${categoryId}/maxQuantity`,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      return response.data;
+    } catch (err) {
+      console.error("Thêm vào giỏ hàng thất bại", err);
+      throw err;
+    }
+  }
+)
 const clothesSlice = createSlice({
   name: "clothes",
   initialState: {
     clothes: [],
     singleClothes: {} as SingleClothes,
     allClothDetails: [] as ClothDetails[],
+    maxQuantityByCategory: 0 as number,
     loading: false,
     error: null,
   } as ClothesState,
-  reducers: {},
+  reducers: {
+    resetClothes(state){
+      state.clothes = []
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchFilterClothes.pending, (state) => {
@@ -133,7 +152,20 @@ const clothesSlice = createSlice({
         state.error = action.error.message ?? "Unknown error";
         showToast('Ngươi dùng chưa mua mặt hàng này','error');
       })
+      .addCase(fetchMaxClothesQuantity.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchMaxClothesQuantity.fulfilled, (state, action) => {
+        state.loading = false;
+        state.maxQuantityByCategory = action.payload;
+      })
+      .addCase(fetchMaxClothesQuantity.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Unknown error";
+      })
       ;
   },
 });
+export const {resetClothes} = clothesSlice.actions;
 export default clothesSlice.reducer;

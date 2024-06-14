@@ -4,8 +4,8 @@ import fs from "fs";
 const excelToJson = require("convert-excel-to-json");
 const prisma = new PrismaClient();
 
-async function filter(filter: filterClothes) {
-  const { categoryId, sizeIds, colorIds, rootCategoryId } = filter;
+async function getClothesByRootCategory(rootCategoryId: string, page: string) {
+  const pageNumber = page ? parseInt(page, 10) : 0;
   let filterRootCategoryIds = {};
   let rootCategoryIds = [];
   if (rootCategoryId !== null) {
@@ -23,24 +23,13 @@ async function filter(filter: filterClothes) {
     filterRootCategoryIds = { in: rootCategoryIds };
   }
   const result = await prisma.clothes.findMany({
+    skip: pageNumber * 3,
+    take: 3,
     where: {
       ...(rootCategoryId !== null ? { categoryId: filterRootCategoryIds } : {}),
-      ...(categoryId && categoryId !== "" ? { categoryId: categoryId } : {}),
-      clothDetails: {
-        some: {
-          ...(sizeIds.length > 0 ? { sizeId: { in: sizeIds } } : {}),
-          ...(colorIds.length > 0 ? { colorId: { in: colorIds } } : {}),
-        },
-      },
     },
     include: {
       clothDetails: {
-        where: {
-          AND: [
-            sizeIds.length > 0 ? { sizeId: { in: sizeIds } } : {},
-            colorIds.length > 0 ? { colorId: { in: colorIds } } : {},
-          ],
-        },
         include: {
           size: { select: { name: true } },
           color: { select: { name: true } },
@@ -49,6 +38,28 @@ async function filter(filter: filterClothes) {
     },
   });
   return result;
+}
+async function getMaxQuantityClothesByRootCategory(rootCategoryId: string) {
+  let filterRootCategoryIds = {};
+  let rootCategoryIds = [];
+  const category: any = await prisma.$queryRaw`WITH allCategory AS (
+    SELECT id
+    FROM Categories
+    WHERE id = ${rootCategoryId}  
+    UNION ALL
+    SELECT c.id
+    FROM Categories c
+    INNER JOIN allCategory s ON c.parent_id = s.id
+  )
+  SELECT id FROM allCategory`;
+  rootCategoryIds.push(...category.map((c: any) => c.id));
+  filterRootCategoryIds = { in: rootCategoryIds };
+  const result = await prisma.clothes.findMany({
+    where: {
+      ...(rootCategoryId !== null ? { categoryId: filterRootCategoryIds } : {}),
+    },
+  });
+  return result.length;
 }
 async function exportClothesToCSV() {
   const data = await prisma.clothes.findMany({
@@ -328,14 +339,15 @@ async function getAllClothesAdmin() {
   );
   return orders;
 }
-async function getMaxQuantityClothes(){
+async function getMaxQuantityClothes() {
   const result = await prisma.clothes.findMany();
   return result.length;
 }
 export default {
+  getMaxQuantityClothesByRootCategory,
   getMaxQuantityClothes,
   getAllClothesAdmin,
-  filter,
+  getClothesByRootCategory,
   exportClothesToCSV,
   getAllClothes,
   readExcelFile,

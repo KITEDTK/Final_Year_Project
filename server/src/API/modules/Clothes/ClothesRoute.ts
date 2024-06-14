@@ -18,8 +18,9 @@ router.post("/admin/csv/read", uploads.upload.single("file"), ClothesController.
 router.get("/admin/page/:page", ClothesController.getAllClothes);
 
 // General routes
-router.post("/filter", ClothesController.filterClothes);
+router.get("/filter/page/:page/categories/:rootCategoryId", ClothesController.filterClothes);
 router.get("/clothDetails", ClothesController.getAllClothDetail);
+router.get("/categories/:categoryId/maxQuantity",ClothesController.getMaxQuantityClothesByRootCategory);
 
 
 export default router;
