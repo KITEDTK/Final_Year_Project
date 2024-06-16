@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { SingleClothes } from "../../features/clothes/clothesType";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchModalCategories } from "../../features/categories/categoriesSlice";
 interface props {
   singleCloth: SingleClothes;
 }
-export const UpdateClothesModal: React.FC<props> = ({ singleCloth }) => {
+export const UpdateClothesModal: React.FC<props> = ({ singleCloth}) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchModalCategories());
@@ -13,6 +13,29 @@ export const UpdateClothesModal: React.FC<props> = ({ singleCloth }) => {
   const categoriesModal = useAppSelector(
     (state) => state.categories.categoriesModal
   );
+  const [clothesName, setClothesName] = useState<string>();
+  const [categoryId, setCategoryId] = useState<string>();
+  const [location, setLocation] = useState<string>();
+  const [pirce, setPrice] = useState<number>();
+  const [brand, setBrand] = useState<string>();
+  const onChangePrice = (event: ChangeEvent<HTMLInputElement>) => {
+    const newPrice = event.target.value;
+    // Convert the input to a number and ensure it is valid
+    const parsedPrice = parseFloat(newPrice);
+
+    // Check if the parsedPrice is a valid number and not negative
+    if (!isNaN(parsedPrice) && parsedPrice >= 0) {
+      setPrice(parsedPrice);
+    }
+  };
+  const handleOnChangeCategory = (selectedName: string) =>{
+    const selectedCategory = categoriesModal.find(category => category.name === selectedName);
+    if (selectedCategory) {
+      setCategoryId(selectedCategory.id);
+      console.log(selectedCategory.id);
+    }
+  };
+
   return (
     <>
       <ul className="nav nav-tabs" id="custom-content-below-tab" role="tablist">
@@ -58,6 +81,7 @@ export const UpdateClothesModal: React.FC<props> = ({ singleCloth }) => {
                     <div className="form-group">
                       <label>Tên mặt hàng</label>
                       <input
+                        onChange={(event)=>setClothesName(event.target.value)}
                         type="text"
                         className="form-control"
                         placeholder={singleCloth && singleCloth.name}
@@ -70,6 +94,7 @@ export const UpdateClothesModal: React.FC<props> = ({ singleCloth }) => {
                     <div className="form-group">
                       <label>Hãng</label>
                       <input
+                      onChange={(event)=>setBrand(event.target.value)}
                         type="text"
                         className="form-control"
                         placeholder={singleCloth && singleCloth.brand}
@@ -80,6 +105,7 @@ export const UpdateClothesModal: React.FC<props> = ({ singleCloth }) => {
                     <div className="form-group">
                       <label>Vị trí</label>
                       <input
+                      onChange={(event)=>setLocation(event.target.value)}
                         type="text"
                         className="form-control"
                         placeholder={singleCloth && singleCloth.location}
@@ -95,6 +121,7 @@ export const UpdateClothesModal: React.FC<props> = ({ singleCloth }) => {
                         type="text"
                         className="form-control"
                         placeholder={singleCloth && singleCloth.initPrice}
+                        disabled
                       />
                     </div>
                   </div>
@@ -102,6 +129,7 @@ export const UpdateClothesModal: React.FC<props> = ({ singleCloth }) => {
                     <div className="form-group">
                       <label>Giá bán</label>
                       <input
+                      onChange={(event)=>onChangePrice(event)}
                         type="text"
                         className="form-control"
                         placeholder={singleCloth && singleCloth.price}
@@ -125,7 +153,7 @@ export const UpdateClothesModal: React.FC<props> = ({ singleCloth }) => {
                   <div className="col-sm-6">
                     <div className="form-group">
                       <label>Danh mục</label>
-                      <select className="form-control">
+                      <select onChange={(event)=>handleOnChangeCategory(event.target.value)} className="form-control">
                         {categoriesModal &&
                           categoriesModal.map((item) => (
                             <option

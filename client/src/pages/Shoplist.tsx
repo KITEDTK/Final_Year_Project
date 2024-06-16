@@ -60,21 +60,26 @@ export const Shoplist = () => {
     }
   }, [category, page, dispatch]);
 
-  // Cập nhật mỗi lần thêm dữ liệu
   useEffect(() => {
     if (clothes.length > 0) {
       setClothesItems((prevItems) => {
-        const updatedItems = [...prevItems, ...clothes];
+        // Tạo một bộ chứa các ID hoặc các đặc tính của prevItems để kiểm tra trùng lặp
+        const prevItemsSet = new Set(prevItems.map(item => item.id));
+        // Lọc ra các item không trùng lặp
+        const newItems = clothes.filter(item => !prevItemsSet.has(item.id));
+        // Kết hợp các item mới không trùng lặp với prevItems
+        const updatedItems = [...prevItems, ...newItems];
+
+        // Kiểm tra xem có đạt đến maxQuantityClothesByCategory không
         if (updatedItems.length >= maxQuantityClothesByCategory) {
+          dispatch(resetClothes());
           setHasMore(false);
         }
+        
         return updatedItems;
       });
-      if (clothes.length < maxQuantityClothesByCategory) {
-        dispatch(resetClothes());  // load max rồi thì không load nữa 
-      }
     }
-  }, [clothes, maxQuantityClothesByCategory, dispatch]); 
+  }, [clothes, maxQuantityClothesByCategory, dispatch]);
   return (
     <>
       <InfiniteScroll
@@ -230,7 +235,7 @@ export const Shoplist = () => {
                             clothDetails: filteredDetails,
                           };
                         })
-                       .filter((item)=>item.clothDetails.length > 0).map((item) => {
+                       .map((item) => {
                           return (
                             <>
                               <SingleClothShoplist

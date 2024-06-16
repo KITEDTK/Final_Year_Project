@@ -113,7 +113,8 @@ export function Clothes() {
                           <th>Hãng</th>
                           <th>Vị trí</th>
                           <th>Danh mục</th>
-                          <th>Giá tiền</th>
+                          <th>Giá bán</th>
+                          <th>Giá nhập</th>
                           <th>Chỉnh sửa/Xóa</th>
                         </tr>
                       </thead>
@@ -127,6 +128,7 @@ export function Clothes() {
                               <td>{cloth.location}</td>
                               <td>{cloth.categoryName}</td>
                               <td>{cloth.price}</td>
+                              <td>{cloth.initPrice}</td>
                               <td>
                                 <button
                                   onClick={() =>
@@ -168,7 +170,7 @@ export function Clothes() {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <UpdateClothesModal singleCloth={singleClothes} />
+            <UpdateClothesModal singleCloth={singleClothes}  />
           </Modal.Body>
           <Modal.Footer>
             <button type="button" className="btn btn-block btn-outline-info">

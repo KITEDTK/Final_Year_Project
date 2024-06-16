@@ -343,9 +343,20 @@ async function getMaxQuantityClothes() {
   const result = await prisma.clothes.findMany();
   return result.length;
 }
+async function updateSingleClothesInfo(clothesId: string, data: any){
+  const {} = data;
+  await prisma.clothes.update({
+    where:{
+      id: clothesId
+    },
+    data: data
+  });
+  return getSingleClothesAdmin(clothesId);
+}
 export default {
   getMaxQuantityClothesByRootCategory,
   getClothesByRootCategory,
+  updateSingleClothesInfo,
   getSingleClothesAdmin,
   getMaxQuantityClothes,
   getAllClothesDetail,

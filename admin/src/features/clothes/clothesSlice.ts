@@ -1,7 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
 
-import { Clothes, ClothesState,SingleClothes } from "./clothesType";
+import {
+  Clothes,
+  ClothesState,
+  SingleClothes,
+  UpdateClothesInput,
+} from "./clothesType";
 
 const BASE_URL = "http://localhost:4000/clothes/admin";
 
@@ -9,9 +14,12 @@ export const fetchAllClothes = createAsyncThunk<Clothes[], number>(
   "clothes/admin/get-all-clothes",
   async (page: number) => {
     try {
-      const response: AxiosResponse<Clothes[]> = await axios.get(`${BASE_URL}/page/${page}`, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const response: AxiosResponse<Clothes[]> = await axios.get(
+        `${BASE_URL}/page/${page}`,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       return response.data;
     } catch (err) {
       console.error("fetching error", err);
@@ -38,7 +46,7 @@ export const fetchSingleClothes = createAsyncThunk<SingleClothes, string>(
 );
 export const fetchMaxQuantityClothes = createAsyncThunk<number>(
   "clothes/maxQuantity",
-  async()=>{
+  async () => {
     try {
       const response: AxiosResponse<number> = await axios.get(
         `http://localhost:4000/clothes/admin/maxQuantity`,
@@ -52,7 +60,34 @@ export const fetchMaxQuantityClothes = createAsyncThunk<number>(
       throw err;
     }
   }
-)
+);
+export const fetchUpdateClothesAdmin = createAsyncThunk<
+  SingleClothes,
+  UpdateClothesInput
+>(
+  "clothes/update",
+  async ({ clothesId, name, categoryId, brand, location, price }) => {
+    try {
+      const response: AxiosResponse<SingleClothes> = await axios.patch(
+        `http://localhost:4000/clothes/admin/${clothesId}`,
+        {
+          name: name,
+          categoryId: categoryId,
+          brand: brand,
+          location: location,
+          price: price,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      console.error("fetching error", err);
+      throw err;
+    }
+  }
+);
 const clothesSlice = createSlice({
   name: "clothes",
   initialState: {
@@ -65,7 +100,7 @@ const clothesSlice = createSlice({
   reducers: {
     resetClothes(state) {
       state.clothes = [];
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -102,6 +137,18 @@ const clothesSlice = createSlice({
         state.maxClothesQuantity = action.payload;
       })
       .addCase(fetchMaxQuantityClothes.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Unknown error";
+      })
+      .addCase(fetchUpdateClothesAdmin.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUpdateClothesAdmin.fulfilled, (state, action) => {
+        state.loading = false;
+        state.singleClothes = action.payload;
+      })
+      .addCase(fetchUpdateClothesAdmin.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message ?? "Unknown error";
       });

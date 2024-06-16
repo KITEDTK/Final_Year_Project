@@ -113,6 +113,15 @@ async function getMaxQuantityClothesByRootCategory(req: Request, res: Response){
     console.log(err);
   }
 }
+async function updateSingleClothes(req: Request, res: Response){
+  try {
+    const {clothesId} = req.params;
+    const result = await ClothesService.updateSingleClothesInfo(clothesId,req.body);
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
 export default {
   getMaxQuantityClothesByRootCategory,
   getMaxQuantityClothes,
@@ -124,5 +133,6 @@ export default {
   getSingleCLothes,
   getAllClothDetail,
   addCommentInClothes,
-  getSingleClothesAdmin
+  getSingleClothesAdmin,
+  updateSingleClothes
 };

@@ -41,3 +41,11 @@ export interface PaginateInput{
     clothesId: string;
     page: number;
 }
+export interface UpdateClothesInput{
+    clothesId: string;
+    name?: string;
+    categoryId?: string;
+    brand?: string;
+    location?: string;
+    price?: string;
+}
