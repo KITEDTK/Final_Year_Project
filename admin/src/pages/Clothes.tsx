@@ -1,4 +1,4 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   fetchAllClothes,
@@ -9,9 +9,9 @@ import {
 import type { Clothes } from "../features/clothes/clothesType";
 import { removeColFromTables } from "../utils/removeColFromTable";
 import { tableToExcel } from "../utils/tableToExcels";
-import { Modal } from "react-bootstrap";
 import { UpdateClothesModal } from "../components/clothes/UpdateClothesModal";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { CreateClothesModal } from "../components/clothes/CreateClothesModal";
 export function Clothes() {
   const dispatch = useAppDispatch();
   const clothes = useAppSelector((state) => state.clothes.clothes);
@@ -19,7 +19,9 @@ export function Clothes() {
   const [page, setPage] = useState<number>(0);
   const [clothesItems, setClothesItems] = useState<Clothes[]>([]);
   const [hasMore, setHasMore] = useState<boolean>(true);
-  const maxClothesQuantity = useAppSelector((state)=>state.clothes.maxClothesQuantity);
+  const maxClothesQuantity = useAppSelector(
+    (state) => state.clothes.maxClothesQuantity
+  );
   const handleExcel = () => {
     const table = document.getElementById("clothes-table");
     if (table) {
@@ -37,23 +39,27 @@ export function Clothes() {
       console.log("Lỗi không tìm thấy bảng");
     }
   };
-  const [clothesIdModal, setClothesIdModal] = useState<string>("");
-  const [show, setShow] = useState<boolean>(false);
+  const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
+  const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
   const handleOnClickUpdateClothes = async (clothesId: string) => {
-    await setClothesIdModal(clothesId);
     await dispatch(fetchSingleClothes(clothesId));
-    setShow(true);
+    setShowUpdateModal(true);
   };
-  const handleOnClickCloseModal = () => {
-    setShow(false);
+  const handleOnClickCreateClothes = async () =>{
+    setShowCreateModal(true);
+  }
+  const handleOnClickCloseUpdateModal = () => {
+    setShowUpdateModal(false);
   };
-  useEffect(()=>{
+  const handleOnClickCloseCreateModal = () => {
+    setShowCreateModal(false);
+  };
+  useEffect(() => {
     dispatch(fetchMaxQuantityClothes());
-  },[dispatch]);
+  }, [dispatch]);
   useEffect(() => {
     dispatch(fetchAllClothes(page));
   }, [dispatch, page]);
-
   useEffect(() => {
     if (clothes.length > 0) {
       setClothesItems((prevItems) => {
@@ -80,17 +86,53 @@ export function Clothes() {
                 <div className="card-header">
                   <h3 className="card-title">Bảng Quần áo</h3>
                 </div>
-
-                <div className="card-body" style={{'minHeight': '101vh'}}>
-                  <button
-                    type="button"
-                    className="btn btn-block btn-success"
-                    style={{width:'10%' , marginLeft: 'auto', display: 'block'}}
-                    onClick={() => handleExcel()}
+                <div className="card-body" style={{ minHeight: "101vh" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "10px",
+                      justifyContent: "flex-end",
+                      alignItems: "flex-end",
+                    }}
                   >
-                    In ra excel
-                  </button>
-                  <br/>
+                    <button
+                      type="button"
+                      className="btn btn-block btn-success"
+                      style={{
+                        width: "10%",
+                        height: "100%",
+                        flex: "0 0 auto", // Thiết lập flex-grow, flex-shrink, và flex-basis cho nút đầu tiên
+                      }}
+                      onClick={() => handleExcel()}
+                    >
+                      In ra excel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={()=>handleOnClickCreateClothes()}
+                      className="btn btn-block btn-success"
+                      style={{
+                        width: "15%",
+                        height: "100%",
+                        flex: "0 0 auto", // Thiết lập flex-grow, flex-shrink, và flex-basis cho nút thứ hai
+                      }}
+                    >
+                      Nhập hàng mới
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-block btn-success"
+                      style={{
+                        width: "10%",
+                        height: "100%",
+                        flex: "0 0 auto", // Thiết lập flex-grow, flex-shrink, và flex-basis cho nút thứ ba
+                      }}
+                    >
+                      Thêm hàng
+                    </button>
+                  </div>
+
+                  <br />
                   <InfiniteScroll
                     dataLength={clothesItems.length}
                     next={fetchMoreData}
@@ -157,34 +199,19 @@ export function Clothes() {
           </div>
         </div>
       </section>
-
-      {show === true && (
-        <Modal
-          show={show}
-          size="lg"
-          aria-labelledby="contained-modal-title-vcenter"
-        >
-          <Modal.Header onClick={() => handleOnClickCloseModal()} closeButton>
-            <Modal.Title>
-              {clothesItems.find((item) => item.id === clothesIdModal)?.name}
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <UpdateClothesModal singleCloth={singleClothes}  />
-          </Modal.Body>
-          <Modal.Footer>
-            <button type="button" className="btn btn-block btn-outline-info">
-              Lưu
-            </button>
-            <button
-              onClick={() => handleOnClickCloseModal()}
-              type="button"
-              className="btn btn-block btn-default"
-            >
-              Đóng
-            </button>
-          </Modal.Footer>
-        </Modal>
+      {showUpdateModal === true && (
+        <UpdateClothesModal
+          singleCloth={singleClothes}
+          show={showUpdateModal}
+          handleOnClickCloseModal={handleOnClickCloseUpdateModal}
+          setClothesItems={setClothesItems}
+        />
+      )}
+      {showCreateModal === true && (
+        <CreateClothesModal
+          show={showCreateModal}
+          handleOnClickCloseModal={handleOnClickCloseCreateModal}
+        />
       )}
     </>
   );

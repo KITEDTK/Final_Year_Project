@@ -17,7 +17,7 @@ model Clothes {
   updateAt     DateTime?
   isEnable     Boolean        @default(true)
   price        Int?
-  initPrice    Int? 
+  initPrice    Int?
   clothDetails ClothDetails[]
   category     Categories     @relation(fields: [categoryId], references: [id])
   commets      Comments[]
@@ -63,6 +63,10 @@ model ClothDetails {
   createAt       DateTime         @default(now())
   updateAt       DateTime?
   isEnable       Boolean          @default(true)
+  image1         String?
+  image2         String?
+  image3         String?
+  image4         String?
   carts          Carts[]
   cloth          Clothes          @relation(fields: [clothId], references: [id])
   color          Colors           @relation(fields: [colorId], references: [id])

@@ -15,15 +15,17 @@ export interface ClothesState{
     error: string | null;
 }
 export interface SingleClothes{
+    id: string;
     name: string;
     brand: string;
     location: string;
     category: {
+        id: string;
         name: string;
     }
     clothDetails: ClothDetails[];
     initPrice: string;
-    price: string;
+    price: number;
 }
 export interface ClothDetails{
     id: string;
@@ -47,5 +49,5 @@ export interface UpdateClothesInput{
     categoryId?: string;
     brand?: string;
     location?: string;
-    price?: string;
+    price?: number;
 }

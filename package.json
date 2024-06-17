@@ -9,6 +9,7 @@
         "concurrently": "^8.2.2",
         "lodash": "^4.17.21",
         "multer": "^1.4.5-lts.1",
+        "react-toastify": "^10.0.5",
         "redux-persist": "^6.0.0"
     },
     "devDependencies": {

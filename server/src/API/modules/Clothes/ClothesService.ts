@@ -260,11 +260,13 @@ async function getSingleClothesAdmin(clothesId: string) {
       id: clothesId,
     },
     select: {
+      id: true,
       name: true,
       brand: true,
       location: true,
       category: {
         select: {
+          id: true,
           name: true,
         },
       },
