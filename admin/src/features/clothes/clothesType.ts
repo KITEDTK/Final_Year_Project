@@ -52,3 +52,6 @@ export interface UpdateClothesInput{
     location?: string;
     price?: number;
 }
+export interface GenerateBarcodeInput {
+    oldBarcode? : string[]
+}

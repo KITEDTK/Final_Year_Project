@@ -6,54 +6,66 @@ import { fetchAllColors } from "../../features/colors/colorsSlice";
 import { fetchAllSizes } from "../../features/sizes/sizesSlice";
 import { useState, useRef } from "react";
 import { ChangeEvent } from "react";
-import { fetchGenerateBarcode, resetBarcode } from "../../features/clothes/clothesSlice";
+import {
+  fetchGenerateBarcode,
+  resetBarcode,
+} from "../../features/clothes/clothesSlice";
 interface props {
   show: boolean;
   handleOnClickCloseModal: () => void;
+}
+interface Rows {
+  color: string;
+  size: string;
+  image1: string;
+  image2: string;
+  image3: string;
+  barcode: string;
+  quantity: number;
 }
 export const CreateClothesModal: React.FC<props> = ({
   show,
   handleOnClickCloseModal,
 }) => {
   const dispatch = useAppDispatch();
+  const colors = useAppSelector((state) => state.colors.colors);
+  const sizes = useAppSelector((state) => state.sizes.sizes);
+
+  const [rows, setRows] = useState<Rows[]>([]);
+
   useEffect(() => {
+    dispatch(resetBarcode());
     dispatch(fetchModalCategories());
     dispatch(fetchAllColors());
     dispatch(fetchAllSizes());
   }, [dispatch]);
-  const colors = useAppSelector((state) => state.colors.colors);
-  const sizes = useAppSelector((state) => state.sizes.sizes);
-  const barcode = useAppSelector((state)=>state.clothes.barcode);
+
   const categoriesModal = useAppSelector(
     (state) => state.categories.categoriesModal
   );
   const fileInput1Refs = useRef<(HTMLInputElement | null)[]>([]);
   const fileInput2Refs = useRef<(HTMLInputElement | null)[]>([]);
   const fileInput3Refs = useRef<(HTMLInputElement | null)[]>([]);
-  const [rows, setRows] = useState([
-    {
-      color: colors[0].name,
-      size: sizes[0].name,
-      image1: "",
-      image2: "",
-      image3: "",
-      barcode: "",
-      quantity: 0,
-    },
-  ]);
-  const handleAddRow = async () => {
-    setRows([
-      ...rows,
-      {
-        color: colors[0].name,
-        size: sizes[0].name,
-        image1: "",
-        image2: "",
-        image3: "",
-        barcode: "",
-        quantity: 0,
-      },
-    ]);
+
+  const oldBarcode = rows.map((item: Rows) => item.barcode);
+
+  const handleAddRow = () => {
+    dispatch(fetchGenerateBarcode({ oldBarcode: [...oldBarcode] })).then(
+      (res) => {
+        setRows([
+          ...rows,
+          {
+            color: colors[0].name,
+            size: sizes[0].name,
+            image1: "",
+            image2: "",
+            image3: "",
+            barcode: res.payload as string,
+            quantity: 0,
+          },
+        ]);
+      }
+    );
   };
   const handleDeleteRow = (index: any) => {
     setRows(rows.filter((_, i) => i !== index));
@@ -73,7 +85,7 @@ export const CreateClothesModal: React.FC<props> = ({
   };
   const handleQuantityChange = (index: number, newQuantityString: string) => {
     let newQuantity = parseInt(newQuantityString, 10);
-  
+
     if (isNaN(newQuantity)) {
       newQuantity = 0;
     }
@@ -133,7 +145,6 @@ export const CreateClothesModal: React.FC<props> = ({
 
   const handleCreateClothes = () => {
     console.log(rows);
-    
   };
   return (
     <>
@@ -327,11 +338,14 @@ export const CreateClothesModal: React.FC<props> = ({
                                   </td>
                                   <td>
                                     <input
-                                     onChange={(
-                                      e: ChangeEvent<HTMLInputElement>
-                                    ) =>
-                                      handleQuantityChange(index, e.target.value)
-                                    }
+                                      onChange={(
+                                        e: ChangeEvent<HTMLInputElement>
+                                      ) =>
+                                        handleQuantityChange(
+                                          index,
+                                          e.target.value
+                                        )
+                                      }
                                       type="text"
                                       value={row.quantity}
                                       style={{ width: "100%" }}

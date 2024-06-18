@@ -377,7 +377,10 @@ async function generateBarcode(oldBarcode: string[]){
   });
   let validBarcodeIntegers : number[] = []
   if(validBarcode.length === 0){
-    validBarcodeIntegers.push(0);
+    const initialCode = VNCode.concat("", shopCode).concat("", "00000");
+    const checkdigit = generateCheckDigit(initialCode);
+    const newBarcode = VNCode.concat(" ", shopCode).concat(" ", "00000").concat(" ", checkdigit);
+    return newBarcode;
   }else{
     validBarcodeIntegers = validBarcode.map(barcode => parseInt(barcode, 10));
   }

@@ -4,6 +4,7 @@ import axios, { AxiosResponse } from "axios";
 import {
   Clothes,
   ClothesState,
+  GenerateBarcodeInput,
   SingleClothes,
   UpdateClothesInput,
 } from "./clothesType";
@@ -88,27 +89,26 @@ export const fetchUpdateClothesAdmin = createAsyncThunk<
     }
   }
 );
-export const fetchGenerateBarcode = createAsyncThunk<string, string[]>(
-  "clothes/generateBarcode",
-  async(oldBarcode) =>{
-    try{
-      const response: AxiosResponse<string> = await axios.post(
-        `${BASE_URL}/barcode`,
-        {
-          oldBarcode: oldBarcode
-        },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      return response.data;
-    }catch(err){
-      console.error("fetching error", err);
-      throw err;
-    }
+export const fetchGenerateBarcode = createAsyncThunk<
+  string,
+  GenerateBarcodeInput
+>("clothes/generateBarcode", async ({ oldBarcode }) => {
+  try {
+    const response: AxiosResponse<string> = await axios.post(
+      `${BASE_URL}/barcode`,
+      {
+        oldBarcode: oldBarcode,
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.error("fetching error", err);
+    throw err;
   }
- 
-)
+});
 const clothesSlice = createSlice({
   name: "clothes",
   initialState: {
@@ -116,16 +116,16 @@ const clothesSlice = createSlice({
     loading: false,
     singleClothes: {} as SingleClothes,
     maxClothesQuantity: 0 as number,
-    barcode:'',
+    barcode: "",
     error: null,
   } as ClothesState,
   reducers: {
     resetClothes(state) {
       state.clothes = [];
     },
-    resetBarcode(state){
-      state.barcode = '';
-    }
+    resetBarcode(state) {
+      state.barcode = "";
+    },
   },
   extraReducers: (builder) => {
     builder
