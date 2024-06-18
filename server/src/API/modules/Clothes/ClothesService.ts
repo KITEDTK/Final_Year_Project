@@ -3,6 +3,7 @@ import { filterClothes } from "./ClothesTypes";
 import fs from "fs";
 const excelToJson = require("convert-excel-to-json");
 const prisma = new PrismaClient();
+import { generateCheckDigit } from "../../../utils/generateCheckDigit";
 
 async function getClothesByRootCategory(rootCategoryId: string, page: string) {
   const pageNumber = page ? parseInt(page, 10) : 0;
@@ -355,6 +356,49 @@ async function updateSingleClothesInfo(clothesId: string, data: any){
   });
   return getSingleClothesAdmin(clothesId);
 }
+async function generateBarcode(oldBarcode: string[]){
+  const VNCode = "893";
+  const shopCode = "1709";
+  let allBarcode = await prisma.clothDetails.findMany({
+    select:{
+      codeBar: true
+    }
+  });
+  if(oldBarcode.length > 0){
+    oldBarcode.forEach((item)=>{
+      allBarcode.push({codeBar: item});
+    })
+  }
+  let validBarcode: string[] = [];
+  allBarcode.forEach((item)=>{
+    if(item.codeBar?.slice(0,3) === "893" && item.codeBar.slice(4,8)==="1709" && item.codeBar.length === 16){
+      validBarcode.push(item.codeBar.slice(9,14))
+    }
+  });
+  let validBarcodeIntegers : number[] = []
+  if(validBarcode.length === 0){
+    validBarcodeIntegers.push(0);
+  }else{
+    validBarcodeIntegers = validBarcode.map(barcode => parseInt(barcode, 10));
+  }
+// Kết quả cuối cùng là mảng các số hợp lệ từ 0 đến 99999 không trùng lặp
+const finalValidBarcodes: number[] = [];
+
+for (let i = 0; i <= 99999; i++) {
+  // Kiểm tra nếu số không nằm trong khoảng từ 0 đến 99999
+  if (! validBarcodeIntegers.includes(i)) {
+    finalValidBarcodes.push(i);
+  }
+}
+
+// Tìm số nhỏ nhất trong mảng finalValidBarcodes
+const smallestValidBarcode = Math.min(...finalValidBarcodes);
+const smallestValidBarcodeString = smallestValidBarcode.toString().padStart(5, '0');
+const barcodeWithoutCheckdigit =  VNCode.concat("", shopCode).concat("", smallestValidBarcodeString);
+const checkdigit = generateCheckDigit(barcodeWithoutCheckdigit);
+const newBarcode = VNCode.concat(" ", shopCode).concat(" ", smallestValidBarcodeString).concat(" ", checkdigit);
+return  newBarcode;
+}
 export default {
   getMaxQuantityClothesByRootCategory,
   getClothesByRootCategory,
@@ -365,6 +409,7 @@ export default {
   getAllClothesAdmin,
   exportClothesToCSV,
   getSingleClothes,
+  generateBarcode,
   getAllClothes,
   readExcelFile,
   addComment,

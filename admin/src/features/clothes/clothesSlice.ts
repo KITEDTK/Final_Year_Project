@@ -88,6 +88,27 @@ export const fetchUpdateClothesAdmin = createAsyncThunk<
     }
   }
 );
+export const fetchGenerateBarcode = createAsyncThunk<string, string[]>(
+  "clothes/generateBarcode",
+  async(oldBarcode) =>{
+    try{
+      const response: AxiosResponse<string> = await axios.post(
+        `${BASE_URL}/barcode`,
+        {
+          oldBarcode: oldBarcode
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      return response.data;
+    }catch(err){
+      console.error("fetching error", err);
+      throw err;
+    }
+  }
+ 
+)
 const clothesSlice = createSlice({
   name: "clothes",
   initialState: {
@@ -95,12 +116,16 @@ const clothesSlice = createSlice({
     loading: false,
     singleClothes: {} as SingleClothes,
     maxClothesQuantity: 0 as number,
+    barcode:'',
     error: null,
   } as ClothesState,
   reducers: {
     resetClothes(state) {
       state.clothes = [];
     },
+    resetBarcode(state){
+      state.barcode = '';
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -151,8 +176,20 @@ const clothesSlice = createSlice({
       .addCase(fetchUpdateClothesAdmin.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message ?? "Unknown error";
+      })
+      .addCase(fetchGenerateBarcode.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchGenerateBarcode.fulfilled, (state, action) => {
+        state.loading = false;
+        state.barcode = action.payload;
+      })
+      .addCase(fetchGenerateBarcode.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Unknown error";
       });
   },
 });
-export const { resetClothes } = clothesSlice.actions;
+export const { resetClothes, resetBarcode } = clothesSlice.actions;
 export default clothesSlice.reducer;

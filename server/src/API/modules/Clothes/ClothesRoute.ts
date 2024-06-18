@@ -15,6 +15,7 @@ router.post("/admin/csv", ClothesController.clothesToCSV);
 router.get("/admin/orderAmount", ClothesController.getAllClothesAdmin);
 router.get("/admin/maxQuantity", ClothesController.getMaxQuantityClothes);
 router.post("/admin/csv/read", uploads.upload.single("file"), ClothesController.readExcelFile);
+router.post("/admin/barcode", ClothesController.generateBarcode)
 router.get("/admin/page/:page", ClothesController.getAllClothes);
 router.patch("/admin/:clothesId", ClothesController.updateSingleClothes);
 

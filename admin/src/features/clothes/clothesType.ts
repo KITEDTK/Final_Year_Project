@@ -11,6 +11,7 @@ export interface ClothesState{
     clothes: Clothes[];
     singleClothes: SingleClothes;
     maxClothesQuantity: number;
+    barcode: string;
     loading: boolean;
     error: string | null;
 }

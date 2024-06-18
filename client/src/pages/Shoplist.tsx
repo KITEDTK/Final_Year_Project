@@ -59,13 +59,15 @@ export const Shoplist = () => {
       }));
     }
   }, [category, page, dispatch]);
-
   useEffect(() => {
+    if(page === 0){
+      setClothesItems(clothes);
+    }
     if (clothes.length > 0) {
       setClothesItems((prevItems) => {
         // Tạo một bộ chứa các ID hoặc các đặc tính của prevItems để kiểm tra trùng lặp
         const prevItemsSet = new Set(prevItems.map(item => item.id));
-        // Lọc ra các item không trùng lặp
+        // Lọc ra các item không trùng lặp và không thuộc categoryId
         const newItems = clothes.filter(item => !prevItemsSet.has(item.id));
         // Kết hợp các item mới không trùng lặp với prevItems
         const updatedItems = [...prevItems, ...newItems];
@@ -79,7 +81,7 @@ export const Shoplist = () => {
         return updatedItems;
       });
     }
-  }, [clothes, maxQuantityClothesByCategory, dispatch]);
+  }, [clothes, maxQuantityClothesByCategory, dispatch, category,page]);
   return (
     <>
       <InfiniteScroll

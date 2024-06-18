@@ -4,8 +4,9 @@ import { useEffect } from "react";
 import { fetchModalCategories } from "../../features/categories/categoriesSlice";
 import { fetchAllColors } from "../../features/colors/colorsSlice";
 import { fetchAllSizes } from "../../features/sizes/sizesSlice";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { ChangeEvent } from "react";
+import { fetchGenerateBarcode, resetBarcode } from "../../features/clothes/clothesSlice";
 interface props {
   show: boolean;
   handleOnClickCloseModal: () => void;
@@ -22,16 +23,36 @@ export const CreateClothesModal: React.FC<props> = ({
   }, [dispatch]);
   const colors = useAppSelector((state) => state.colors.colors);
   const sizes = useAppSelector((state) => state.sizes.sizes);
+  const barcode = useAppSelector((state)=>state.clothes.barcode);
   const categoriesModal = useAppSelector(
     (state) => state.categories.categoriesModal
   );
+  const fileInput1Refs = useRef<(HTMLInputElement | null)[]>([]);
+  const fileInput2Refs = useRef<(HTMLInputElement | null)[]>([]);
+  const fileInput3Refs = useRef<(HTMLInputElement | null)[]>([]);
   const [rows, setRows] = useState([
-    { color: colors[0].name, size: sizes[0].name,image1:"",image2:"", image3:"", barcode: "", quantity: "" },
+    {
+      color: colors[0].name,
+      size: sizes[0].name,
+      image1: "",
+      image2: "",
+      image3: "",
+      barcode: "",
+      quantity: 0,
+    },
   ]);
-  const handleAddRow = () => {
+  const handleAddRow = async () => {
     setRows([
       ...rows,
-      { color: colors[0].name, size: sizes[0].name,image1:"",image2:"", image3:"", barcode: "", quantity: "" },
+      {
+        color: colors[0].name,
+        size: sizes[0].name,
+        image1: "",
+        image2: "",
+        image3: "",
+        barcode: "",
+        quantity: 0,
+      },
     ]);
   };
   const handleDeleteRow = (index: any) => {
@@ -50,9 +71,69 @@ export const CreateClothesModal: React.FC<props> = ({
     );
     setRows(newRows);
   };
+  const handleQuantityChange = (index: number, newQuantityString: string) => {
+    let newQuantity = parseInt(newQuantityString, 10);
+  
+    if (isNaN(newQuantity)) {
+      newQuantity = 0;
+    }
+
+    const newRows = rows.map((row, i) =>
+      i === index ? { ...row, quantity: newQuantity } : row
+    );
+    setRows(newRows);
+  };
+  const handleFile1Change = (
+    index: number,
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const updatedRows = [...rows];
+        updatedRows[index].image1 = reader.result as string;
+        setRows(updatedRows);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleFile2Change = (
+    index: number,
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const updatedRows = [...rows];
+        updatedRows[index].image2 = reader.result as string;
+        setRows(updatedRows);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleFile3Change = (
+    index: number,
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const updatedRows = [...rows];
+        updatedRows[index].image3 = reader.result as string;
+        setRows(updatedRows);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleCreateClothes = () => {
     console.log(rows);
+    
   };
   return (
     <>
@@ -246,14 +327,137 @@ export const CreateClothesModal: React.FC<props> = ({
                                   </td>
                                   <td>
                                     <input
+                                     onChange={(
+                                      e: ChangeEvent<HTMLInputElement>
+                                    ) =>
+                                      handleQuantityChange(index, e.target.value)
+                                    }
                                       type="text"
                                       value={row.quantity}
                                       style={{ width: "100%" }}
                                     />
                                   </td>
-                                  <td>Ảnh 1</td>
-                                  <td>Ảnh 2</td>
-                                  <td>Ảnh 3</td>
+                                  <td>
+                                    {row.image1 === "" ? (
+                                      <>
+                                        {" "}
+                                        <button
+                                          onClick={() => {
+                                            const fileInput =
+                                              fileInput1Refs.current[index];
+                                            if (fileInput) {
+                                              fileInput.click();
+                                            }
+                                          }}
+                                          type="button"
+                                          className="btn btn-block btn-info"
+                                        >
+                                          File
+                                        </button>
+                                        <input
+                                          type="file"
+                                          accept="image/*"
+                                          ref={(el) =>
+                                            (fileInput1Refs.current[index] = el)
+                                          }
+                                          onChange={(e) =>
+                                            handleFile1Change(index, e)
+                                          }
+                                          style={{ display: "none" }}
+                                        />
+                                      </>
+                                    ) : (
+                                      <>
+                                        <img
+                                          src={row.image1}
+                                          alt="Preview"
+                                          style={{
+                                            width: "50px",
+                                            height: "50px",
+                                          }}
+                                        />
+                                      </>
+                                    )}
+                                  </td>
+                                  <td>
+                                    {row.image2 ? (
+                                      <img
+                                        src={row.image2}
+                                        alt="Preview"
+                                        style={{
+                                          width: "50px",
+                                          height: "50px",
+                                        }}
+                                      />
+                                    ) : (
+                                      <>
+                                        <button
+                                          onClick={() => {
+                                            const fileInput =
+                                              fileInput2Refs.current[index];
+                                            if (fileInput) {
+                                              fileInput.click();
+                                            }
+                                          }}
+                                          type="button"
+                                          className="btn btn-block btn-info"
+                                        >
+                                          File
+                                        </button>
+                                        <input
+                                          type="file"
+                                          accept="image/*"
+                                          ref={(el) =>
+                                            (fileInput2Refs.current[index] = el)
+                                          }
+                                          onChange={(e) =>
+                                            handleFile2Change(index, e)
+                                          }
+                                          style={{ display: "none" }}
+                                        />
+                                      </>
+                                    )}
+                                  </td>
+                                  <td>
+                                    {row.image3 ? (
+                                      <img
+                                        src={row.image3}
+                                        alt="Preview"
+                                        style={{
+                                          width: "50px",
+                                          height: "50px",
+                                        }}
+                                      />
+                                    ) : (
+                                      <>
+                                        {" "}
+                                        <button
+                                          onClick={() => {
+                                            const fileInput =
+                                              fileInput3Refs.current[index];
+                                            if (fileInput) {
+                                              fileInput.click();
+                                            }
+                                          }}
+                                          type="button"
+                                          className="btn btn-block btn-info"
+                                        >
+                                          File
+                                        </button>
+                                        <input
+                                          type="file"
+                                          accept="image/*"
+                                          ref={(el) =>
+                                            (fileInput3Refs.current[index] = el)
+                                          }
+                                          onChange={(e) =>
+                                            handleFile3Change(index, e)
+                                          }
+                                          style={{ display: "none" }}
+                                        />
+                                      </>
+                                    )}
+                                  </td>
                                   <td>
                                     <button
                                       onClick={() => handleDeleteRow(index)}
