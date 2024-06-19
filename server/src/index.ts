@@ -23,7 +23,8 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false } // Đặt secure: true nếu sử dụng HTTPS
 }));
-
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 }, cors({ maxAge: 84600 }));

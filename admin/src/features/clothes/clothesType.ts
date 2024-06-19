@@ -1,3 +1,4 @@
+
 export interface Clothes{
     id: string;
     name: string;
@@ -55,3 +56,21 @@ export interface UpdateClothesInput{
 export interface GenerateBarcodeInput {
     oldBarcode? : string[]
 }
+export interface CreateClothesInput {
+    name: string;
+    brand: string;
+    location: string;
+    initPrice: number;
+    price: number;
+    categoryId: string;
+    clothDetails: CreateClothDetailsInput[];
+  }
+  export interface CreateClothDetailsInput {
+    colorId: string;
+    sizeId: string;
+    image1: string;
+    image2: string;
+    image3: string;
+    barcode: string;
+    amount: number;
+  }

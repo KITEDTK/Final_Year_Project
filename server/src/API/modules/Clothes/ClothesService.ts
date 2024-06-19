@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { filterClothes } from "./ClothesTypes";
+import { ClothDetails, CreateClothesInput, filterClothes } from "./ClothesTypes";
 import fs from "fs";
 const excelToJson = require("convert-excel-to-json");
 const prisma = new PrismaClient();
@@ -346,61 +346,103 @@ async function getMaxQuantityClothes() {
   const result = await prisma.clothes.findMany();
   return result.length;
 }
-async function updateSingleClothesInfo(clothesId: string, data: any){
+async function updateSingleClothesInfo(clothesId: string, data: any) {
   const {} = data;
   await prisma.clothes.update({
-    where:{
-      id: clothesId
+    where: {
+      id: clothesId,
     },
-    data: data
+    data: data,
   });
   return getSingleClothesAdmin(clothesId);
 }
-async function generateBarcode(oldBarcode: string[]){
+async function generateBarcode(oldBarcode: string[]) {
   const VNCode = "893";
   const shopCode = "1709";
   let allBarcode = await prisma.clothDetails.findMany({
-    select:{
-      codeBar: true
-    }
+    select: {
+      codeBar: true,
+    },
   });
-  if(oldBarcode.length > 0){
-    oldBarcode.forEach((item)=>{
-      allBarcode.push({codeBar: item});
-    })
+  if (oldBarcode.length > 0) {
+    oldBarcode.forEach((item) => {
+      allBarcode.push({ codeBar: item });
+    });
   }
   let validBarcode: string[] = [];
-  allBarcode.forEach((item)=>{
-    if(item.codeBar?.slice(0,3) === "893" && item.codeBar.slice(4,8)==="1709" && item.codeBar.length === 16){
-      validBarcode.push(item.codeBar.slice(9,14))
+  allBarcode.forEach((item) => {
+    if (
+      item.codeBar?.slice(0, 3) === "893" &&
+      item.codeBar.slice(4, 8) === "1709" &&
+      item.codeBar.length === 16
+    ) {
+      validBarcode.push(item.codeBar.slice(9, 14));
     }
   });
-  let validBarcodeIntegers : number[] = []
-  if(validBarcode.length === 0){
+  let validBarcodeIntegers: number[] = [];
+  if (validBarcode.length === 0) {
     const initialCode = VNCode.concat("", shopCode).concat("", "00000");
     const checkdigit = generateCheckDigit(initialCode);
-    const newBarcode = VNCode.concat(" ", shopCode).concat(" ", "00000").concat(" ", checkdigit);
+    const newBarcode = VNCode.concat(" ", shopCode)
+      .concat(" ", "00000")
+      .concat(" ", checkdigit);
     return newBarcode;
-  }else{
-    validBarcodeIntegers = validBarcode.map(barcode => parseInt(barcode, 10));
+  } else {
+    validBarcodeIntegers = validBarcode.map((barcode) => parseInt(barcode, 10));
   }
-// Kết quả cuối cùng là mảng các số hợp lệ từ 0 đến 99999 không trùng lặp
-const finalValidBarcodes: number[] = [];
+  // Kết quả cuối cùng là mảng các số hợp lệ từ 0 đến 99999 không trùng lặp
+  const finalValidBarcodes: number[] = [];
 
-for (let i = 0; i <= 99999; i++) {
-  // Kiểm tra nếu số không nằm trong khoảng từ 0 đến 99999
-  if (! validBarcodeIntegers.includes(i)) {
-    finalValidBarcodes.push(i);
+  for (let i = 0; i <= 99999; i++) {
+    // Kiểm tra nếu số không nằm trong khoảng từ 0 đến 99999
+    if (!validBarcodeIntegers.includes(i)) {
+      finalValidBarcodes.push(i);
+    }
   }
+
+  // Tìm số nhỏ nhất trong mảng finalValidBarcodes
+  const smallestValidBarcode = Math.min(...finalValidBarcodes);
+  const smallestValidBarcodeString = smallestValidBarcode
+    .toString()
+    .padStart(5, "0");
+  const barcodeWithoutCheckdigit = VNCode.concat("", shopCode).concat(
+    "",
+    smallestValidBarcodeString
+  );
+  const checkdigit = generateCheckDigit(barcodeWithoutCheckdigit);
+  const newBarcode = VNCode.concat(" ", shopCode)
+    .concat(" ", smallestValidBarcodeString)
+    .concat(" ", checkdigit);
+  return newBarcode;
 }
-
-// Tìm số nhỏ nhất trong mảng finalValidBarcodes
-const smallestValidBarcode = Math.min(...finalValidBarcodes);
-const smallestValidBarcodeString = smallestValidBarcode.toString().padStart(5, '0');
-const barcodeWithoutCheckdigit =  VNCode.concat("", shopCode).concat("", smallestValidBarcodeString);
-const checkdigit = generateCheckDigit(barcodeWithoutCheckdigit);
-const newBarcode = VNCode.concat(" ", shopCode).concat(" ", smallestValidBarcodeString).concat(" ", checkdigit);
-return  newBarcode;
+async function createClothes(input: CreateClothesInput){
+  const {name, brand, location, initPrice, price, categoryId, clothDetails} = input;
+  const result = await prisma.clothes.create({
+    data: {
+      name: name,
+      brand: brand,
+      location: location,
+      initPrice: initPrice,
+      price: price,
+      categoryId: categoryId
+    }
+  });
+  const clothDetailsData = clothDetails.map((item: ClothDetails)=>{
+    const {barcode,image1, image2, image3, ...rest} = item;
+    return {
+      ...rest,
+      codeBar: item.barcode,
+      clothId: result.id
+    }
+  })
+  await prisma.clothDetails.createMany({
+    data: clothDetailsData
+  });
+  return await prisma.clothes.findUnique({
+    where:{
+      id: result.id
+    }
+  });
 }
 export default {
   getMaxQuantityClothesByRootCategory,
@@ -414,6 +456,7 @@ export default {
   getSingleClothes,
   generateBarcode,
   getAllClothes,
+  createClothes,
   readExcelFile,
   addComment,
 };

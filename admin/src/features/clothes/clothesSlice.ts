@@ -4,6 +4,7 @@ import axios, { AxiosResponse } from "axios";
 import {
   Clothes,
   ClothesState,
+  CreateClothesInput,
   GenerateBarcodeInput,
   SingleClothes,
   UpdateClothesInput,
@@ -109,6 +110,32 @@ export const fetchGenerateBarcode = createAsyncThunk<
     throw err;
   }
 });
+export const fetchCreateClothes = createAsyncThunk<Clothes,CreateClothesInput>(
+  "clothes/create", async({name, brand, location, initPrice, price, categoryId,clothDetails})=>{
+    try {
+      const response: AxiosResponse<Clothes> = await axios.post(
+        `${BASE_URL}`,
+        {
+          name: name,
+          brand: brand, 
+          location: location,
+          initPrice: initPrice,
+          price: price,
+          categoryId: categoryId,
+          clothDetails: clothDetails
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      console.error("fetching error", err);
+      throw err;
+    }
+  }
+  
+)
 const clothesSlice = createSlice({
   name: "clothes",
   initialState: {

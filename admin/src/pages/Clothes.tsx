@@ -211,6 +211,7 @@ export function Clothes() {
         <CreateClothesModal
           show={showCreateModal}
           handleOnClickCloseModal={handleOnClickCloseCreateModal}
+          setClothesItems={setClothesItems}
         />
       )}
     </>

@@ -131,8 +131,17 @@ async function generateBarcode(req: Request, res: Response){
     console.log(err);
   }
 }
+async function createClothes(req: Request, res: Response){
+  try {
+    const result = await ClothesService.createClothes(req.body);
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
 export default {
   getMaxQuantityClothesByRootCategory,
+  createClothes,
   generateBarcode,
   getMaxQuantityClothes,
   getAllClothesAdmin,

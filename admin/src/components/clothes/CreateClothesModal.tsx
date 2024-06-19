@@ -6,26 +6,31 @@ import { fetchAllColors } from "../../features/colors/colorsSlice";
 import { fetchAllSizes } from "../../features/sizes/sizesSlice";
 import { useState, useRef } from "react";
 import { ChangeEvent } from "react";
+import { Clothes } from "../../features/clothes/clothesType";
 import {
+  fetchCreateClothes,
   fetchGenerateBarcode,
   resetBarcode,
 } from "../../features/clothes/clothesSlice";
+import { showToast } from "../../utils/showToast";
 interface props {
   show: boolean;
   handleOnClickCloseModal: () => void;
+  setClothesItems: (items: (prevItems: Clothes[]) => Clothes[]) => void;
 }
 interface Rows {
-  color: string;
-  size: string;
-  image1: string;
-  image2: string;
-  image3: string;
+  colorId: string;
+  sizeId: string;
+  image1: string ;
+  image2: string ;
+  image3: string ;
   barcode: string;
   quantity: number;
 }
 export const CreateClothesModal: React.FC<props> = ({
   show,
   handleOnClickCloseModal,
+  setClothesItems,
 }) => {
   const dispatch = useAppDispatch();
   const colors = useAppSelector((state) => state.colors.colors);
@@ -43,6 +48,16 @@ export const CreateClothesModal: React.FC<props> = ({
   const categoriesModal = useAppSelector(
     (state) => state.categories.categoriesModal
   );
+  const [clothesName, setClothesName] = useState<string>("");
+  const [clothesBrand, setClothesBrand] = useState<string>("");
+  const [clothesLocation, setClothesLocation] = useState<string>("");
+  const [clothesPrice, setClothesPrice] = useState<number>(0);
+  const [clothesInitPrice, setClothesInitPrice] = useState<number>(0);
+  const [clothesCategoryId, setClothesCategoryId] = useState<string>("");
+  const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setClothesCategoryId(event.target.value);
+  };
+
   const fileInput1Refs = useRef<(HTMLInputElement | null)[]>([]);
   const fileInput2Refs = useRef<(HTMLInputElement | null)[]>([]);
   const fileInput3Refs = useRef<(HTMLInputElement | null)[]>([]);
@@ -55,8 +70,8 @@ export const CreateClothesModal: React.FC<props> = ({
         setRows([
           ...rows,
           {
-            color: colors[0].name,
-            size: sizes[0].name,
+            colorId: colors[0].id,
+            sizeId: sizes[0].id,
             image1: "",
             image2: "",
             image3: "",
@@ -70,16 +85,16 @@ export const CreateClothesModal: React.FC<props> = ({
   const handleDeleteRow = (index: any) => {
     setRows(rows.filter((_, i) => i !== index));
   };
-  const handleColorChange = (index: number, newColor: string) => {
+  const handleColorChange = (index: number, newColorId: string) => {
     const newRows = rows.map((row, i) =>
-      i === index ? { ...row, color: newColor } : row
+      i === index ? { ...row, colorId: newColorId } : row
     );
     setRows(newRows);
   };
 
-  const handleSizeChange = (index: number, newSize: string) => {
+  const handleSizeChange = (index: number, newSizeId: string) => {
     const newRows = rows.map((row, i) =>
-      i === index ? { ...row, size: newSize } : row
+      i === index ? { ...row, sizeId: newSizeId } : row
     );
     setRows(newRows);
   };
@@ -144,7 +159,54 @@ export const CreateClothesModal: React.FC<props> = ({
   };
 
   const handleCreateClothes = () => {
-    console.log(rows);
+    const data = {
+      name: clothesName,
+      brand: clothesBrand,
+      location: clothesLocation,
+      initPrice: clothesInitPrice,
+      price: clothesPrice,
+      categoryId: clothesCategoryId,
+      clothDetails: rows.map((item) => ({
+        colorId: item.colorId,
+        sizeId: item.sizeId,
+        image1: item.image1 ,
+        image2: item.image2 ,
+        image3: item.image3 ,
+        barcode: item.barcode,
+        amount: item.quantity,
+      })),
+    };
+
+    console.log(data);
+
+    // Kiểm tra nếu sản phẩm đã tồn tại trong clothesItems
+
+    if (clothesName === '' || clothesBrand === '' || clothesLocation === '') {
+      showToast('Vui lòng điền đầy đủ thông tin', 'error');
+    }
+     else {
+      dispatch(fetchCreateClothes(data)).then((res: any) => {
+        setClothesItems((prev) => {
+          if (Array.isArray(res.payload)) {
+            const newItems = res.payload.filter(
+              (newItem: Clothes) => !prev.some((item) => item.id === newItem.id)
+            );
+            return [...prev, ...newItems];
+          } else {
+            const newItem = res.payload;
+            const checkExist = prev.find((item) => item.id === newItem.id);
+            if (checkExist) {
+              return [...prev];
+            } else {
+              return [...prev, newItem];
+            }
+          }
+        });
+        showToast('Sản phẩm đã được thêm thành công', 'success');
+      }).catch(() => {
+        showToast('Đã xảy ra lỗi khi thêm sản phẩm', 'error');
+      });
+    }
   };
   return (
     <>
@@ -203,7 +265,14 @@ export const CreateClothesModal: React.FC<props> = ({
                       <div className="col-sm-6">
                         <div className="form-group">
                           <label>Tên mặt hàng</label>
-                          <input type="text" className="form-control" />
+                          <input
+                            type="text"
+                            className="form-control"
+                            onChange={(event) =>
+                              setClothesName(event.target.value)
+                            }
+                            value={clothesName}
+                          />
                         </div>
                       </div>
                     </div>
@@ -211,13 +280,27 @@ export const CreateClothesModal: React.FC<props> = ({
                       <div className="col-sm-6">
                         <div className="form-group">
                           <label>Hãng</label>
-                          <input type="text" className="form-control" />
+                          <input
+                            type="text"
+                            className="form-control"
+                            onChange={(event) =>
+                              setClothesBrand(event.target.value)
+                            }
+                            value={clothesBrand}
+                          />
                         </div>
                       </div>
                       <div className="col-sm-6">
                         <div className="form-group">
                           <label>Vị trí</label>
-                          <input type="text" className="form-control" />
+                          <input
+                            type="text"
+                            className="form-control"
+                            onChange={(event) =>
+                              setClothesLocation(event.target.value)
+                            }
+                            value={clothesLocation}
+                          />
                         </div>
                       </div>
                     </div>
@@ -225,13 +308,27 @@ export const CreateClothesModal: React.FC<props> = ({
                       <div className="col-sm-6">
                         <div className="form-group">
                           <label>Giá nhập</label>
-                          <input type="text" className="form-control" />
+                          <input
+                            type="text"
+                            className="form-control"
+                            onChange={(event) =>
+                              setClothesInitPrice(parseInt(event.target.value))
+                            }
+                            value={clothesInitPrice}
+                          />
                         </div>
                       </div>
                       <div className="col-sm-6">
                         <div className="form-group">
                           <label>Giá bán</label>
-                          <input type="text" className="form-control" />
+                          <input
+                            type="text"
+                            className="form-control"
+                            onChange={(event) =>
+                              setClothesPrice(parseInt(event.target.value))
+                            }
+                            value={clothesPrice}
+                          />
                         </div>
                       </div>
                     </div>
@@ -239,10 +336,14 @@ export const CreateClothesModal: React.FC<props> = ({
                       <div className="col-sm-6">
                         <div className="form-group">
                           <label>Danh mục</label>
-                          <select className="form-control">
+                          <select
+                            onChange={handleCategoryChange}
+                            value={clothesCategoryId}
+                            className="form-control"
+                          >
                             {categoriesModal &&
                               categoriesModal.map((item) => (
-                                <option key={item.id} value={item.name}>
+                                <option key={item.id} value={item.id}>
                                   {item.name}
                                 </option>
                               ))}
@@ -297,13 +398,11 @@ export const CreateClothesModal: React.FC<props> = ({
                                       }
                                       style={{ width: "100%" }}
                                       className="form-control"
+                                      value={row.colorId}
                                     >
                                       {colors &&
                                         colors.map((item) => (
-                                          <option
-                                            key={item.id}
-                                            value={item.name}
-                                          >
+                                          <option key={item.id} value={item.id}>
                                             {item.name}
                                           </option>
                                         ))}
@@ -317,13 +416,11 @@ export const CreateClothesModal: React.FC<props> = ({
                                         handleSizeChange(index, e.target.value)
                                       }
                                       className="form-control"
+                                      value={row.sizeId}
                                     >
                                       {sizes &&
                                         sizes.map((item) => (
-                                          <option
-                                            key={item.id}
-                                            value={item.name}
-                                          >
+                                          <option key={item.id} value={item.id}>
                                             {item.name}
                                           </option>
                                         ))}
