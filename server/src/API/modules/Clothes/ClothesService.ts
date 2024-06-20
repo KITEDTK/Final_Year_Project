@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { ClothDetails, CreateClothesInput, filterClothes } from "./ClothesTypes";
 import fs from "fs";
+import * as path from 'path';
 const excelToJson = require("convert-excel-to-json");
 const prisma = new PrismaClient();
 import { generateCheckDigit } from "../../../utils/generateCheckDigit";
@@ -415,7 +416,7 @@ async function generateBarcode(oldBarcode: string[]) {
     .concat(" ", checkdigit);
   return newBarcode;
 }
-async function createClothes(input: CreateClothesInput){
+async function createClothes(input: CreateClothesInput , req: any){
   const {name, brand, location, initPrice, price, categoryId, clothDetails} = input;
   const result = await prisma.clothes.create({
     data: {
@@ -427,14 +428,22 @@ async function createClothes(input: CreateClothesInput){
       categoryId: categoryId
     }
   });
-  const clothDetailsData = clothDetails.map((item: ClothDetails)=>{
-    const {barcode,image1, image2, image3, ...rest} = item;
+  const clothDetailsData = await Promise.all(clothDetails.map(async (item) => {
+    const { barcode, image1, image2, image3, ...rest } = item;
+     // Save images to a folder and get paths
+     const imagePath1 = await saveImage(image1); // Implement saveImage function for each image
+     const imagePath2 = await saveImage(image2);
+     const imagePath3 = await saveImage(image3);
     return {
       ...rest,
-      codeBar: item.barcode,
-      clothId: result.id
-    }
-  })
+      barcode: barcode,
+      clothId: result.id,
+      image1: imagePath1,
+      image2: imagePath2,
+      image3: imagePath3// Lưu đường dẫn của các tệp hình ảnh vào cơ sở dữ liệu
+    };
+  }));
+
   await prisma.clothDetails.createMany({
     data: clothDetailsData
   });
@@ -443,6 +452,19 @@ async function createClothes(input: CreateClothesInput){
       id: result.id
     }
   });
+}
+
+async function saveImage(image: any) {
+  const { path: tempPath, filename } = image; // Assuming image is the file object from multer
+
+  // Construct destination path (where to save the file)
+  const targetPath = path.join(__dirname, 'uploads/', filename);
+
+  // Move the uploaded file to the destination directory
+  await fs.promises.rename(tempPath, targetPath);
+
+  // Return the path where the file has been saved
+  return `/uploads/${filename}`; // Return the relative path to store in database
 }
 export default {
   getMaxQuantityClothesByRootCategory,

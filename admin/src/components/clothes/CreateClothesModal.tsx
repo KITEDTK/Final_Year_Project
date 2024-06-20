@@ -21,9 +21,9 @@ interface props {
 interface Rows {
   colorId: string;
   sizeId: string;
-  image1: string ;
-  image2: string ;
-  image3: string ;
+  image1: File | null;
+  image2: File | null ;
+  image3: File | null;
   barcode: string;
   quantity: number;
 }
@@ -72,9 +72,9 @@ export const CreateClothesModal: React.FC<props> = ({
           {
             colorId: colors[0].id,
             sizeId: sizes[0].id,
-            image1: "",
-            image2: "",
-            image3: "",
+            image1: null,
+            image2: null,
+            image3: null,
             barcode: res.payload as string,
             quantity: 0,
           },
@@ -110,54 +110,38 @@ export const CreateClothesModal: React.FC<props> = ({
     );
     setRows(newRows);
   };
-  const handleFile1Change = (
-    index: number,
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleFile1Change = (index: number, event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const updatedRows = [...rows];
-        updatedRows[index].image1 = reader.result as string;
-        setRows(updatedRows);
-      };
-      reader.readAsDataURL(file);
+      const updatedRows = [...rows];
+      updatedRows[index].image1 = file;
+      setRows(updatedRows);
     }
   };
 
-  const handleFile2Change = (
-    index: number,
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleFile2Change = (index: number, event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const updatedRows = [...rows];
-        updatedRows[index].image2 = reader.result as string;
-        setRows(updatedRows);
-      };
-      reader.readAsDataURL(file);
+      const updatedRows = [...rows];
+      updatedRows[index].image2 = file;
+      setRows(updatedRows);
     }
   };
 
-  const handleFile3Change = (
-    index: number,
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleFile3Change = (index: number, event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const updatedRows = [...rows];
-        updatedRows[index].image3 = reader.result as string;
-        setRows(updatedRows);
-      };
-      reader.readAsDataURL(file);
+      const updatedRows = [...rows];
+      updatedRows[index].image3 = file;
+      setRows(updatedRows);
     }
   };
-
+  const getImageUrl = (file: File | null): string | undefined => {
+    if (file) {
+      return URL.createObjectURL(file);
+    }
+    return undefined;
+  };
   const handleCreateClothes = () => {
     const data = {
       name: clothesName,
@@ -169,9 +153,9 @@ export const CreateClothesModal: React.FC<props> = ({
       clothDetails: rows.map((item) => ({
         colorId: item.colorId,
         sizeId: item.sizeId,
-        image1: item.image1 ,
-        image2: item.image2 ,
-        image3: item.image3 ,
+        image1: item.image1,
+        image2: item.image2,
+        image3: item.image3,
         barcode: item.barcode,
         amount: item.quantity,
       })),
@@ -185,6 +169,7 @@ export const CreateClothesModal: React.FC<props> = ({
       showToast('Vui lòng điền đầy đủ thông tin', 'error');
     }
      else {
+      
       dispatch(fetchCreateClothes(data)).then((res: any) => {
         setClothesItems((prev) => {
           if (Array.isArray(res.payload)) {
@@ -449,7 +434,7 @@ export const CreateClothesModal: React.FC<props> = ({
                                     />
                                   </td>
                                   <td>
-                                    {row.image1 === "" ? (
+                                    {row.image1 === null ? (
                                       <>
                                         {" "}
                                         <button
@@ -480,7 +465,7 @@ export const CreateClothesModal: React.FC<props> = ({
                                     ) : (
                                       <>
                                         <img
-                                          src={row.image1}
+                                          src={getImageUrl(row.image1)}
                                           alt="Preview"
                                           style={{
                                             width: "50px",
@@ -493,7 +478,7 @@ export const CreateClothesModal: React.FC<props> = ({
                                   <td>
                                     {row.image2 ? (
                                       <img
-                                        src={row.image2}
+                                        src={getImageUrl(row.image2)}
                                         alt="Preview"
                                         style={{
                                           width: "50px",
@@ -532,7 +517,7 @@ export const CreateClothesModal: React.FC<props> = ({
                                   <td>
                                     {row.image3 ? (
                                       <img
-                                        src={row.image3}
+                                        src={getImageUrl(row.image3)}
                                         alt="Preview"
                                         style={{
                                           width: "50px",

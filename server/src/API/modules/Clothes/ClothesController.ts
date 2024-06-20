@@ -133,7 +133,7 @@ async function generateBarcode(req: Request, res: Response){
 }
 async function createClothes(req: Request, res: Response){
   try {
-    const result = await ClothesService.createClothes(req.body);
+    const result = await ClothesService.createClothes(req.body, req);
     res.json(result);
   } catch (err) {
     console.log(err);
