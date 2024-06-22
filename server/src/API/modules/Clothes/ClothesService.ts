@@ -428,25 +428,6 @@ async function createClothes(input: CreateClothesInput , req: any){
       categoryId: categoryId
     }
   });
-  const clothDetailsData = await Promise.all(clothDetails.map(async (item) => {
-    const { barcode, image1, image2, image3, ...rest } = item;
-     // Save images to a folder and get paths
-     const imagePath1 = await saveImage(image1); // Implement saveImage function for each image
-     const imagePath2 = await saveImage(image2);
-     const imagePath3 = await saveImage(image3);
-    return {
-      ...rest,
-      barcode: barcode,
-      clothId: result.id,
-      image1: imagePath1,
-      image2: imagePath2,
-      image3: imagePath3// Lưu đường dẫn của các tệp hình ảnh vào cơ sở dữ liệu
-    };
-  }));
-
-  await prisma.clothDetails.createMany({
-    data: clothDetailsData
-  });
   return await prisma.clothes.findUnique({
     where:{
       id: result.id
@@ -454,18 +435,6 @@ async function createClothes(input: CreateClothesInput , req: any){
   });
 }
 
-async function saveImage(image: any) {
-  const { path: tempPath, filename } = image; // Assuming image is the file object from multer
-
-  // Construct destination path (where to save the file)
-  const targetPath = path.join(__dirname, 'uploads/', filename);
-
-  // Move the uploaded file to the destination directory
-  await fs.promises.rename(tempPath, targetPath);
-
-  // Return the path where the file has been saved
-  return `/uploads/${filename}`; // Return the relative path to store in database
-}
 export default {
   getMaxQuantityClothesByRootCategory,
   getClothesByRootCategory,

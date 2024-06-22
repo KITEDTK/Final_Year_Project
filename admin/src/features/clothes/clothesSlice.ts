@@ -111,7 +111,7 @@ export const fetchGenerateBarcode = createAsyncThunk<
   }
 });
 export const fetchCreateClothes = createAsyncThunk<Clothes,CreateClothesInput>(
-  "clothes/create", async({name, brand, location, initPrice, price, categoryId,clothDetails})=>{
+  "clothes/create", async({name, brand, location, initPrice, price, categoryId})=>{
     try {
       const response: AxiosResponse<Clothes> = await axios.post(
         `${BASE_URL}`,
@@ -122,7 +122,6 @@ export const fetchCreateClothes = createAsyncThunk<Clothes,CreateClothesInput>(
           initPrice: initPrice,
           price: price,
           categoryId: categoryId,
-          clothDetails: clothDetails
         },
         {
           headers: { "Content-Type": "application/json" },

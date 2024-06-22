@@ -63,7 +63,6 @@ export interface CreateClothesInput {
     initPrice: number;
     price: number;
     categoryId: string;
-    clothDetails: CreateClothDetailsInput[];
   }
   export interface CreateClothDetailsInput {
     colorId: string;

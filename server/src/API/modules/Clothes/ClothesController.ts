@@ -139,7 +139,15 @@ async function createClothes(req: Request, res: Response){
     console.log(err);
   }
 }
+async function createClothDetails(req: Request, res: Response){
+  try {
+    res.json(req.body);
+  } catch (err) {
+    console.log(err);
+  }
+}
 export default {
+  createClothDetails,
   getMaxQuantityClothesByRootCategory,
   createClothes,
   generateBarcode,

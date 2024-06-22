@@ -1,6 +1,6 @@
 import { Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { useEffect } from "react";
+import { FormEvent, useEffect } from "react";
 import { fetchModalCategories } from "../../features/categories/categoriesSlice";
 import { fetchAllColors } from "../../features/colors/colorsSlice";
 import { fetchAllSizes } from "../../features/sizes/sizesSlice";
@@ -13,6 +13,7 @@ import {
   resetBarcode,
 } from "../../features/clothes/clothesSlice";
 import { showToast } from "../../utils/showToast";
+import axios from "axios";
 interface props {
   show: boolean;
   handleOnClickCloseModal: () => void;
@@ -22,7 +23,7 @@ interface Rows {
   colorId: string;
   sizeId: string;
   image1: File | null;
-  image2: File | null ;
+  image2: File | null;
   image3: File | null;
   barcode: string;
   quantity: number;
@@ -110,7 +111,10 @@ export const CreateClothesModal: React.FC<props> = ({
     );
     setRows(newRows);
   };
-  const handleFile1Change = (index: number, event: ChangeEvent<HTMLInputElement>) => {
+  const handleFile1Change = (
+    index: number,
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
       const updatedRows = [...rows];
@@ -119,7 +123,10 @@ export const CreateClothesModal: React.FC<props> = ({
     }
   };
 
-  const handleFile2Change = (index: number, event: ChangeEvent<HTMLInputElement>) => {
+  const handleFile2Change = (
+    index: number,
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
       const updatedRows = [...rows];
@@ -128,7 +135,10 @@ export const CreateClothesModal: React.FC<props> = ({
     }
   };
 
-  const handleFile3Change = (index: number, event: ChangeEvent<HTMLInputElement>) => {
+  const handleFile3Change = (
+    index: number,
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
       const updatedRows = [...rows];
@@ -142,7 +152,8 @@ export const CreateClothesModal: React.FC<props> = ({
     }
     return undefined;
   };
-  const handleCreateClothes = () => {
+  const handleCreateClothes = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     const data = {
       name: clothesName,
       brand: clothesBrand,
@@ -150,47 +161,55 @@ export const CreateClothesModal: React.FC<props> = ({
       initPrice: clothesInitPrice,
       price: clothesPrice,
       categoryId: clothesCategoryId,
-      clothDetails: rows.map((item) => ({
-        colorId: item.colorId,
-        sizeId: item.sizeId,
-        image1: item.image1,
-        image2: item.image2,
-        image3: item.image3,
-        barcode: item.barcode,
-        amount: item.quantity,
-      })),
     };
 
-    console.log(data);
-
-    // Kiểm tra nếu sản phẩm đã tồn tại trong clothesItems
-
-    if (clothesName === '' || clothesBrand === '' || clothesLocation === '') {
-      showToast('Vui lòng điền đầy đủ thông tin', 'error');
-    }
-     else {
-      
-      dispatch(fetchCreateClothes(data)).then((res: any) => {
-        setClothesItems((prev) => {
-          if (Array.isArray(res.payload)) {
-            const newItems = res.payload.filter(
-              (newItem: Clothes) => !prev.some((item) => item.id === newItem.id)
-            );
-            return [...prev, ...newItems];
-          } else {
-            const newItem = res.payload;
-            const checkExist = prev.find((item) => item.id === newItem.id);
-            if (checkExist) {
-              return [...prev];
-            } else {
-              return [...prev, newItem];
-            }
+    if (clothesName === "" || clothesBrand === "" || clothesLocation === "") {
+      showToast("Vui lòng điền đầy đủ thông tin", "error");
+    } else {
+      dispatch(fetchCreateClothes({ ...data })).then((res: any) => {
+        rows.forEach(async (item) => {
+          const formData = new FormData();
+          formData.append("colorId", item.colorId);
+          formData.append("sizeId", item.sizeId);
+          if (item.image1 !== null) {
+            formData.append("image1", item.image1);
           }
+          if (item.image2 !== null) {
+            formData.append("image2", item.image2);
+          }
+          if (item.image3 !== null) {
+            formData.append("image3", item.image3);
+          }
+          formData.append("amount", item.quantity.toString());
+          formData.append("barcode", item.barcode);
+          await axios.post(`http://localhost:4000/clothes/admin/${res.payload.id}/clothDetails`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
         });
-        showToast('Sản phẩm đã được thêm thành công', 'success');
-      }).catch(() => {
-        showToast('Đã xảy ra lỗi khi thêm sản phẩm', 'error');
       });
+      // .then((res: any) => {
+      //   setClothesItems((prev) => {
+      //     if (Array.isArray(res.payload)) {
+      //       const newItems = res.payload.filter(
+      //         (newItem: Clothes) => !prev.some((item) => item.id === newItem.id)
+      //       );
+      //       return [...prev, ...newItems];
+      //     } else {
+      //       const newItem = res.payload;
+      //       const checkExist = prev.find((item) => item.id === newItem.id);
+      //       if (checkExist) {
+      //         return [...prev];
+      //       } else {
+      //         return [...prev, newItem];
+      //       }
+      //     }
+      //   });
+      //   showToast('Sản phẩm đã được thêm thành công', 'success');
+      // }).catch(() => {
+      //   showToast('Đã xảy ra lỗi khi thêm sản phẩm', 'error');
+      // });
     }
   };
   return (
@@ -465,7 +484,9 @@ export const CreateClothesModal: React.FC<props> = ({
                                     ) : (
                                       <>
                                         <img
-                                          src={getImageUrl(row.image1)}
+                                          src={
+                                            getImageUrl(row.image1) || undefined
+                                          }
                                           alt="Preview"
                                           style={{
                                             width: "50px",
@@ -478,7 +499,9 @@ export const CreateClothesModal: React.FC<props> = ({
                                   <td>
                                     {row.image2 ? (
                                       <img
-                                        src={getImageUrl(row.image2)}
+                                        src={
+                                          getImageUrl(row.image2) || undefined
+                                        }
                                         alt="Preview"
                                         style={{
                                           width: "50px",
@@ -517,7 +540,9 @@ export const CreateClothesModal: React.FC<props> = ({
                                   <td>
                                     {row.image3 ? (
                                       <img
-                                        src={getImageUrl(row.image3)}
+                                        src={
+                                          getImageUrl(row.image3) || undefined
+                                        }
                                         alt="Preview"
                                         style={{
                                           width: "50px",
