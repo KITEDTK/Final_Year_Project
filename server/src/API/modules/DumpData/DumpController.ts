@@ -41,10 +41,19 @@ async function updateClothes(req: Request, res: Response) {
     console.log(err);
   }
 }
+async function deleteClothesDump(req: Request, res: Response){
+  try {
+    const result = await DumpService.deleteDumpClothes();
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
 export default {
   dumpCategories,
   dumpClothes,
   dumpClothDetails,
   updateCategories,
-  updateClothes
+  updateClothes,
+  deleteClothesDump
 };

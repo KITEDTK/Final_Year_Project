@@ -141,7 +141,18 @@ async function createClothes(req: Request, res: Response){
 }
 async function createClothDetails(req: Request, res: Response){
   try {
-    res.json(req.body);
+    const {image1Name, image2Name, image3Name,amount, ...rest  } = req.body;
+    const quantity = parseInt(amount,10);
+    const data = {
+      ...rest,
+      image1: image1Name,
+      image2: image2Name,
+      image3: image3Name,
+      amount: quantity
+    }
+    const {clothesId} = req.params;
+    const result = await ClothesService.createClothesDetail(clothesId, data);
+    res.json(result);
   } catch (err) {
     console.log(err);
   }

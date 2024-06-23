@@ -1,6 +1,6 @@
 import { Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { FormEvent, useEffect } from "react";
+import { useEffect } from "react";
 import { fetchModalCategories } from "../../features/categories/categoriesSlice";
 import { fetchAllColors } from "../../features/colors/colorsSlice";
 import { fetchAllSizes } from "../../features/sizes/sizesSlice";
@@ -152,8 +152,7 @@ export const CreateClothesModal: React.FC<props> = ({
     }
     return undefined;
   };
-  const handleCreateClothes = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleCreateClothes = () => {
     const data = {
       name: clothesName,
       brand: clothesBrand,
@@ -167,18 +166,38 @@ export const CreateClothesModal: React.FC<props> = ({
       showToast("Vui lòng điền đầy đủ thông tin", "error");
     } else {
       dispatch(fetchCreateClothes({ ...data })).then((res: any) => {
+        setClothesItems((prev) => {
+          if (Array.isArray(res.payload)) {
+            const newItems = res.payload.filter(
+              (newItem: Clothes) => !prev.some((item) => item.id === newItem.id)
+            );
+            return [...prev, ...newItems];
+          } else {
+            const newItem = res.payload;
+            const checkExist = prev.find((item) => item.id === newItem.id);
+            if (checkExist) {
+              return [...prev];
+            } else {
+              return [...prev, newItem];
+            }
+          }
+        });
+        showToast('Sản phẩm đã được thêm thành công', 'success');
         rows.forEach(async (item) => {
           const formData = new FormData();
           formData.append("colorId", item.colorId);
           formData.append("sizeId", item.sizeId);
           if (item.image1 !== null) {
             formData.append("image1", item.image1);
+            formData.append("image1Name", item.image1.name)
           }
           if (item.image2 !== null) {
             formData.append("image2", item.image2);
+            formData.append("image2Name", item.image2.name);
           }
           if (item.image3 !== null) {
             formData.append("image3", item.image3);
+            formData.append("image3Name", item.image3.name);
           }
           formData.append("amount", item.quantity.toString());
           formData.append("barcode", item.barcode);
@@ -188,28 +207,8 @@ export const CreateClothesModal: React.FC<props> = ({
             },
           });
         });
+        handleOnClickCloseModal();
       });
-      // .then((res: any) => {
-      //   setClothesItems((prev) => {
-      //     if (Array.isArray(res.payload)) {
-      //       const newItems = res.payload.filter(
-      //         (newItem: Clothes) => !prev.some((item) => item.id === newItem.id)
-      //       );
-      //       return [...prev, ...newItems];
-      //     } else {
-      //       const newItem = res.payload;
-      //       const checkExist = prev.find((item) => item.id === newItem.id);
-      //       if (checkExist) {
-      //         return [...prev];
-      //       } else {
-      //         return [...prev, newItem];
-      //       }
-      //     }
-      //   });
-      //   showToast('Sản phẩm đã được thêm thành công', 'success');
-      // }).catch(() => {
-      //   showToast('Đã xảy ra lỗi khi thêm sản phẩm', 'error');
-      // });
     }
   };
   return (

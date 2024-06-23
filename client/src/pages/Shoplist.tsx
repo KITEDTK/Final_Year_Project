@@ -59,10 +59,12 @@ export const Shoplist = () => {
       }));
     }
   }, [category, page, dispatch]);
-  useEffect(() => {
+  useEffect(()=>{
     if(page === 0){
       setClothesItems(clothes);
     }
+  },[page, clothes]);
+  useEffect(() => {
     if (clothes.length > 0) {
       setClothesItems((prevItems) => {
         // Tạo một bộ chứa các ID hoặc các đặc tính của prevItems để kiểm tra trùng lặp
@@ -74,14 +76,14 @@ export const Shoplist = () => {
 
         // Kiểm tra xem có đạt đến maxQuantityClothesByCategory không
         if (updatedItems.length >= maxQuantityClothesByCategory) {
-          dispatch(resetClothes());
+          // dispatch(resetClothes());
           setHasMore(false);
         }
         
         return updatedItems;
       });
     }
-  }, [clothes, maxQuantityClothesByCategory, dispatch, category,page]);
+  }, [clothes, maxQuantityClothesByCategory, dispatch, category]);
   return (
     <>
       <InfiniteScroll
@@ -135,7 +137,7 @@ export const Shoplist = () => {
                   <div className="toolbox">
                     <div className="toolbox-left">
                       <div className="toolbox-info">
-                        Showing <span>9 of 56</span> Products
+                        Hiển thị <span>{clothesItems.length} trong số {maxQuantityClothesByCategory}</span> sản phẩm
                       </div>
                       {/* End .toolbox-info */}
                     </div>

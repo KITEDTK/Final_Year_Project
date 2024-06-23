@@ -83,4 +83,22 @@ async function dumpClothDetails(){
     });
     return dump;
 }
-export default {dumpCategories, dumpClothes, dumpClothDetails, updateCategories, updateClothes};
+async function deleteDumpClothes(){
+    const clothesWithoutDetails = await prisma.clothes.findMany({
+        where:{
+            clothDetails:{
+                none:{}
+            }
+        }
+    });
+    const clothesIds = clothesWithoutDetails.map((item)=> item.id);
+    await prisma.clothes.deleteMany({
+        where:{
+            id: {
+                in: clothesIds
+            }
+        }
+    })
+    return clothesWithoutDetails;
+}
+export default {dumpCategories, dumpClothes, dumpClothDetails, updateCategories, updateClothes,deleteDumpClothes};

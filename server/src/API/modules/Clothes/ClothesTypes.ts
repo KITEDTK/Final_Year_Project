@@ -16,9 +16,9 @@ export interface CreateClothesInput {
 export interface ClothDetails {
   colorId: string;
   sizeId: string;
-  image1: File;
-  image2: File;
-  image3: File;
+  image1: string;
+  image2: string;
+  image3: string;
   barcode: string;
   amount: number;
 }

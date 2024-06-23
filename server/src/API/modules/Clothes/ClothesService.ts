@@ -434,13 +434,24 @@ async function createClothes(input: CreateClothesInput , req: any){
     }
   });
 }
-
+async function createClothesDetail( clothesId: string,input: ClothDetails){
+  const {barcode,...rest} = input;
+  const result = await prisma.clothDetails.create({
+    data:{
+      clothId: clothesId,
+      codeBar: barcode,
+      ...rest
+    }
+  });
+  return result;
+}
 export default {
   getMaxQuantityClothesByRootCategory,
   getClothesByRootCategory,
   updateSingleClothesInfo,
   getSingleClothesAdmin,
   getMaxQuantityClothes,
+  createClothesDetail,
   getAllClothesDetail,
   getAllClothesAdmin,
   exportClothesToCSV,
