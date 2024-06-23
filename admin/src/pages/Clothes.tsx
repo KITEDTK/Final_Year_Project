@@ -4,7 +4,6 @@ import {
   fetchAllClothes,
   fetchMaxQuantityClothes,
   fetchSingleClothes,
-  resetClothes,
 } from "../features/clothes/clothesSlice";
 import type { Clothes } from "../features/clothes/clothesType";
 import { removeColFromTables } from "../utils/removeColFromTable";
@@ -14,7 +13,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { CreateClothesModal } from "../components/clothes/CreateClothesModal";
 export function Clothes() {
   const dispatch = useAppDispatch();
-  const clothes = useAppSelector((state) => state.clothes.clothes);
   const singleClothes = useAppSelector((state) => state.clothes.singleClothes);
   const [page, setPage] = useState<number>(0);
   const [clothesItems, setClothesItems] = useState<Clothes[]>([]);
@@ -58,21 +56,19 @@ export function Clothes() {
     dispatch(fetchMaxQuantityClothes());
   }, [dispatch]);
   useEffect(() => {
-    dispatch(fetchAllClothes(page));
+    dispatch(fetchAllClothes(page)).then((res: any)=>{
+      if(page === 0){
+        setClothesItems(res.payload);
+      }else{
+        setClothesItems((prev)=>[...prev, ...res.payload]);
+      }
+    });
   }, [dispatch, page]);
-  useEffect(() => {
-    if (clothes.length > 0) {
-      setClothesItems((prevItems) => {
-        const updatedItems = [...prevItems, ...clothes];
-        if (updatedItems.length >= maxClothesQuantity) {
-          setHasMore(false);
-          dispatch(resetClothes()); // nếu đã load max giá trị thì reset clothes để tránh reload lại trang thì lấy lại dữ liệu cũ
-        }
-        return updatedItems; //trả về giá trị mới đã cập nhật
-      });
+  useEffect(()=>{
+    if(clothesItems.length === maxClothesQuantity){
+      setHasMore(false);
     }
-  }, [clothes, maxClothesQuantity, dispatch]);
-
+  },[clothesItems, maxClothesQuantity])
   const fetchMoreData = () => {
     setPage((prevPage) => prevPage + 1);
   };

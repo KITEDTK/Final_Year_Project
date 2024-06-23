@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { fetchFilterClothes, fetchMaxClothesQuantity, resetClothes } from "../features/products/clothesSlice";
+import {
+  fetchFilterClothes,
+  fetchMaxClothesQuantity,
+  resetClothes,
+} from "../features/products/clothesSlice";
 import { SingleClothShoplist } from "../components/products/SingleClothShoplist";
 import { FilterSize } from "../components/sizes/FilterSize";
 import { FilterColor } from "../components/colors/FilterColor";
@@ -7,11 +11,13 @@ import { FilterCategory } from "../components/categories/FilterCategory";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { ClothesFilter } from "../features/products/clothesTypes";
 import InfiniteScroll from "react-infinite-scroll-component";
+
 export const Shoplist = () => {
   const dispatch = useAppDispatch();
   const category = useAppSelector((state) => state.categories.category);
-  const clothes = useAppSelector((state) => state.clothes.clothes);
-  const maxQuantityClothesByCategory = useAppSelector((state) => state.clothes.maxQuantityByCategory);
+  const maxQuantityClothesByCategory = useAppSelector(
+    (state) => state.clothes.maxQuantityByCategory
+  );
 
   const [clothesItems, setClothesItems] = useState<ClothesFilter[]>([]);
   const [hasMore, setHasMore] = useState<boolean>(true);
@@ -39,7 +45,6 @@ export const Shoplist = () => {
     }
   };
 
-  // Reset clothes data, page, and hasMore flag when category changes
   useEffect(() => {
     if (category) {
       dispatch(resetClothes());
@@ -49,41 +54,27 @@ export const Shoplist = () => {
       dispatch(fetchMaxClothesQuantity(category.id));
     }
   }, [category, dispatch]);
-
-  // Fetch clothes when category or page changes
   useEffect(() => {
     if (category) {
-      dispatch(fetchFilterClothes({
-        rootCategoryId: category.id ,
-        page: page,
-      }));
-    }
-  }, [category, page, dispatch]);
-  useEffect(()=>{
-    if(page === 0){
-      setClothesItems(clothes);
-    }
-  },[page, clothes]);
-  useEffect(() => {
-    if (clothes.length > 0) {
-      setClothesItems((prevItems) => {
-        // Tạo một bộ chứa các ID hoặc các đặc tính của prevItems để kiểm tra trùng lặp
-        const prevItemsSet = new Set(prevItems.map(item => item.id));
-        // Lọc ra các item không trùng lặp và không thuộc categoryId
-        const newItems = clothes.filter(item => !prevItemsSet.has(item.id));
-        // Kết hợp các item mới không trùng lặp với prevItems
-        const updatedItems = [...prevItems, ...newItems];
-
-        // Kiểm tra xem có đạt đến maxQuantityClothesByCategory không
-        if (updatedItems.length >= maxQuantityClothesByCategory) {
-          // dispatch(resetClothes());
-          setHasMore(false);
+      dispatch(
+        fetchFilterClothes({
+          rootCategoryId: category.id,
+          page: page,
+        })
+      ).then((res : any)=>{
+        if(page === 0){
+          setClothesItems(res.payload);
+        }else{
+          setClothesItems((prev)=>[...prev, ...res.payload]);
         }
-        
-        return updatedItems;
       });
     }
-  }, [clothes, maxQuantityClothesByCategory, dispatch, category]);
+  }, [page, category, dispatch]);
+  useEffect(()=>{
+    if(clothesItems.length === maxQuantityClothesByCategory){
+      setHasMore(false);
+    }
+  },[clothesItems, maxQuantityClothesByCategory]);
   return (
     <>
       <InfiniteScroll
@@ -137,7 +128,12 @@ export const Shoplist = () => {
                   <div className="toolbox">
                     <div className="toolbox-left">
                       <div className="toolbox-info">
-                        Hiển thị <span>{clothesItems.length} trong số {maxQuantityClothesByCategory}</span> sản phẩm
+                        Hiển thị{" "}
+                        <span>
+                          {clothesItems.length} trong số{" "}
+                          {maxQuantityClothesByCategory}
+                        </span>{" "}
+                        sản phẩm
                       </div>
                       {/* End .toolbox-info */}
                     </div>
@@ -217,47 +213,46 @@ export const Shoplist = () => {
                     <div className="row justify-content-center">
                       {clothesItems && // filter trực tiếp ở đây
                         clothesItems.length > 0 &&
-                        clothesItems.filter(
-                          (fi) =>
-                            !categoryFilter ||
-                            categoryFilter.length === 0 ||
-                            categoryFilter.includes(fi.categoryId)
-                        )
-                        .map((item) => {
-                          const filteredDetails = item.clothDetails.filter(
-                            (cd) =>
-                              (!colorsFilter ||
-                                colorsFilter.length === 0 ||
-                                colorsFilter.includes(cd.colorId)) &&
-                              (!sizesFilter ||
-                                sizesFilter.length === 0 ||
-                                sizesFilter.includes(cd.sizeId))
-                          );
-                
-                          return {
-                            ...item,
-                            clothDetails: filteredDetails,
-                          };
-                        })
-                       .map((item) => {
-                          return (
-                            <>
-                              <SingleClothShoplist
-                                key={item.id}
-                                clothes={item}
-                              />
-                            </>
-                          );
-                        })}
+                        clothesItems
+                          .filter(
+                            (fi) =>
+                              !categoryFilter ||
+                              categoryFilter.length === 0 ||
+                              categoryFilter.includes(fi.categoryId)
+                          )
+                          .map((item) => {
+                            const filteredDetails = item.clothDetails.filter(
+                              (cd) =>
+                                (!colorsFilter ||
+                                  colorsFilter.length === 0 ||
+                                  colorsFilter.includes(cd.colorId)) &&
+                                (!sizesFilter ||
+                                  sizesFilter.length === 0 ||
+                                  sizesFilter.includes(cd.sizeId))
+                            );
+
+                            return {
+                              ...item,
+                              clothDetails: filteredDetails,
+                            };
+                          })
+                          .filter((item)=> item.clothDetails.length > 0).map((item) => {
+                            return (
+                              <>
+                                <SingleClothShoplist
+                                  key={item.id}
+                                  clothes={item}
+                                />
+                              </>
+                            );
+                          })}
                       {/* End .col-sm-6 col-lg-4 */}
                     </div>
                     {/* End .row */}
                   </div>
 
                   {/* End .products */}
-                  <nav aria-label="Page navigation">
-                    loading
-                  </nav>
+                  <nav aria-label="Page navigation">loading</nav>
                 </div>
                 {/* End .col-lg-9 */}
                 <aside className="col-lg-3 order-lg-first">
