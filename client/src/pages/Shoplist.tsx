@@ -236,7 +236,8 @@ export const Shoplist = () => {
                               clothDetails: filteredDetails,
                             };
                           })
-                          .filter((item)=> item.clothDetails.length > 0).map((item) => {
+                          .filter((item)=> item.clothDetails.length > 0)
+                          .map((item) => {
                             return (
                               <>
                                 <SingleClothShoplist

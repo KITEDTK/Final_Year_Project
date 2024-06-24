@@ -3,6 +3,7 @@
 # dependencies
 client/node_modules
 server/node_modules
+server/src/API/modules/Clothes/uploads
 admin/node_modules
 node_modules
 /.pnp

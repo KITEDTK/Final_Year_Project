@@ -152,6 +152,7 @@ model Payments {
   isPaid         Boolean          @default(false)
   vnpay          Boolean
   onlinePay      Boolean
+  status         String?
   createAt       DateTime         @default(now())
   updateAt       DateTime?
   isEnable       Boolean          @default(true)

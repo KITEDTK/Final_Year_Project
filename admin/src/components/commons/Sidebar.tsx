@@ -71,28 +71,10 @@ export function Sidebar() {
                 </a>
                 <ul className="nav nav-treeview">
                   <li className="nav-item">
-                    <a href="pages/forms/general.html" className="nav-link">
+                    <Link to="/order" className="nav-link">
                       <i className="far fa-circle nav-icon"></i>
-                      <p>General Elements</p>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a href="pages/forms/advanced.html" className="nav-link">
-                      <i className="far fa-circle nav-icon"></i>
-                      <p>Advanced Elements</p>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a href="pages/forms/editors.html" className="nav-link">
-                      <i className="far fa-circle nav-icon"></i>
-                      <p>Editors</p>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a href="pages/forms/validation.html" className="nav-link">
-                      <i className="far fa-circle nav-icon"></i>
-                      <p>Validation</p>
-                    </a>
+                      <p>Hóa đơn</p>
+                    </Link>
                   </li>
                 </ul>
               </li>

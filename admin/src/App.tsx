@@ -3,6 +3,7 @@ import { Header } from "./components/commons/Header";
 import { Route, Routes } from "react-router-dom";
 import { Clothes } from "./pages/Clothes";
 import { Dashboard } from "./pages/Dashboard";
+import { Order } from "./pages/Order";
 function App() {
   return (
     <div className="App">
@@ -13,6 +14,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard/>}/>
             <Route path="/clothes" element={<Clothes />} />
+            <Route path="/order" element={<Order />} />
           </Routes>
         </div>
       </div>
