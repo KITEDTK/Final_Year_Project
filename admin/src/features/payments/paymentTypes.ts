@@ -8,7 +8,7 @@ export interface Payment {
     email: string;
     fullname: string;
     phoneNumber: string;
-    status: string | null;
+    status: string;
 }
 export interface PaymentInput {
     page: number;
@@ -37,4 +37,8 @@ export interface PaymentDetail {
             name: string;
         }
     }
+}
+export interface PaymentStatusInput{
+    paymentId: string;
+    status: string;
 }

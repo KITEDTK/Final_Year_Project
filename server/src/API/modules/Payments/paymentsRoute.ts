@@ -12,4 +12,6 @@ router.post("/vnpay", PaymentsController.paidByVnPay);
 router.get("/:payType/quantity", PaymentsController.getQuantityPayment);
 
 router.get("/:paymentId/paymentDetails", PaymentsController.getPaymentDetail);
+
+router.patch("/:paymentId/status", PaymentsController.updatePaymentStatus);
 export default router;

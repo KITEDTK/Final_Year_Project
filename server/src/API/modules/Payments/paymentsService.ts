@@ -34,6 +34,7 @@ async function createPayment(input: any) {
       isEnable: true,
       vnpay: true,
       onlinePay: true,
+      status: 'Chưa duyệt đơn'
     },
   });
   const data: any = [];
@@ -131,8 +132,23 @@ async function getPaymentDetail(paymentId: string){
   });
   return result;
 }
+async function updateStatusPayment(paymentId: string, status: string){
+  if(status === 'Đang vận chuyển'){
+    // xử lí logic vận chuyển ở đây
+  }
+  const update = await prisma.payments.update({
+    where:{
+      id: paymentId
+    },
+    data:{
+      status: status
+    }
+  })
+  return update;
+}
 export default {
   vnpay,
+  updateStatusPayment,
   createPayment,
   returnVnpay,
   getPayments,

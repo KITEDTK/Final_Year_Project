@@ -2,13 +2,18 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { Payment, PaymentDetail } from "../features/payments/paymentTypes";
-import { fetchAllPayments, fetchPaymentDetails, fetchQuantityPayment } from "../features/payments/paymentSlice";
+import {
+  fetchAllPayments,
+  fetchPaymentDetails,
+  fetchQuantityPayment,
+  fetchUpdatePaymentStatus,
+} from "../features/payments/paymentSlice";
 import { PaymentDetailModal } from "../components/payments/PaymentDetailModal";
 export const Order = () => {
   const [page, setPage] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const dispatch = useAppDispatch();
-  const maxQuantity = useAppSelector((state)=> state.payments.maxQuantity);
+  const maxQuantity = useAppSelector((state) => state.payments.maxQuantity);
   const fetchMoreData = () => {
     setPage((prevPage) => prevPage + 1);
   };
@@ -22,9 +27,9 @@ export const Order = () => {
     setPage(0);
     setPaymentTypes("offlinePay");
   };
-  useEffect(()=>{
-    dispatch(fetchQuantityPayment(paymentTypes))
-  },[paymentTypes, dispatch])
+  useEffect(() => {
+    dispatch(fetchQuantityPayment(paymentTypes));
+  }, [paymentTypes, dispatch]);
   useEffect(() => {
     dispatch(fetchAllPayments({ page: page, payType: paymentTypes })).then(
       (res: any) => {
@@ -36,23 +41,49 @@ export const Order = () => {
       }
     );
   }, [page, paymentTypes, dispatch]);
-  useEffect(()=>{
-    if(paymentItems.length === maxQuantity){
-        setHasMore(false);
+  useEffect(() => {
+    if (paymentItems.length === maxQuantity) {
+      setHasMore(false);
     }
   }, [paymentItems, maxQuantity]);
 
   const [showDetailModal, setShowDetailModal] = useState<boolean>();
   const [paymentDetails, setPaymentDetails] = useState<PaymentDetail[]>([]);
-  const handleOnClickShowModal= (paymentId: string) => {
+  const handleOnClickShowModal = (paymentId: string) => {
     setShowDetailModal(true);
-    dispatch(fetchPaymentDetails(paymentId)).then((res: any)=>{
-        setPaymentDetails(res.payload);
+    dispatch(fetchPaymentDetails(paymentId)).then((res: any) => {
+      setPaymentDetails(res.payload);
     });
-  }
+  };
   const handleOnClickCloseModal = () => {
     setShowDetailModal(false);
-  }
+  };
+  const subStatuses = ["Duyệt đơn", "Vận chuyển", "Khách đã nhận"];
+  const statuses = [
+    "Chưa duyệt đơn",
+    "Đã duyệt đơn",
+    "Đang vận chuyển",
+    "Khách đã nhận",
+  ];
+  const getNextStatus = (currentStatus: string) => {
+    const currentStatusIndex = statuses.indexOf(currentStatus);
+    return subStatuses[currentStatusIndex];
+  };
+
+  const handleOnClickChangeStatus = async (paymentId: string) => {
+    const updatedItems = await Promise.all(
+      paymentItems.map(async(item)=>{
+        if (item.id === paymentId) {
+          const nextStatusIndex = statuses.indexOf(item.status) + 1;
+          const nextStatus = statuses[nextStatusIndex];
+          await dispatch(fetchUpdatePaymentStatus({paymentId: paymentId, status: nextStatus}));
+          return { ...item, status: nextStatus };
+        }
+        return item;
+      })
+    );
+    setPaymentItems(updatedItems);
+  };
   return (
     <>
       <section className="content">
@@ -61,7 +92,15 @@ export const Order = () => {
             <div className="col-12">
               <div className="card">
                 <div className="card-header">
-                  <h3 className="card-title">Bảng Hóa đơn / {paymentTypes === 'onlinePay' && (<>Khách hàng thanh toán online</>) || paymentTypes === 'offlinePay' && (<>Khách hàng thanh toán khi nhận hàng</>)}</h3>
+                  <h3 className="card-title">
+                    Bảng Hóa đơn /{" "}
+                    {(paymentTypes === "onlinePay" && (
+                      <>Khách hàng thanh toán online</>
+                    )) ||
+                      (paymentTypes === "offlinePay" && (
+                        <>Khách hàng thanh toán khi nhận hàng</>
+                      ))}
+                  </h3>
                 </div>
                 <div className="card-body" style={{ minHeight: "101vh" }}>
                   <div
@@ -129,7 +168,7 @@ export const Order = () => {
                       <tbody>
                         {paymentItems &&
                           paymentItems.length > 0 &&
-                          paymentItems.map((item,index) => (
+                          paymentItems.map((item, index) => (
                             <>
                               <tr key={item.id}>
                                 <td>{index + 1}</td>
@@ -141,18 +180,25 @@ export const Order = () => {
                                 <td>{item.status}</td>
                                 <td>
                                   <button
-                                    onClick={()=>handleOnClickShowModal(item.id)}
+                                    onClick={() =>
+                                      handleOnClickShowModal(item.id)
+                                    }
                                     type="button"
                                     className="btn btn-block btn-outline-info"
                                   >
                                     Xem
                                   </button>
-                                  <button
-                                    type="button"
-                                    className="btn btn-block btn-outline-danger"
-                                  >
-                                    Duyệt đơn
-                                  </button>
+                                  {item.status !== "Khách đã nhận" && (
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        handleOnClickChangeStatus(item.id)
+                                      }
+                                      className="btn btn-block btn-outline-danger"
+                                    >
+                                      {getNextStatus(item.status)}
+                                    </button>
+                                  )}
                                 </td>
                               </tr>
                             </>
@@ -166,11 +212,11 @@ export const Order = () => {
           </div>
         </div>
       </section>
-      {showDetailModal=== true && (
-        <PaymentDetailModal 
-        show={showDetailModal}
-        handleOnClickCloseModal = {handleOnClickCloseModal}
-        paymentDetails = {paymentDetails}
+      {showDetailModal === true && (
+        <PaymentDetailModal
+          show={showDetailModal}
+          handleOnClickCloseModal={handleOnClickCloseModal}
+          paymentDetails={paymentDetails}
         />
       )}
     </>
