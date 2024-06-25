@@ -22,8 +22,9 @@ export function initSocket(server: http.Server): Server {
       socket.to(userId).emit('receive_payment_status', { paymentId, status });
     });
 
-    socket.on('create_vnpay_payment', (data) => {
-      socket.emit('receive_vnpay_payment', { data });
+    socket.on('create_vnpay_payment', (data:{ paymentId: string, userId: string }) => {
+      const { paymentId, userId } = data;
+      socket.to(userId).emit('receive_vnpay_payment', { paymentId });
     });
   });
 

@@ -90,6 +90,10 @@ export const Order = () => {
     );
     setPaymentItems(updatedItems);
   };
+  useEffect(()=>{
+    socket.emit("join_user",{userId: 'admin'});
+    socket.on('receive_vnpay_payment',(data: {paymentId: string})=>{alert(data.paymentId)});
+  },[])
   return (
     <>
       <section className="content">

@@ -38,8 +38,12 @@ export const PaymentHistory = () => {
       }
     );
   }, [paymentHistory]);
+  const handleEmit = () =>{
+    socket.emit('create_vnpay_payment', {paymentId: 'hello', userId: 'admin'})
+  }
   return (
     <>
+    <button onClick={handleEmit}>test</button>
       <table className="table table-wishlist table-mobile">
         <thead>
           <tr>
