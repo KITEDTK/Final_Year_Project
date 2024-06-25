@@ -1,9 +1,9 @@
-import { Server } from "socket.io";
+import { Server, Socket } from 'socket.io';
 import http from 'http';
 
-let io; // Socket.IO instance
+let io: Server;
 
-function initSocket(server: Server) {
+export function initSocket(server: http.Server): Server {
   io = new Server(server, {
     cors: {
       origin: '*',
@@ -11,30 +11,28 @@ function initSocket(server: Server) {
     },
   });
 
-  io.on('connection', (socket) => {
-    socket.on('join_user', (data) => {
+  io.on('connection', (socket: Socket) => {
+    socket.on('join_user', (data: { userId: string }) => {
       const { userId } = data;
       socket.join(userId);
     });
 
-    socket.on('update_payment_status', (data) => {
+    socket.on('update_payment_status', (data: { paymentId: string, userId: string, status: string }) => {
       const { paymentId, userId, status } = data;
       socket.to(userId).emit('receive_payment_status', { paymentId, status });
     });
 
-    socket.on('create_online_payment', (data) => {
-      socket.emit('receive_payment', { data });
+    socket.on('create_vnpay_payment', (data) => {
+      socket.emit('receive_vnpay_payment', { data });
     });
   });
 
   return io;
 }
 
-function getIo() {
+export function getIo(): Server {
   if (!io) {
     throw new Error('Socket.IO has not been initialized');
   }
   return io;
 }
-
-export { initSocket, getIo };

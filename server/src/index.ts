@@ -14,6 +14,8 @@ import ColorsRoute from "./API/modules/Colors/ColorsRoute";
 import CartsRoute from "./API/modules/Carts/CartsRoute";
 import PaymentsRoute from "./API/modules/Payments/paymentsRoute";
 
+import { initSocket } from "./API/sockets/sockets";
+
 const app = express();
 const server = http.createServer(app); 
 
@@ -42,31 +44,7 @@ app.use("/payments", PaymentsRoute);
 import DumpRoute from "./API/modules/DumpData/DumpRoute";
 app.use("/dump",DumpRoute);
 
-const io = new Server(server, {
-  cors: {
-    origin: '*',
-    methods: ['GET', 'POST'],
-  },
-});
-
-io.on('connection', (socket) => {
-  //console.log(`a user connected`);
-
-  socket.on('join_user',(data: { userId: string })=>{
-    const { userId } = data;
-    socket.join(userId);
-  })
-
-  socket.on('update_payment_status',(data: { paymentId: string, userId: string, status: string })=>{
-    const {paymentId, userId, status} = data;
-    //console.log(`Updating payment status for ${paymentId}, sending to user ${userId}`);
-    socket.to(userId).emit('receive_payment_status', {paymentId, status} );
-  })
-
-  socket.on('create_online_payment',(data)=>{
-    socket.emit('receive_payment',{data})
-  })
-});
+initSocket(server);
 
 const PORT = 4000;
 
