@@ -28,3 +28,21 @@ export interface LocalPaymentInfo {
   email: string;
   phoneNumber: string;
 }
+export interface PaymentHistory {
+  status: string;
+  paymentDetails: {
+    amount: number,
+    clothDetail: {
+      cloth: {
+        name: string,
+        price: number
+      },
+      size: {
+        name: string;
+      },
+      color:{
+        name: string;
+      }
+    }
+  }[]
+}

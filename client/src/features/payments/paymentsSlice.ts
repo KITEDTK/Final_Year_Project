@@ -1,17 +1,26 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { PaymentsState} from './paymentsType';
-import { PaymentInput, LocalPaymentInfo} from "./paymentsType";
+import { PaymentHistory, PaymentsState } from "./paymentsType";
+import { PaymentInput, LocalPaymentInfo } from "./paymentsType";
 
 const BASE_URL = "http://localhost:4000/payments";
 
 export const fetchPaybyVNPAY = createAsyncThunk<string, PaymentInput>(
   "payments/vn_pay",
-  async ({userId,voucherId,total, address, email, phoneNumber, fullName, clothDetail}) => {
+  async ({
+    userId,
+    voucherId,
+    total,
+    address,
+    email,
+    phoneNumber,
+    fullName,
+    clothDetail,
+  }) => {
     try {
       const response: AxiosResponse<string> = await axios.post(
         `${BASE_URL}/vnpay`,
-        { 
+        {
           userId: userId,
           voucherId: voucherId,
           total: total,
@@ -19,7 +28,7 @@ export const fetchPaybyVNPAY = createAsyncThunk<string, PaymentInput>(
           email: email,
           phoneNumber: phoneNumber,
           fullname: fullName,
-          clothDetail: clothDetail
+          clothDetail: clothDetail,
         },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -30,18 +39,36 @@ export const fetchPaybyVNPAY = createAsyncThunk<string, PaymentInput>(
     }
   }
 );
+export const fetchHistoryPayment = createAsyncThunk<PaymentHistory[], string>(
+  "payment/history",
+  async (userId: string) => {
+    try {
+      const response: AxiosResponse<PaymentHistory[]> = await axios.get(
+        `${BASE_URL}/history/${userId}/users`,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      return response.data;
+    } catch (err) {
+      console.log("Lấy dữ liệu thất bại");
+      throw err;
+    }
+  }
+);
 const paymentsSlice = createSlice({
   name: "payments",
   initialState: {
-    paymentUrl: '',
+    paymentUrl: "",
     localPaymentInfo: {} as LocalPaymentInfo,
     loading: false,
     error: null,
   } as PaymentsState,
   reducers: {
-    updateLocalPaymentInfo: (state, action: PayloadAction<LocalPaymentInfo>)=>{
+    updateLocalPaymentInfo: (
+      state,
+      action: PayloadAction<LocalPaymentInfo>
+    ) => {
       state.localPaymentInfo = action.payload;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -56,8 +83,19 @@ const paymentsSlice = createSlice({
       .addCase(fetchPaybyVNPAY.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message ?? "Unknown error";
+      })
+      .addCase(fetchHistoryPayment.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchHistoryPayment.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(fetchHistoryPayment.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Unknown error";
       });
   },
 });
-export const {updateLocalPaymentInfo} = paymentsSlice.actions;
+export const { updateLocalPaymentInfo } = paymentsSlice.actions;
 export default paymentsSlice.reducer;

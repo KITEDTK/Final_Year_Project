@@ -14,4 +14,6 @@ router.get("/:payType/quantity", PaymentsController.getQuantityPayment);
 router.get("/:paymentId/paymentDetails", PaymentsController.getPaymentDetail);
 
 router.patch("/:paymentId/status", PaymentsController.updatePaymentStatus);
+
+router.get("/history/:userId/users", PaymentsController.getHistoryPayment);
 export default router;

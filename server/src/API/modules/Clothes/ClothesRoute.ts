@@ -50,6 +50,7 @@ const storage = multer.diskStorage({
 // Specific routes first
 router.post("/:clothesId/users/:userId/comments", ClothesController.addCommentInClothes);
 router.get("/:clothesId/admin", ClothesController.getSingleClothesAdmin);
+router.get("/clothDetails", ClothesController.getAllClothDetail);
 router.get("/:clothesId", ClothesController.getSingleCLothes); // Make sure this route points to a specific handler
 
 // Admin routes
@@ -69,7 +70,6 @@ router.post("/admin/:clothesId/clothDetails",upload.fields([
 
 // General routes
 router.get("/filter/page/:page/categories/:rootCategoryId", ClothesController.filterClothes);
-router.get("/clothDetails", ClothesController.getAllClothDetail);
 router.get("/categories/:categoryId/maxQuantity",ClothesController.getMaxQuantityClothesByRootCategory);
 
 

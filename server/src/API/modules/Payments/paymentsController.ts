@@ -63,6 +63,15 @@ async function updatePaymentStatus(req: Request, res: Response) {
     console.log(err);
   }
 }
+async function getHistoryPayment(req: Request, res: Response){
+  try{
+    const {userId} = req.params;
+    const result = await paymentsService.getHistoryPayment(userId);
+    res.json(result);
+  }catch(err){
+    console.log(err);
+  }
+}
 export default {
   paidByVnPay,
   returnVnpay,
@@ -70,4 +79,5 @@ export default {
   getQuantityPayment,
   getPaymentDetail,
   updatePaymentStatus,
+  getHistoryPayment,
 };

@@ -146,6 +146,42 @@ async function updateStatusPayment(paymentId: string, status: string){
   })
   return update;
 }
+async function getHistoryPayment(userId: string){
+  const result = await prisma.payments.findMany({
+    where:{
+      userId: userId,
+    },
+    select:{
+      status: true,
+      paymentDetails:{
+        select:{
+          amount: true,
+          clothDetail:{
+            select:{
+              cloth:{
+                select:{
+                  name: true,
+                  price: true
+                }
+              },
+              size:{
+                select: {
+                  name: true
+                }
+              },
+              color:{
+                select:{
+                  name: true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+  return result;
+}
 export default {
   vnpay,
   updateStatusPayment,
@@ -153,5 +189,6 @@ export default {
   returnVnpay,
   getPayments,
   getQuantityPayment,
-  getPaymentDetail
+  getPaymentDetail,
+  getHistoryPayment
 };

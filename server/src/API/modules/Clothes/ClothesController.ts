@@ -52,7 +52,7 @@ async function getSingleCLothes(req: Request, res: Response) {
 async function getAllClothDetail(req: Request, res: Response) {
   try {
     const result = await ClothesService.getAllClothesDetail();
-    res.send(result);
+    res.json(result);
   } catch (err) {
     console.log(err);
   }
