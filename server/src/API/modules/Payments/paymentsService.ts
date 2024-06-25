@@ -103,7 +103,6 @@ async function getPaymentDetail(paymentId: string){
         paymentId: paymentId
     },
     select:{
-      id: true,
       amount: true,
       clothDetail:{
         select:{
@@ -152,6 +151,7 @@ async function getHistoryPayment(userId: string){
       userId: userId,
     },
     select:{
+      id: true,
       status: true,
       paymentDetails:{
         select:{

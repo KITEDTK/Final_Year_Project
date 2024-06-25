@@ -9,6 +9,9 @@ import {
   fetchUpdatePaymentStatus,
 } from "../features/payments/paymentSlice";
 import { PaymentDetailModal } from "../components/payments/PaymentDetailModal";
+
+import { io } from "socket.io-client";
+const socket = io('http://localhost:4000');
 export const Order = () => {
   const [page, setPage] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
@@ -76,6 +79,7 @@ export const Order = () => {
         if (item.id === paymentId) {
           const nextStatusIndex = statuses.indexOf(item.status) + 1;
           const nextStatus = statuses[nextStatusIndex];
+          socket.emit('update_payment_status', {paymentId: paymentId, userId: item.userId, status: nextStatus});
           await dispatch(fetchUpdatePaymentStatus({paymentId: paymentId, status: nextStatus}));
           return { ...item, status: nextStatus };
         }

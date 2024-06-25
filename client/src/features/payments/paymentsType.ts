@@ -29,6 +29,7 @@ export interface LocalPaymentInfo {
   phoneNumber: string;
 }
 export interface PaymentHistory {
+  id: string;
   status: string;
   paymentDetails: {
     amount: number,
