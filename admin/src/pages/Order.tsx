@@ -24,10 +24,12 @@ export const Order = () => {
   const [paymentTypes, setPaymentTypes] = useState<string>("offlinePay");
   const handleButtonOnlinePay = () => {
     setPage(0);
+    setHasMore(true);
     setPaymentTypes("onlinePay");
   };
   const handleButtonPayWhenReceived = () => {
     setPage(0);
+    setHasMore(true);
     setPaymentTypes("offlinePay");
   };
   useEffect(() => {
