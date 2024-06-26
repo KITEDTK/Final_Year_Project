@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import paymentsService from "./paymentsService";
 let paymentInfoData: any = {};
+import { io } from "../../..";
 async function paidByVnPay(req: Request, res: Response) {
   try {
     const result = await paymentsService.vnpay(req);
@@ -14,8 +15,9 @@ async function returnVnpay(req: Request, res: Response) {
   try {
     const result = await paymentsService.returnVnpay(req, res);
     if (result === "success") {
-      await paymentsService.createPayment(paymentInfoData);
+      const paymentId = await paymentsService.createPayment(paymentInfoData);
       paymentInfoData = {};
+      io.emit('vnpay_payment_create', {paymentId: paymentId});
       res.redirect(`http://localhost:3000/donepay/success`);
     } else {
       paymentInfoData = {};
@@ -72,9 +74,19 @@ async function getHistoryPayment(req: Request, res: Response){
     console.log(err);
   }
 }
+async function getSinglePayment(req: Request, res: Response){
+  try{
+    const {paymentId} = req.params;
+    const result = await paymentsService.getSinglePayment(paymentId);
+    res.json(result);
+  }catch(err){
+    console.log(err);
+  }
+}
 export default {
   paidByVnPay,
   returnVnpay,
+  getSinglePayment,
   getAllPayment,
   getQuantityPayment,
   getPaymentDetail,

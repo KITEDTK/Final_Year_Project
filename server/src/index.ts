@@ -3,7 +3,6 @@ import bodyParser from "body-parser";
 import cors from 'cors';
 import { Request, Response, NextFunction } from "express";
 var session = require('express-session');
-import { Server } from "socket.io";
 const http = require('http');
 //Router
 import UsersRoute from "./API/modules/Users/UsersRoute";
@@ -30,6 +29,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 }, cors({ maxAge: 84600 }));
+export const io = initSocket(server);
 app.use(bodyParser.json());
 
 app.use("/users", UsersRoute);
@@ -44,7 +44,6 @@ app.use("/payments", PaymentsRoute);
 import DumpRoute from "./API/modules/DumpData/DumpRoute";
 app.use("/dump",DumpRoute);
 
-initSocket(server);
 
 const PORT = 4000;
 

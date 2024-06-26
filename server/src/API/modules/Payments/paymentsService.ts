@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { generateURL } from "../../../utils/vnpay";
 import { uuid } from "uuidv4";
 import { sortObject } from "../../../utils/sortObject";
+
 const prisma = new PrismaClient();
 
 async function vnpay(req: any) {
@@ -45,9 +46,10 @@ async function createPayment(input: any) {
       amount: item.amount,
     });
   });
-  return await prisma.paymentDetails.createMany({
+  await prisma.paymentDetails.createMany({
     data: data,
   });
+  return createPayment.id;
 }
 async function returnVnpay(req: any, res: any) {
   let vnp_Params = req.query;
@@ -182,8 +184,17 @@ async function getHistoryPayment(userId: string){
   })
   return result;
 }
+async function getSinglePayment (paymentId: string){
+  const result = await prisma.payments.findUnique({
+    where:{
+      id: paymentId
+    }
+  });
+  return result;
+}
 export default {
   vnpay,
+  getSinglePayment,
   updateStatusPayment,
   createPayment,
   returnVnpay,

@@ -5,6 +5,8 @@ export interface Payment {
     total: number;
     isPaid: boolean;
     address: string;
+    onlinePay: boolean;
+    vnpay: boolean;
     email: string;
     fullname: string;
     phoneNumber: string;

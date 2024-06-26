@@ -30,6 +30,7 @@
     "npm": "^10.6.0",
     "qs": "^6.12.1",
     "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5",
     "uuid": "^9.0.1",
     "uuidv4": "^6.2.13",
     "vn-payments": "^1.1.0"

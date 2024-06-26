@@ -6,12 +6,13 @@ import {
   fetchAllPayments,
   fetchPaymentDetails,
   fetchQuantityPayment,
+  fetchSinglePayment,
   fetchUpdatePaymentStatus,
 } from "../features/payments/paymentSlice";
 import { PaymentDetailModal } from "../components/payments/PaymentDetailModal";
 
 import { io } from "socket.io-client";
-const socket = io('http://localhost:4000');
+const socket = io("http://localhost:4000");
 export const Order = () => {
   const [page, setPage] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
@@ -77,12 +78,21 @@ export const Order = () => {
 
   const handleOnClickChangeStatus = async (paymentId: string) => {
     const updatedItems = await Promise.all(
-      paymentItems.map(async(item)=>{
+      paymentItems.map(async (item) => {
         if (item.id === paymentId) {
           const nextStatusIndex = statuses.indexOf(item.status) + 1;
           const nextStatus = statuses[nextStatusIndex];
-          socket.emit('update_payment_status', {paymentId: paymentId, userId: item.userId, status: nextStatus});
-          await dispatch(fetchUpdatePaymentStatus({paymentId: paymentId, status: nextStatus}));
+          socket.emit("update_payment_status", {
+            paymentId: paymentId,
+            userId: item.userId,
+            status: nextStatus,
+          });
+          await dispatch(
+            fetchUpdatePaymentStatus({
+              paymentId: paymentId,
+              status: nextStatus,
+            })
+          );
           return { ...item, status: nextStatus };
         }
         return item;
@@ -90,10 +100,31 @@ export const Order = () => {
     );
     setPaymentItems(updatedItems);
   };
-  useEffect(()=>{
-    socket.emit("join_user",{userId: 'admin'});
-    socket.on('receive_vnpay_payment',(data: {paymentId: string})=>{alert(data.paymentId)});
-  },[])
+  useEffect(() => {
+    socket.emit("join_user", { userId: "admin" });
+    socket.on("vnpay_payment_create", (data: { paymentId: string }) => {
+      dispatch(fetchSinglePayment(data.paymentId)).then((res: any) => {
+        //console.log(res.payload);
+    
+        // Check if res.payload should be added based on paymentTypes and if it doesn't already exist in paymentItems
+        if (
+          (paymentTypes === 'onlinePay' && res.payload.onlinePay === true) ||
+          (paymentTypes === 'offlinePay' && res.payload.onlinePay === false)
+        ) {
+          // Check if res.payload already exists in paymentItems
+            setPaymentItems(prev => {
+              const checkExist = prev.find((item)=>{item.id === res.payload.id});
+              if(!checkExist){
+                return [res.payload, ...prev];
+              }else{
+                return [...prev];
+              }
+
+            });
+        }
+      });
+    });
+  }, [dispatch,paymentTypes]);
   return (
     <>
       <section className="content">

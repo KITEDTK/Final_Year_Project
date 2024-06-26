@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import CartsService from "./CartsService";
-
 async function addItemToCarts(req: Request, res: Response){
     try {
         const {clothDetailId, amount} = req.body;

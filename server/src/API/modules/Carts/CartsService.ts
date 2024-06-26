@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-
 async function fetchCartItem(userId: string){
     const data = await prisma.carts.findMany({
         where:{

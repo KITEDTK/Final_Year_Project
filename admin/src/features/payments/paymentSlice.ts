@@ -81,6 +81,21 @@ export const fetchUpdatePaymentStatus = createAsyncThunk<
     throw err;
   }
 });
+export const fetchSinglePayment = createAsyncThunk<Payment, string>(
+  "payment/single",
+  async(paymentId: string)=>{
+    try{
+      const response: AxiosResponse<Payment> = await axios.get(`${BASE_URL}/${paymentId}/single`,{
+        headers: { "Content-Type": "application/json" },
+      });
+      return response.data;
+    }catch(err){
+      console.error("fetching error", err);
+      throw err;
+    }
+  }
+  
+)
 const paymentsSlice = createSlice({
   name: "payments",
   initialState: {
