@@ -14,9 +14,16 @@ export const Order = () => {
   const authCart = useAppSelector((state) => state.carts.carts);
   const localCart = useAppSelector((state) => state.carts.localCarts);
   const [authTotalPrice, setAuthTotalPrice] = useState<number>(0);
+  const [paymentType, setPaymentType] = useState<string>('vnpay'); 
   const localPaymentInfo = useAppSelector(
     (state) => state.payments.localPaymentInfo
   );
+  const handleChoosePaymentType = (type: string) =>{
+    setPaymentType(type);
+    if(type === paymentType){
+      setPaymentType('');
+    }
+  }
   const handleSubmitButton = async () => {
     if (auth && auth !== null) {
       const authClothDetail: clothDetailItem[] = authCart.map((item) => {
@@ -25,17 +32,24 @@ export const Order = () => {
           amount: item.amount,
         };
       });
-      dispatch(
-        fetchPaybyVNPAY({
-          userId: auth.id,
-          total: authTotalPrice,
-          address: "Hà Nội",
-          email: auth.email,
-          phoneNumber: auth.phoneNumber,
-          fullName: auth.fullname,
-          clothDetail: authClothDetail,
-        })
-      );
+      if(paymentType === 'vnpay'){
+        dispatch(
+          fetchPaybyVNPAY({
+            userId: auth.id,
+            total: authTotalPrice,
+            address: "Hà Nội",
+            email: auth.email,
+            phoneNumber: auth.phoneNumber,
+            fullName: auth.fullname,
+            clothDetail: authClothDetail,
+          })
+        );
+      }
+      else if(paymentType === 'pay_when_receive'){
+        alert('thanh toan offline');
+      }else if(paymentType === ''){
+        showToast('Vui lòng chọn kiểu thanh toán','error');
+      }
     } else {
       const hasEmptyField = Object.values(localPaymentInfo).some(
         (value) => value === ""
@@ -51,13 +65,19 @@ export const Order = () => {
             };
           }
         );
-        dispatch(
-          fetchPaybyVNPAY({
-            total: localCart.totalPrice,
-            ...localPaymentInfo,
-            clothDetail: localClothDetail,
-          })
-        );
+        if(paymentType === 'vnpay'){
+          dispatch(
+            fetchPaybyVNPAY({
+              total: localCart.totalPrice,
+              ...localPaymentInfo,
+              clothDetail: localClothDetail,
+            })
+          );
+        }else if(paymentType === 'pay_when_receive'){
+          alert('thanh toan offline');
+        }else if(paymentType === ''){
+          showToast('Vui lòng chọn kiểu thanh toán','error');
+        }
       }
     }
   };
@@ -171,13 +191,14 @@ export const Order = () => {
               <div className="card-header" id="heading-1">
                 <h2 className="card-title">
                   <a
+                    onClick={()=>handleChoosePaymentType('vnpay')}
                     role="button"
                     data-toggle="collapse"
                     href="#collapse-1"
-                    aria-expanded="true"
+                    aria-expanded={paymentType === 'vnpay' ? true : false}
                     aria-controls="collapse-1"
                   >
-                    Direct bank transfer
+                    Thanh toán online
                   </a>
                 </h2>
               </div>
@@ -189,9 +210,7 @@ export const Order = () => {
                 data-parent="#accordion-payment"
               >
                 <div className="card-body">
-                  Make your payment directly into our bank account. Please use
-                  your Order ID as the payment reference. Your order will not be
-                  shipped until the funds have cleared in our account.
+                  Thanh toán qua cổng thông tin VNpay
                 </div>
                 {/* End .card-body */}
               </div>
@@ -203,14 +222,15 @@ export const Order = () => {
               <div className="card-header" id="heading-2">
                 <h2 className="card-title">
                   <a
+                  onClick={()=>handleChoosePaymentType('pay_when_receive')}
                     className="collapsed"
                     role="button"
                     data-toggle="collapse"
                     href="#collapse-2"
-                    aria-expanded="false"
+                    aria-expanded={paymentType === 'pay_when_receive' ? true : false}
                     aria-controls="collapse-2"
                   >
-                    Check payments
+                    Thanh toán khi nhận hàng
                   </a>
                 </h2>
               </div>
@@ -222,120 +242,13 @@ export const Order = () => {
                 data-parent="#accordion-payment"
               >
                 <div className="card-body">
-                  Ipsum dolor sit amet, consectetuer adipiscing elit. Donec
-                  odio. Quisque volutpat mattis eros. Nullam malesuada erat ut
-                  turpis.
+                  Vui lòng điền đúng và đầy đủ thông tin 
                 </div>
                 {/* End .card-body */}
               </div>
               {/* End .collapse */}
             </div>
             {/* End .card */}
-
-            <div className="card">
-              <div className="card-header" id="heading-3">
-                <h2 className="card-title">
-                  <a
-                    className="collapsed"
-                    role="button"
-                    data-toggle="collapse"
-                    href="#collapse-3"
-                    aria-expanded="false"
-                    aria-controls="collapse-3"
-                  >
-                    Cash on delivery
-                  </a>
-                </h2>
-              </div>
-              {/* End .card-header */}
-              <div
-                id="collapse-3"
-                className="collapse"
-                aria-labelledby="heading-3"
-                data-parent="#accordion-payment"
-              >
-                <div className="card-body">
-                  Quisque volutpat mattis eros. Lorem ipsum dolor sit amet,
-                  consectetuer adipiscing elit. Donec odio. Quisque volutpat
-                  mattis eros.
-                </div>
-                {/* End .card-body */}
-              </div>
-              {/* End .collapse */}
-            </div>
-            {/* End .card */}
-
-            <div className="card">
-              <div className="card-header" id="heading-4">
-                <h2 className="card-title">
-                  <a
-                    className="collapsed"
-                    role="button"
-                    data-toggle="collapse"
-                    href="#collapse-4"
-                    aria-expanded="false"
-                    aria-controls="collapse-4"
-                  >
-                    PayPal{" "}
-                    <small className="float-right paypal-link">
-                      What is PayPal?
-                    </small>
-                  </a>
-                </h2>
-              </div>
-              {/* End .card-header */}
-              <div
-                id="collapse-4"
-                className="collapse"
-                aria-labelledby="heading-4"
-                data-parent="#accordion-payment"
-              >
-                <div className="card-body">
-                  Nullam malesuada erat ut turpis. Suspendisse urna nibh,
-                  viverra non, semper suscipit, posuere a, pede. Donec nec justo
-                  eget felis facilisis fermentum.
-                </div>
-                {/* End .card-body */}
-              </div>
-              {/* End .collapse */}
-            </div>
-            {/* End .card */}
-
-            <div className="card">
-              <div className="card-header" id="heading-5">
-                <h2 className="card-title">
-                  <a
-                    className="collapsed"
-                    role="button"
-                    data-toggle="collapse"
-                    href="#collapse-5"
-                    aria-expanded="false"
-                    aria-controls="collapse-5"
-                  >
-                    Credit Card (Stripe)
-                    <img
-                      src="assets/images/payments-summary.png"
-                      alt="payments cards"
-                    />
-                  </a>
-                </h2>
-              </div>
-              {/* End .card-header */}
-              <div
-                id="collapse-5"
-                className="collapse"
-                aria-labelledby="heading-5"
-                data-parent="#accordion-payment"
-              >
-                <div className="card-body">
-                  Donec nec justo eget felis facilisis fermentum.Lorem ipsum
-                  dolor sit amet, consectetuer adipiscing elit. Donec odio.
-                  Quisque volutpat mattis eros. Lorem ipsum dolor sit ame.
-                </div>
-                {/* End .card-body */}
-              </div>
-              {/* End .collapse */}
-            </div>
             {/* End .card */}
           </div>
           {/* End .accordion */}

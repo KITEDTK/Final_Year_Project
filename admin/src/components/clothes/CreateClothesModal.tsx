@@ -430,11 +430,7 @@ export const CreateClothesModal: React.FC<props> = ({
                                     </select>
                                   </td>
                                   <td>
-                                    <input
-                                      type="text"
-                                      value={row.barcode}
-                                      style={{ width: "100%" }}
-                                    />
+                                    {row.barcode}
                                   </td>
                                   <td>
                                     <input

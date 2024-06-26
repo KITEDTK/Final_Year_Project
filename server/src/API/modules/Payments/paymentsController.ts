@@ -15,7 +15,7 @@ async function returnVnpay(req: Request, res: Response) {
   try {
     const result = await paymentsService.returnVnpay(req, res);
     if (result === "success") {
-      const paymentId = await paymentsService.createPayment(paymentInfoData);
+      const paymentId = await paymentsService.createPaymentVNpay(paymentInfoData);
       paymentInfoData = {};
       io.emit('vnpay_payment_create', {paymentId: paymentId});
       res.redirect(`http://localhost:3000/donepay/success`);
@@ -82,6 +82,9 @@ async function getSinglePayment(req: Request, res: Response){
   }catch(err){
     console.log(err);
   }
+}
+async function returnPayWhenRecived(req: Request, res: Response){
+
 }
 export default {
   paidByVnPay,

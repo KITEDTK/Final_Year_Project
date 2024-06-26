@@ -11,7 +11,7 @@ async function vnpay(req: any) {
   const url = generateURL(req, uniqueId, total);
   return url;
 }
-async function createPayment(input: any) {
+async function createPaymentVNpay(input: any) {
   const {
     userId,
     voucherId,
@@ -20,7 +20,7 @@ async function createPayment(input: any) {
     address,
     phoneNumber,
     email,
-    clothDetail,
+    clothDetail
   } = input;
   const createPayment = await prisma.payments.create({
     data: {
@@ -196,7 +196,7 @@ export default {
   vnpay,
   getSinglePayment,
   updateStatusPayment,
-  createPayment,
+  createPaymentVNpay,
   returnVnpay,
   getPayments,
   getQuantityPayment,
