@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { resetLocalCarts } from "../features/carts/cartsSlice";
-
+import { useParams } from "react-router-dom";
 export const DoneCheckout = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth.auth);
@@ -10,7 +10,7 @@ export const DoneCheckout = () => {
       dispatch(resetLocalCarts());
     }
   }, [auth, dispatch]);
-
+  const { type } = useParams();
   return (
     <>
       <div
@@ -19,8 +19,9 @@ export const DoneCheckout = () => {
       >
         <div className="container">
           <h2 className="title text-center text-white mb-3">
-            Quote Sign <span className="title-separator">/</span> Centered Align{" "}
-            <span className="title-separator">/</span> Dark Background
+            {type === "success"
+              ? "Cảm ơn bạn đã mua hàng của KITESHOP."
+              : "Mua hàng thất bại"}
           </h2>
           {/* End .title text-center */}
 
@@ -29,67 +30,38 @@ export const DoneCheckout = () => {
             data-toggle="owl"
             data-owl-options='{
                                 "nav": false, 
-                                "dots": true,
+                                "dots": false,
                                 "margin": 20,
                                 "loop": true,
                                 "responsive": {
                                     "1200": {
-                                        "nav": true
+                                        "nav": false
                                     }
                                 }
                             }'
           >
             <blockquote className="testimonial testimonial-icon text-center text-white">
               <p>
-                “ Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi
-                neque, aliquet vel, dapibus id, mattis vel, nisi. Sed pretium,
-                ligula sollicitudin laoreet viverra, tortor libero sodales leo,
-                eget blandit nunc tortor eu nibh. Nullam mollis. Ut justo.
-                Suspendisse potenti. ”
+                {type === "success" ? (
+                  <>
+                    “Vui lòng kiên nhẫn đợi. Đơn hàng sẽ đến tay bạn sớm nhất có
+                    thể. Chúng tôi xin chân thành cảm ơn. ”
+                  </>
+                ) : (
+                  <>
+                    “Thao tác mua hàng xảy ra vấn đề. Vui lòng kiểm tra lại. ”
+                  </>
+                )}
               </p>
 
               <cite>
-                Jenson Gregory
-                <span>Customer</span>
+                Đào Tuấn Kiệt
+                <span>Chủ cửa hàng</span>
               </cite>
             </blockquote>
             {/* End .testimonial */}
 
-            <blockquote className="testimonial testimonial-icon text-center text-white">
-              <p>
-                “ Impedit, ratione sequi, sunt incidunt magnam et. Delectus
-                obcaecati optio eius error libero perferendis nesciunt atque
-                dolores magni recusandae! Doloremque quidem error eum quis
-                similique doloribus natus qui ut ipsum.Velit quos ipsa
-                exercitationem, vel unde obcaecati impedit eveniet non. ”
-              </p>
-
-              <cite>
-                Damon Stone
-                <span>Customer</span>
-              </cite>
-            </blockquote>
             {/* End .testimonial */}
-
-            <blockquote className="testimonial testimonial-icon text-center text-white">
-              <p>
-                “ Molestias animi illo natus ut quod neque ad accusamus
-                praesentium fuga! Dolores odio alias sapiente odit delectus
-                quasi, explicabo a, modi voluptatibus. Perferendis perspiciatis,
-                voluptate, distinctio earum veritatis animi tempora eget blandit
-                nunc tortor eu nibh. Nullam mollis. Ut justo. Suspendisse
-                potenti. ”
-              </p>
-
-              <cite>
-                John Smith
-                <span>Customer</span>
-              </cite>
-            </blockquote>
-            {/* End .testimonial */}
-
-            
           </div>
           {/* End .testimonials-slider owl-carousel */}
         </div>

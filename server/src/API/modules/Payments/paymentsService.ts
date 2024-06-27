@@ -51,6 +51,46 @@ async function createPaymentVNpay(input: any) {
   });
   return createPayment.id;
 }
+async function createPaymentPayWhenReceive(input: any) {
+  const {
+    userId,
+    voucherId,
+    total,
+    fullname,
+    address,
+    phoneNumber,
+    email,
+    clothDetail
+  } = input;
+  const createPayment = await prisma.payments.create({
+    data: {
+      ...(userId ? { userId: userId } : {}),
+      ...(voucherId ? { voucherId: voucherId } : {}),
+      total: total,
+      fullname: fullname,
+      address: address,
+      email: email,
+      phoneNumber: phoneNumber,
+      isPaid: false,
+      isEnable: true,
+      vnpay: false,
+      onlinePay: false,
+      status: 'Chưa duyệt đơn'
+    },
+  });
+  const data: any = [];
+  clothDetail.forEach((item: any) => {
+    data.push({
+      paymentId: createPayment.id,
+      clothId: item.id,
+      amount: item.amount,
+    });
+  });
+  await prisma.paymentDetails.createMany({
+    data: data,
+  });
+  return createPayment.id;
+}
 async function returnVnpay(req: any, res: any) {
   let vnp_Params = req.query;
 
@@ -193,6 +233,7 @@ async function getSinglePayment (paymentId: string){
   return result;
 }
 export default {
+  createPaymentPayWhenReceive,
   vnpay,
   getSinglePayment,
   updateStatusPayment,

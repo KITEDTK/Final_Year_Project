@@ -9,6 +9,8 @@ router.get("/:payType/page/:page", PaymentsController.getAllPayment);
 
 router.post("/vnpay", PaymentsController.paidByVnPay);
 
+router.post("/pay_when_receive", PaymentsController.returnPayWhenRecived);
+
 router.get("/:payType/quantity", PaymentsController.getQuantityPayment);
 
 router.get("/:paymentId/paymentDetails", PaymentsController.getPaymentDetail);

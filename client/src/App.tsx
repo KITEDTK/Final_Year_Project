@@ -23,7 +23,7 @@ function App() {
           <Route path="/carts" element={<Carts />} />
           <Route path="/single-product/:clothesId" element={<SingleClothes/>} />
           <Route path="/checkout" element={<Checkout/>}/>
-          <Route path="/donepay/success" element={<DoneCheckout/>}/>
+          <Route path="/donepay/:type" element={<DoneCheckout/>}/>
           <Route path="/user" element={<UserProfile/>}/>
         </Routes>
         <Footer/>

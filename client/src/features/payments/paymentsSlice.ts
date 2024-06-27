@@ -54,6 +54,40 @@ export const fetchHistoryPayment = createAsyncThunk<PaymentHistory[], string>(
     }
   }
 );
+export const fetchPayWhenReceive = createAsyncThunk<any,PaymentInput> (
+  "payment/pay_when_recieve",
+  async ({
+    userId,
+    voucherId,
+    total,
+    address,
+    email,
+    phoneNumber,
+    fullName,
+    clothDetail,
+  }) => {
+    try {
+      const response: AxiosResponse<any> = await axios.post(
+        `${BASE_URL}/pay_when_receive`,
+        {
+          userId: userId,
+          voucherId: voucherId,
+          total: total,
+          address: address,
+          email: email,
+          phoneNumber: phoneNumber,
+          fullname: fullName,
+          clothDetail: clothDetail,
+        },
+        { headers: { "Content-Type": "application/json" } }
+      );
+      return response.data;
+    } catch (err) {
+      console.error("Thêm vào giỏ hàng thất bại", err);
+      throw err;
+    }
+  }
+)
 const paymentsSlice = createSlice({
   name: "payments",
   initialState: {
@@ -92,6 +126,17 @@ const paymentsSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchHistoryPayment.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Unknown error";
+      })
+      .addCase(fetchPayWhenReceive.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPayWhenReceive.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(fetchPayWhenReceive.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message ?? "Unknown error";
       });

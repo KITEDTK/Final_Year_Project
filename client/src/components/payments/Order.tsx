@@ -2,7 +2,7 @@ import { useAppSelector } from "../../store/hooks";
 import { formatMoney } from "../../utils/formatMoney";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../store/hooks";
-import { fetchPaybyVNPAY } from "../../features/payments/paymentsSlice";
+import { fetchPaybyVNPAY, fetchPayWhenReceive } from "../../features/payments/paymentsSlice";
 import { showToast } from "../../utils/showToast";
 interface clothDetailItem {
   id: string;
@@ -46,7 +46,19 @@ export const Order = () => {
         );
       }
       else if(paymentType === 'pay_when_receive'){
-        alert('thanh toan offline');
+        dispatch(
+          fetchPayWhenReceive({
+            userId: auth.id,
+            total: authTotalPrice,
+            address: "Hà Nội",
+            email: auth.email,
+            phoneNumber: auth.phoneNumber,
+            fullName: auth.fullname,
+            clothDetail: authClothDetail,
+          })
+        ).then((res)=>{
+          window.location.href = res.payload; 
+      });
       }else if(paymentType === ''){
         showToast('Vui lòng chọn kiểu thanh toán','error');
       }
@@ -74,7 +86,15 @@ export const Order = () => {
             })
           );
         }else if(paymentType === 'pay_when_receive'){
-          alert('thanh toan offline');
+          dispatch(
+            fetchPayWhenReceive({
+              total: localCart.totalPrice,
+              ...localPaymentInfo,
+              clothDetail: localClothDetail,
+            })
+          ).then((res)=>{
+              window.location.href = res.payload; 
+          });
         }else if(paymentType === ''){
           showToast('Vui lòng chọn kiểu thanh toán','error');
         }
