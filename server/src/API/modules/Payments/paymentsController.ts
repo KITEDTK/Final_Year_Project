@@ -93,7 +93,17 @@ async function returnPayWhenRecived(req: Request, res: Response){
     console.log(err);
   }
 }
+async function barChartMonth(req: Request, res: Response){
+  try {
+    const {year, month} = req.body;
+    const result = await paymentsService.barChartMonth(year, month);
+    res.json(result);
+} catch (err) {
+  console.log(err);
+}
+}
 export default {
+  barChartMonth,
   returnPayWhenRecived,
   paidByVnPay,
   returnVnpay,

@@ -20,4 +20,6 @@ router.patch("/:paymentId/status", PaymentsController.updatePaymentStatus);
 router.get("/history/:userId/users", PaymentsController.getHistoryPayment);
 
 router.get("/:paymentId/single", PaymentsController.getSinglePayment);
+
+router.post("/statistical/month",PaymentsController.barChartMonth);
 export default router;

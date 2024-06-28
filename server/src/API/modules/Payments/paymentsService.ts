@@ -232,7 +232,27 @@ async function getSinglePayment (paymentId: string){
   });
   return result;
 }
+async function barChartMonth (year: number, month: number){
+  const startDate = new Date(year, month - 1, 1); // tháng trong JavaScript bắt đầu từ 0
+  const endDate = new Date(year, month, 1); // ngày đầu tiên của tháng tiếp theo
+  const result = await prisma.payments.findMany({
+    where:{
+      createAt:{
+        gte: startDate,
+        lt: endDate,
+      }
+    },select:{
+      paymentDetails:{
+        select:{
+          
+        }
+      }
+    }
+  });
+  return result;
+}
 export default {
+  barChartMonth,
   createPaymentPayWhenReceive,
   vnpay,
   getSinglePayment,
