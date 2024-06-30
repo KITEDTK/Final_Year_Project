@@ -253,7 +253,7 @@ export const Shoplist = () => {
                   </div>
 
                   {/* End .products */}
-                  <nav aria-label="Page navigation">loading</nav>
+                  <nav aria-label="Page navigation"></nav>
                 </div>
                 {/* End .col-lg-9 */}
                 <aside className="col-lg-3 order-lg-first">

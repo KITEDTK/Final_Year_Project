@@ -1,34 +1,54 @@
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
 export const Dashboard = () => {
-    
-  return (
-    <div className="card card-primary card-outline">
-      <div className="card-header">
-        <h3 className="card-title">
-          <i className="far fa-chart-bar"></i>
-          Bar Chart
-        </h3>
-        <div className="card-tools">
-          <button
-            type="button"
-            className="btn btn-tool"
-            data-card-widget="collapse"
-          >
-            <i className="fas fa-minus"></i>
-          </button>
-          <button
-            type="button"
-            className="btn btn-tool"
-            data-card-widget="remove"
-          >
-            <i className="fas fa-times"></i>
-          </button>
-        </div>
-      </div>
-      <div className="card-body">
-        <div id="bar-chart" style={{ height: '300px' }}>
-        </div>
-      </div>
-    </div>
-  );
-};
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Chart.js Bar Chart',
+      },
+    },
+  };
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: ['1','2','3','4','5','6','7'],
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+      {
+        label: 'Dataset 2',
+        data: ['1','2','3','4','5','6','7'],
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      },
+    ],
+  };
+  return (<>
+  <Bar options={options} data={data} />
+  <Bar options={options} data={data} />
+  </>);
+}

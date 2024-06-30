@@ -87,7 +87,6 @@ async function returnPayWhenRecived(req: Request, res: Response){
   try {
       const paymentId = await paymentsService.createPaymentPayWhenReceive(req.body);
       io.emit('payment_create', {paymentId: paymentId});
-      //res.redirect(`http://localhost:3000/donepay/success`);
       res.json(`http://localhost:3000/donepay/success`);
   } catch (err) {
     console.log(err);

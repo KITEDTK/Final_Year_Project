@@ -106,14 +106,10 @@ export const Order = () => {
     socket.on("payment_create", (data: { paymentId: string }) => {
       showToast('Bạn vừa có đơn hàng mới','success');
       dispatch(fetchSinglePayment(data.paymentId)).then((res: any) => {
-        //console.log(res.payload);
-    
-        // Check if res.payload should be added based on paymentTypes and if it doesn't already exist in paymentItems
         if (
           (paymentTypes === 'onlinePay' && res.payload.onlinePay === true) ||
           (paymentTypes === 'offlinePay' && res.payload.onlinePay === false)
         ) {
-          // Check if res.payload already exists in paymentItems
             setPaymentItems(prev => {
               const checkExist = prev.find((item)=>{item.id === res.payload.id});
               if(!checkExist){
@@ -121,7 +117,6 @@ export const Order = () => {
               }else{
                 return [...prev];
               }
-
             });
         }
       });
