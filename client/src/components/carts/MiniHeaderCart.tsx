@@ -16,6 +16,7 @@ export const MiniHeaderCart = () => {
   const LocalCarts = useAppSelector((state) => state.carts.localCarts);
   const [authTotalAmount, setAuthTotalAmount] = useState<number>(0);
   const [authTotalPrice, setAuthTotalPrice] = useState<number>(0);
+
   useEffect(() => {
     if (auth && authCarts) {
       const totalAmount: number = authCarts.reduce(
@@ -33,11 +34,13 @@ export const MiniHeaderCart = () => {
       setAuthTotalPrice(0);
     }
   }, [auth, authCarts]);
+
   useEffect(() => {
     if (auth) {
       dispatch(fetchItemInCart({ userId: auth.id }));
     }
   }, [dispatch, auth]);
+
   const deleteItemFromAuthCart = async (cartId: string) => {
     if (auth && auth !== null) {
       try {
@@ -51,6 +54,7 @@ export const MiniHeaderCart = () => {
       }
     }
   };
+
   const deleteItemFromLocalCart = async (clothDetailId: string) => {
     try {
       await dispatch(removeItemFromLocalCart(clothDetailId));
@@ -59,6 +63,7 @@ export const MiniHeaderCart = () => {
       showToast("Lỗi khi thêm sản phẩm","error")
     }
   };
+  
   return (
     <>
       <div className="dropdown cart-dropdown">

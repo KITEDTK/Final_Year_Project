@@ -16861,5 +16861,8 @@ button:focus {
   content: '\f7e3'; }
 
 /* '' */
+.suggestion {
+  border-bottom: 1px solid #ebebeb;
+}
 
 /*# sourceMappingURL=style.css.map */

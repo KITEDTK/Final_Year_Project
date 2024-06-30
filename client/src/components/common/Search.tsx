@@ -1,7 +1,12 @@
+// props {
+//   text: string;
+//   setText: (text: string) => void;
+// }
+
 export const Search = () => {
   return (
     <>
-      <div className="header-left">
+      <div className="header-left" >
         <div className="header-search header-search-extended header-search-visible d-none d-lg-block">
           <a href="#" className="search-toggle" role="button">
             <i className="icon-search"></i>
@@ -21,6 +26,9 @@ export const Search = () => {
                 id="q"
                 placeholder="Search product ..."
                 required
+                onChange={() => {
+                  // setText
+                }}
               />
             </div>
             {/* End .header-search-wrapper */}
