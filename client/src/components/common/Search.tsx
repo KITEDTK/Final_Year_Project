@@ -1,9 +1,10 @@
-// props {
-//   text: string;
-//   setText: (text: string) => void;
-// }
-
-export const Search = () => {
+interface props {
+  searchText: (text: string) => void;
+}
+export const Search: React.FC<props> = ({searchText}) => {
+  const handleOnChangeSearchText = (text: string) =>{
+    searchText(text);
+  }
   return (
     <>
       <div className="header-left" >
@@ -26,9 +27,7 @@ export const Search = () => {
                 id="q"
                 placeholder="Search product ..."
                 required
-                onChange={() => {
-                  // setText
-                }}
+                onChange={(event) => handleOnChangeSearchText(event.target.value)}
               />
             </div>
             {/* End .header-search-wrapper */}

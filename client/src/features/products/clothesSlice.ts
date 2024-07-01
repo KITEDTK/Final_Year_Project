@@ -9,6 +9,7 @@ import {
   SingleClothes,
   ClothDetails,
   CommentInput,
+  CLothesSearching,
 } from "./clothesTypes";
 
 const BASE_URL = "http://localhost:4000/clothes";
@@ -77,6 +78,22 @@ export const fetchMaxClothesQuantity = createAsyncThunk<number, string>(
     try {
       const response: AxiosResponse<number> = await axios.get(
         `${BASE_URL}/categories/${categoryId}/maxQuantity`,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      return response.data;
+    } catch (err) {
+      console.error("Thêm vào giỏ hàng thất bại", err);
+      throw err;
+    }
+  }
+)
+export const fetchSearchingClothes = createAsyncThunk<CLothesSearching[], string>(
+  "clothes/searhing",
+  async(text: string)=>{
+    try {
+      const response: AxiosResponse<CLothesSearching[]> = await axios.post(
+        `${BASE_URL}/searching`,
+        {text: text},
         { headers: { "Content-Type": "application/json" } }
       );
       return response.data;

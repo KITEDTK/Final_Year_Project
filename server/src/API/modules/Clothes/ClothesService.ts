@@ -435,12 +435,43 @@ async function createClothes(input: CreateClothesInput , req: any){
   });
 }
 async function createClothesDetail( clothesId: string,input: ClothDetails){
-  const {barcode,...rest} = input;
+  const {barcode, ...rest} = input;
   const result = await prisma.clothDetails.create({
     data:{
       clothId: clothesId,
       codeBar: barcode,
       ...rest
+    }
+  });
+  await prisma.actionLogs.create({
+    data:{
+      clothDetailId: result.id,
+      actionName: 'Thêm mới',
+      amount: result.amount
+    }
+  });
+  return result;
+}
+async function searching(text: string) {
+  if(text === ""){
+    return null;
+  }
+  const result = await prisma.clothes.findMany({
+    where:{
+      OR: [
+        {
+          name: {
+            contains: text
+          }
+        },
+        {
+          category:{
+            name: {
+              contains: text
+            }
+          }
+        }
+      ]
     }
   });
   return result;
@@ -461,4 +492,5 @@ export default {
   createClothes,
   readExcelFile,
   addComment,
+  searching,
 };

@@ -6,69 +6,93 @@ import { resetAuth } from "../../features/auth/authSlice";
 import { Search } from "./Search";
 import { useNavigate } from "react-router-dom";
 import { useCallback } from "react";
-
-interface MockData {
-  id: number;
-  name: string;
-}
-
-const data: MockData[] = [
-  { id: 0, name: "ABC" },
-  { id: 1, name: "BCD" },
-  { id: 3, name: "DEF" },
-];
-
-const text = "ABC";
+import { useState } from "react";
+import _ from "lodash";
+import { CLothesSearching } from "../../features/products/clothesTypes";
+import { fetchSearchingClothes } from "../../features/products/clothesSlice";
+import { useEffect } from "react";
+import { formatMoney } from "../../utils/formatMoney";
 
 export const Header = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const auth = useAppSelector((state) => state.auth.auth);
 
+  const [result, setResult] = useState<CLothesSearching[]>([])
+  const handleOnChangeSearchText = (data: string) =>{
+    debouncedSearch(data);
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedSearch = useCallback(
+    _.debounce((searchTerm) => {
+      dispatch(fetchSearchingClothes(searchTerm)).then((res: any) => {
+        setResult(res.payload);
+      });
+    }, 300),
+    [dispatch]
+  );
+
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
+  
   const handleLogout = () => {
     dispatch(resetAuth());
     navigate("/");
   };
 
   const renderSuggestion = useCallback(() => {
-    return text ? (
+    return result ? (
       <div
-        style={{
-          position: "absolute",
-          top: 100,
-          left: 390,
-          backgroundColor: "white",
-          borderTopWidth: 1,
-          borderTopColor: '#ebebeb',
-          borderTopStyle: 'solid',
-          width: "20%",
-        }}
-      >
-        {data.map((item, index) => {
-          return (
-            <div
-              className="suggestion"
-              style={{
-                width: "100%",
-                paddingTop: 16,
-                paddingRight: 16,
-                paddingLeft: 16,
-              }}
-            >
+      style={{
+        position: "absolute",
+        top: 100,
+        left: 200,
+        backgroundColor: "white",
+        borderTopWidth: 1,
+        borderTopColor: "#ebebeb",
+        borderTopStyle: "solid",
+        width: "20%",
+        maxHeight: "300px", // Giới hạn chiều cao để hiển thị 3 sản phẩm
+        overflowY: "auto", // Thêm thanh cuộn dọc nếu có nhiều sản phẩm hơn
+      }}
+    >
+      {result.map((item, index) => {
+        return (
+          <div
+            key={index}
+            className="suggestion"
+            style={{
+              width: "100%",
+              paddingTop: 16,
+              paddingRight: 16,
+              paddingLeft: 16,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <img
+              src="assets/images/products/cart/product-1.jpg"
+              alt="product"
+              style={{ marginRight: 16, marginBottom: 10 }}
+            />
+            <div style={{ flex: 1 }}>
               <a href="#" role="button">
                 <h4 className="product-title" style={{ paddingBottom: 16 }}>
                   {item.name}
+                  <br />
+                  {formatMoney(item.price)}đ
                 </h4>
               </a>
-              {index !== data.length - 1 ? (
-                <div style={{ height: 1, backgroundColor: "#ebebeb" }} />
-              ) : null}
             </div>
-          );
-        }, [])}
-      </div>
+          </div>
+        );
+      })}
+    </div>
     ) : null;
-  }, []);
+  }, [result]);
 
   return (
     <>
@@ -181,8 +205,7 @@ export const Header = () => {
         <div className="header-middle">
           <div className="container">
             <Search
-            //text
-            //setText
+            searchText = {handleOnChangeSearchText}
             />
             <div className="header-center">
               <Link to="/" className="logo">

@@ -68,3 +68,9 @@ export interface CommentInput {
   content: string;
   clothesId: string;
 }
+
+export interface CLothesSearching {
+  id: string;
+  name: string;
+  price: number;
+}

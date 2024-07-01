@@ -73,6 +73,7 @@ model ClothDetails {
   size           Sizes            @relation(fields: [sizeId], references: [id])
   paymentDetails PaymentDetails[]
   refunds        Refunds[]
+  actionLogs     ActionLogs[]
 }
 
 model Users {
@@ -221,4 +222,14 @@ model CLothesAddExcelTest {
   brand      String?
   location   String?
   price      Int?
+}
+
+model ActionLogs {
+  id            String       @id @default(uuid())
+  actionName    String       
+  clothDetailId String
+  clothDetails  ClothDetails @relation(fields: [clothDetailId], references: [id])
+  amount        Int
+  createAt      DateTime     @default(now())
+  updateAt      DateTime?
 }

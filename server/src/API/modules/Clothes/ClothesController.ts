@@ -157,7 +157,17 @@ async function createClothDetails(req: Request, res: Response){
     console.log(err);
   }
 }
+async function searching(req: Request, res: Response){
+  try {
+    const {text} = req.body;
+    const result = await ClothesService.searching(text);
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
 export default {
+  searching,
   createClothDetails,
   getMaxQuantityClothesByRootCategory,
   createClothes,

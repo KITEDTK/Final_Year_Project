@@ -12,6 +12,7 @@ import SizesRoute from "./API/modules/Sizes/SizesRoute";
 import ColorsRoute from "./API/modules/Colors/ColorsRoute";
 import CartsRoute from "./API/modules/Carts/CartsRoute";
 import PaymentsRoute from "./API/modules/Payments/paymentsRoute";
+import StatisticalRoute from "./API/modules/Statistical/StatisticalRoute";
 
 import { initSocket } from "./API/sockets/sockets";
 
@@ -39,6 +40,7 @@ app.use("/sizes",SizesRoute);
 app.use("/colors",ColorsRoute);
 app.use("/carts",CartsRoute);
 app.use("/payments", PaymentsRoute);
+app.use("/statistical",StatisticalRoute);
 
 //dump
 import DumpRoute from "./API/modules/DumpData/DumpRoute";

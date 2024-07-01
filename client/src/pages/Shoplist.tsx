@@ -54,6 +54,7 @@ export const Shoplist = () => {
       dispatch(fetchMaxClothesQuantity(category.id));
     }
   }, [category, dispatch]);
+
   useEffect(() => {
     if (category) {
       dispatch(
@@ -70,11 +71,13 @@ export const Shoplist = () => {
       });
     }
   }, [page, category, dispatch]);
+
   useEffect(()=>{
     if(clothesItems.length === maxQuantityClothesByCategory){
       setHasMore(false);
     }
   },[clothesItems, maxQuantityClothesByCategory]);
+  
   return (
     <>
       <InfiniteScroll
