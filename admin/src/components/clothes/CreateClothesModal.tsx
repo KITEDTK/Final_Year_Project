@@ -250,7 +250,7 @@ export const CreateClothesModal: React.FC<props> = ({
                 aria-controls="custom-content-below-profile"
                 aria-selected="false"
               >
-                Tồn kho
+                Tạo mới chi tiết mặt hàng
               </a>
             </li>
           </ul>

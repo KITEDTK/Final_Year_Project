@@ -199,6 +199,7 @@ export function Clothes() {
         <UpdateClothesModal
           singleCloth={singleClothes}
           show={showUpdateModal}
+          setShow={setShowUpdateModal}
           handleOnClickCloseModal={handleOnClickCloseUpdateModal}
           setClothesItems={setClothesItems}
         />
