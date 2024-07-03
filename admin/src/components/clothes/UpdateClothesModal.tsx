@@ -220,23 +220,36 @@ export const UpdateClothesModal: React.FC<props> = ({
   };
   const [showAddQuantity, setShowAddQuantity] = useState<boolean>(false);
 
-  const handleAddQuantity = () => {
+  const handleAddQuantity = (clothDetailId: string) => {
+    console.log(clothDetailId);
+    
     setShowAddQuantity(true);
   };
   const handleCloseAddQuantity = () => {
     setShowAddQuantity(false);
   };
+  const handleAddClothDetailQuantity = () =>{
+    console.log(singleCloth.name);
+  }
   return (
     <>
       <Modal show={showAddQuantity} onHide={handleCloseAddQuantity}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Thêm số lượng mặt hàng</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {" "}
           <input type="text" className="form-control" />
         </Modal.Body>
-        <Modal.Footer></Modal.Footer>
+        <Modal.Footer>
+        <button
+            type="button"
+            onClick={()=>handleAddClothDetailQuantity()}
+            className="btn btn-block btn-outline-info"
+          >
+            Thêm
+          </button>
+        </Modal.Footer>
       </Modal>
       <Modal
         show={show}
@@ -458,7 +471,7 @@ export const UpdateClothesModal: React.FC<props> = ({
                                       <td>
                                         <button
                                           type="button"
-                                          onClick={() => handleAddQuantity()}
+                                          onClick={() => handleAddQuantity(item.id)}
                                           className="btn btn-block btn-info"
                                         >
                                           Thêm số lượng
