@@ -3,7 +3,7 @@ import { Clothes, SingleClothes } from "../../features/clothes/clothesType";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchModalCategories } from "../../features/categories/categoriesSlice";
 import { Modal } from "react-bootstrap";
-import { fetchUpdateClothesAdmin } from "../../features/clothes/clothesSlice";
+import { fetchAddClothDetailQuantity, fetchUpdateClothDetailQuantity, fetchUpdateClothesAdmin } from "../../features/clothes/clothesSlice";
 import { showToast } from "../../utils/showToast";
 import { fetchAllColors } from "../../features/colors/colorsSlice";
 import { fetchAllSizes } from "../../features/sizes/sizesSlice";
@@ -219,17 +219,26 @@ export const UpdateClothesModal: React.FC<props> = ({
     return undefined;
   };
   const [showAddQuantity, setShowAddQuantity] = useState<boolean>(false);
-
-  const handleAddQuantity = (clothDetailId: string) => {
-    console.log(clothDetailId);
-    
+  const [clothDetailToAdd, setClothDetailToAdd] = useState<string>('');
+  const [quantityToAdd, setQuantityToAdd] = useState<number>(0);
+  const handleShowAddQuantity = (clothDetailId: string) => {
+    setClothDetailToAdd(clothDetailId);
+    setQuantityToAdd(0);
     setShowAddQuantity(true);
   };
   const handleCloseAddQuantity = () => {
     setShowAddQuantity(false);
   };
   const handleAddClothDetailQuantity = () =>{
-    console.log(singleCloth.name);
+    dispatch(fetchAddClothDetailQuantity({clothDetailId: clothDetailToAdd,quantity : quantityToAdd}));
+  }
+
+  const [showChangeQuantity, setShowChangeQuantity] = useState<boolean>(false);
+  const handleCloseChangeQuantity = () =>{
+    setShowChangeQuantity(false);
+  }
+  const handleChangeClothDetailQuantity = ()=>{
+    dispatch(fetchUpdateClothDetailQuantity({clothDetailId: clothDetailToAdd, quantity: quantityToAdd}));
   }
   return (
     <>
@@ -239,7 +248,7 @@ export const UpdateClothesModal: React.FC<props> = ({
         </Modal.Header>
         <Modal.Body>
           {" "}
-          <input type="text" className="form-control" />
+          <input type="text" value={quantityToAdd} className="form-control" onChange={(event)=>setQuantityToAdd(parseInt(event.target.value))} />
         </Modal.Body>
         <Modal.Footer>
         <button
@@ -251,6 +260,26 @@ export const UpdateClothesModal: React.FC<props> = ({
           </button>
         </Modal.Footer>
       </Modal>
+
+      <Modal show={showChangeQuantity} onHide={handleCloseChangeQuantity}>
+        <Modal.Header closeButton>
+          <Modal.Title>Sửa số lượng mặt hàng</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {" "}
+          <input type="text" value={quantityToAdd} className="form-control" onChange={(event)=>setQuantityToAdd(parseInt(event.target.value))} />
+        </Modal.Body>
+        <Modal.Footer>
+        <button
+            type="button"
+            onClick={()=>handleChangeClothDetailQuantity()}
+            className="btn btn-block btn-outline-info"
+          >
+            Thêm
+          </button>
+        </Modal.Footer>
+      </Modal>
+
       <Modal
         show={show}
         size="lg"
@@ -471,10 +500,17 @@ export const UpdateClothesModal: React.FC<props> = ({
                                       <td>
                                         <button
                                           type="button"
-                                          onClick={() => handleAddQuantity(item.id)}
+                                          onClick={() => handleShowAddQuantity(item.id)}
                                           className="btn btn-block btn-info"
                                         >
                                           Thêm số lượng
+                                        </button>
+                                        <button
+                                          type="button"
+                                          onClick={() => handleShowAddQuantity(item.id)}
+                                          className="btn btn-block btn-primary"
+                                        >
+                                          Sửa số lượng
                                         </button>
                                       </td>
                                     </tr>

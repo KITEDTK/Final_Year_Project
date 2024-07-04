@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
 
 import {
+  ClothDetailsUpdateInput,
   Clothes,
   ClothesState,
   CreateClothesInput,
@@ -133,7 +134,44 @@ export const fetchCreateClothes = createAsyncThunk<Clothes,CreateClothesInput>(
       throw err;
     }
   }
-  
+)
+export const fetchAddClothDetailQuantity = createAsyncThunk<number, ClothDetailsUpdateInput>(
+  "clothes/clothDetails/add-quantity", async({clothDetailId, quantity})=>{
+    try {
+      const response: AxiosResponse<number> = await axios.patch(
+        `${BASE_URL}/clothDetails/${clothDetailId}/add-quantity`,
+        {
+          quantity : quantity
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      console.error("fetching error", err);
+      throw err;
+    }
+  }
+)
+export const fetchUpdateClothDetailQuantity = createAsyncThunk<number, ClothDetailsUpdateInput>(
+  "clothes/clothDetails/add-quantity", async({clothDetailId, quantity})=>{
+    try {
+      const response: AxiosResponse<number> = await axios.patch(
+        `${BASE_URL}/clothDetails/${clothDetailId}/update-quantity`,
+        {
+          quantity : quantity
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      console.error("fetching error", err);
+      throw err;
+    }
+  }
 )
 const clothesSlice = createSlice({
   name: "clothes",

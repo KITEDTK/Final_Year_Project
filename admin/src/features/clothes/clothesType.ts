@@ -73,3 +73,7 @@ export interface CreateClothesInput {
     barcode: string;
     amount: number;
   }
+  export interface ClothDetailsUpdateInput{
+    clothDetailId: string;
+    quantity: number;
+  }

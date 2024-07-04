@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import { ClothDetails, CreateClothesInput, filterClothes } from "./ClothesTypes";
+import { ClothDetails, CreateClothesInput } from "./ClothesTypes";
 import fs from "fs";
-import * as path from 'path';
 const excelToJson = require("convert-excel-to-json");
 const prisma = new PrismaClient();
 import { generateCheckDigit } from "../../../utils/generateCheckDigit";
@@ -476,6 +475,65 @@ async function searching(text: string) {
   });
   return result;
 }
+async function addQuantity(clothDetailId: string, quantity: number){
+  const clothDetail = await prisma.clothDetails.findUnique({
+    where:{
+      id: clothDetailId
+    }
+  })
+  const result = await prisma.clothDetails.update({
+    where : {
+      id: clothDetailId
+    },
+    data:{
+      amount: clothDetail ? clothDetail.amount + quantity : quantity
+    }
+  });
+  await prisma.actionLogs.create({
+    data:{
+      actionName: 'Thêm mới',
+      clothDetailId: clothDetailId,
+      amount: quantity
+    }
+  });
+  return result.amount;
+}
+async function updateQuantity(clothDetailId: string, quantity: number){
+  const oldQuantity = await prisma.clothDetails.findUnique({
+    where:{
+      id: clothDetailId
+    }
+  });
+  if(oldQuantity){
+    if(oldQuantity.amount > quantity){
+      await prisma.actionLogs.create({
+        data:{
+          actionName: 'Bớt đi',
+          clothDetailId: clothDetailId,
+          amount: oldQuantity.amount - quantity
+        }
+      })
+    }
+    if(oldQuantity.amount < quantity){
+      await prisma.actionLogs.create({
+        data:{
+          actionName: 'Thêm mới',
+          clothDetailId: clothDetailId,
+          amount: quantity - oldQuantity.amount
+        }
+      })
+    }
+  }
+  const result = await prisma.clothDetails.update({
+    where:{
+      id: clothDetailId
+    },
+    data:{
+      amount: quantity
+    }
+  });
+  return result.amount;
+}
 export default {
   getMaxQuantityClothesByRootCategory,
   getClothesByRootCategory,
@@ -491,6 +549,8 @@ export default {
   getAllClothes,
   createClothes,
   readExcelFile,
+  updateQuantity,
+  addQuantity,
   addComment,
   searching,
 };

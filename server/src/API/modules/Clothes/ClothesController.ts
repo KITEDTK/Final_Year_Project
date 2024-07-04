@@ -166,7 +166,29 @@ async function searching(req: Request, res: Response){
     console.log(err);
   }
 }
+async function addClothDetailQuantity(req: Request, res: Response){
+  try {
+    const {quantity} = req.body;
+    const {clothDetailId} = req.params;
+    const result = await ClothesService.addQuantity(clothDetailId, quantity);
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
+async function updateClothDetailQuantity(req: Request, res: Response){
+  try {
+    const {quantity} = req.body;
+    const {clothDetailId} = req.params;
+    const result = await ClothesService.updateQuantity(clothDetailId, quantity);
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
 export default {
+  addClothDetailQuantity,
+  updateClothDetailQuantity,
   searching,
   createClothDetails,
   getMaxQuantityClothesByRootCategory,
