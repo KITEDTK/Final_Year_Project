@@ -496,7 +496,7 @@ async function addQuantity(clothDetailId: string, quantity: number){
       amount: quantity
     }
   });
-  return result.amount;
+  return result;
 }
 async function updateQuantity(clothDetailId: string, quantity: number){
   const oldQuantity = await prisma.clothDetails.findUnique({
@@ -532,7 +532,7 @@ async function updateQuantity(clothDetailId: string, quantity: number){
       amount: quantity
     }
   });
-  return result.amount;
+  return result;
 }
 export default {
   getMaxQuantityClothesByRootCategory,

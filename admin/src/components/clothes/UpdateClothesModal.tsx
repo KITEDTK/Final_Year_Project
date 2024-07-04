@@ -10,6 +10,7 @@ import { fetchAllSizes } from "../../features/sizes/sizesSlice";
 import { useRef } from "react";
 import { fetchGenerateBarcode } from "../../features/clothes/clothesSlice";
 import axios from "axios";
+import { fetchSingleClothes } from "../../features/clothes/clothesSlice";
 interface props {
   singleCloth: SingleClothes;
   show: boolean;
@@ -226,11 +227,20 @@ export const UpdateClothesModal: React.FC<props> = ({
     setQuantityToAdd(0);
     setShowAddQuantity(true);
   };
+  const handleShowChangeQuantity = (clothDetailId: string) =>{
+    setClothDetailToAdd(clothDetailId);
+    setQuantityToAdd(0);
+    setShowChangeQuantity(true);
+  }
   const handleCloseAddQuantity = () => {
     setShowAddQuantity(false);
   };
   const handleAddClothDetailQuantity = () =>{
-    dispatch(fetchAddClothDetailQuantity({clothDetailId: clothDetailToAdd,quantity : quantityToAdd}));
+    dispatch(fetchAddClothDetailQuantity({clothDetailId: clothDetailToAdd,quantity : quantityToAdd})).then(()=>{
+      dispatch(fetchSingleClothes(singleCloth.id));
+    }).then(()=>{
+      setShowAddQuantity(false);
+    });
   }
 
   const [showChangeQuantity, setShowChangeQuantity] = useState<boolean>(false);
@@ -238,7 +248,11 @@ export const UpdateClothesModal: React.FC<props> = ({
     setShowChangeQuantity(false);
   }
   const handleChangeClothDetailQuantity = ()=>{
-    dispatch(fetchUpdateClothDetailQuantity({clothDetailId: clothDetailToAdd, quantity: quantityToAdd}));
+    dispatch(fetchUpdateClothDetailQuantity({clothDetailId: clothDetailToAdd, quantity: quantityToAdd})).then(()=>{
+      dispatch(fetchSingleClothes(singleCloth.id));
+    }).then(()=>{
+      setShowChangeQuantity(false);
+    });
   }
   return (
     <>
@@ -507,7 +521,7 @@ export const UpdateClothesModal: React.FC<props> = ({
                                         </button>
                                         <button
                                           type="button"
-                                          onClick={() => handleShowAddQuantity(item.id)}
+                                          onClick={() => handleShowChangeQuantity(item.id)}
                                           className="btn btn-block btn-primary"
                                         >
                                           Sửa số lượng

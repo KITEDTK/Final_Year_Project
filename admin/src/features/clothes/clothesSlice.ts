@@ -135,10 +135,10 @@ export const fetchCreateClothes = createAsyncThunk<Clothes,CreateClothesInput>(
     }
   }
 )
-export const fetchAddClothDetailQuantity = createAsyncThunk<number, ClothDetailsUpdateInput>(
+export const fetchAddClothDetailQuantity = createAsyncThunk<any, ClothDetailsUpdateInput>(
   "clothes/clothDetails/add-quantity", async({clothDetailId, quantity})=>{
     try {
-      const response: AxiosResponse<number> = await axios.patch(
+      const response: AxiosResponse<any> = await axios.patch(
         `${BASE_URL}/clothDetails/${clothDetailId}/add-quantity`,
         {
           quantity : quantity
@@ -154,10 +154,10 @@ export const fetchAddClothDetailQuantity = createAsyncThunk<number, ClothDetails
     }
   }
 )
-export const fetchUpdateClothDetailQuantity = createAsyncThunk<number, ClothDetailsUpdateInput>(
+export const fetchUpdateClothDetailQuantity = createAsyncThunk<any, ClothDetailsUpdateInput>(
   "clothes/clothDetails/add-quantity", async({clothDetailId, quantity})=>{
     try {
-      const response: AxiosResponse<number> = await axios.patch(
+      const response: AxiosResponse<any> = await axios.patch(
         `${BASE_URL}/clothDetails/${clothDetailId}/update-quantity`,
         {
           quantity : quantity

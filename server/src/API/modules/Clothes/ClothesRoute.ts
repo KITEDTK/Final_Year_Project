@@ -83,7 +83,7 @@ router.get(
   ClothesController.getMaxQuantityClothesByRootCategory
 );
 router.post("/searching", ClothesController.searching);
-router.patch("/clothDetails/:clothDetailId/add-quantity",ClothesController.addClothDetailQuantity);
-router.patch("/clothDetails/:clothDetailId/update-quantity", ClothesController.updateClothDetailQuantity);
+router.patch("/admin/clothDetails/:clothDetailId/add-quantity",ClothesController.addClothDetailQuantity);
+router.patch("/admin/clothDetails/:clothDetailId/update-quantity", ClothesController.updateClothDetailQuantity);
 
 export default router;
