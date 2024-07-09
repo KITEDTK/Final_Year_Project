@@ -3,7 +3,11 @@ import { Clothes, SingleClothes } from "../../features/clothes/clothesType";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchModalCategories } from "../../features/categories/categoriesSlice";
 import { Modal } from "react-bootstrap";
-import { fetchAddClothDetailQuantity, fetchUpdateClothDetailQuantity, fetchUpdateClothesAdmin } from "../../features/clothes/clothesSlice";
+import {
+  fetchAddClothDetailQuantity,
+  fetchUpdateClothDetailQuantity,
+  fetchUpdateClothesAdmin,
+} from "../../features/clothes/clothesSlice";
 import { showToast } from "../../utils/showToast";
 import { fetchAllColors } from "../../features/colors/colorsSlice";
 import { fetchAllSizes } from "../../features/sizes/sizesSlice";
@@ -11,6 +15,7 @@ import { useRef } from "react";
 import { fetchGenerateBarcode } from "../../features/clothes/clothesSlice";
 import axios from "axios";
 import { fetchSingleClothes } from "../../features/clothes/clothesSlice";
+import JsBarcode from "jsbarcode";
 interface props {
   singleCloth: SingleClothes;
   show: boolean;
@@ -220,40 +225,68 @@ export const UpdateClothesModal: React.FC<props> = ({
     return undefined;
   };
   const [showAddQuantity, setShowAddQuantity] = useState<boolean>(false);
-  const [clothDetailToAdd, setClothDetailToAdd] = useState<string>('');
+  const [clothDetailToAdd, setClothDetailToAdd] = useState<string>("");
   const [quantityToAdd, setQuantityToAdd] = useState<number>(0);
   const handleShowAddQuantity = (clothDetailId: string) => {
     setClothDetailToAdd(clothDetailId);
     setQuantityToAdd(0);
     setShowAddQuantity(true);
   };
-  const handleShowChangeQuantity = (clothDetailId: string) =>{
+  const handleShowChangeQuantity = (clothDetailId: string) => {
     setClothDetailToAdd(clothDetailId);
     setQuantityToAdd(0);
     setShowChangeQuantity(true);
-  }
+  };
+
   const handleCloseAddQuantity = () => {
     setShowAddQuantity(false);
   };
-  const handleAddClothDetailQuantity = () =>{
-    dispatch(fetchAddClothDetailQuantity({clothDetailId: clothDetailToAdd,quantity : quantityToAdd})).then(()=>{
-      dispatch(fetchSingleClothes(singleCloth.id));
-    }).then(()=>{
-      setShowAddQuantity(false);
-    });
-  }
+  const handleAddClothDetailQuantity = () => {
+    dispatch(
+      fetchAddClothDetailQuantity({
+        clothDetailId: clothDetailToAdd,
+        quantity: quantityToAdd,
+      })
+    )
+      .then(() => {
+        dispatch(fetchSingleClothes(singleCloth.id));
+      })
+      .then(() => {
+        setShowAddQuantity(false);
+      });
+  };
 
   const [showChangeQuantity, setShowChangeQuantity] = useState<boolean>(false);
-  const handleCloseChangeQuantity = () =>{
+  const handleCloseChangeQuantity = () => {
     setShowChangeQuantity(false);
-  }
-  const handleChangeClothDetailQuantity = ()=>{
-    dispatch(fetchUpdateClothDetailQuantity({clothDetailId: clothDetailToAdd, quantity: quantityToAdd})).then(()=>{
-      dispatch(fetchSingleClothes(singleCloth.id));
-    }).then(()=>{
-      setShowChangeQuantity(false);
-    });
-  }
+  };
+  const handleChangeClothDetailQuantity = () => {
+    dispatch(
+      fetchUpdateClothDetailQuantity({
+        clothDetailId: clothDetailToAdd,
+        quantity: quantityToAdd,
+      })
+    )
+      .then(() => {
+        dispatch(fetchSingleClothes(singleCloth.id));
+      })
+      .then(() => {
+        setShowChangeQuantity(false);
+      });
+  };
+  useEffect(() => {
+    if (singleCloth && singleCloth.clothDetails) {
+      singleCloth.clothDetails.forEach((item) => {
+        JsBarcode(`#barcode-${item.id}`, item.codeBar, {
+          format: "CODE128",
+          displayValue: true,
+          width: 0.75, // Adjust the width of the bars
+          height: 30, // Adjust the height of the bars
+          fontSize: 15
+        });
+      });
+    }
+  }, [singleCloth]);
   return (
     <>
       <Modal show={showAddQuantity} onHide={handleCloseAddQuantity}>
@@ -262,12 +295,17 @@ export const UpdateClothesModal: React.FC<props> = ({
         </Modal.Header>
         <Modal.Body>
           {" "}
-          <input type="text" value={quantityToAdd} className="form-control" onChange={(event)=>setQuantityToAdd(parseInt(event.target.value))} />
+          <input
+            type="text"
+            value={quantityToAdd}
+            className="form-control"
+            onChange={(event) => setQuantityToAdd(parseInt(event.target.value))}
+          />
         </Modal.Body>
         <Modal.Footer>
-        <button
+          <button
             type="button"
-            onClick={()=>handleAddClothDetailQuantity()}
+            onClick={() => handleAddClothDetailQuantity()}
             className="btn btn-block btn-outline-info"
           >
             Thêm
@@ -281,12 +319,17 @@ export const UpdateClothesModal: React.FC<props> = ({
         </Modal.Header>
         <Modal.Body>
           {" "}
-          <input type="text" value={quantityToAdd} className="form-control" onChange={(event)=>setQuantityToAdd(parseInt(event.target.value))} />
+          <input
+            type="text"
+            value={quantityToAdd}
+            className="form-control"
+            onChange={(event) => setQuantityToAdd(parseInt(event.target.value))}
+          />
         </Modal.Body>
         <Modal.Footer>
-        <button
+          <button
             type="button"
-            onClick={()=>handleChangeClothDetailQuantity()}
+            onClick={() => handleChangeClothDetailQuantity()}
             className="btn btn-block btn-outline-info"
           >
             Thêm
@@ -491,11 +534,11 @@ export const UpdateClothesModal: React.FC<props> = ({
                             <thead>
                               <tr>
                                 <th style={{ width: "3%" }}>STT</th>
-                                <th style={{ width: "10%" }}>Màu sắc</th>
-                                <th style={{ width: "10%" }}>Kích cỡ</th>
+                                <th style={{ width: "6%" }}>Màu sắc</th>
+                                <th style={{ width: "6%" }}>Kích cỡ</th>
                                 <th style={{ width: "10%" }}>Mã vạch</th>
-                                <th style={{ width: "10%" }}>Tồn kho</th>
-                                <th style={{ width: "10%" }}>Đang đặt</th>
+                                <th style={{ width: "7%" }}>Tồn kho</th>
+                                <th style={{ width: "10%" }}>Khách đang đặt</th>
                                 <th style={{ width: "15%" }}>Thêm số lượng</th>
                               </tr>
                             </thead>
@@ -508,20 +551,26 @@ export const UpdateClothesModal: React.FC<props> = ({
                                       <td>{index + 1}</td>
                                       <td>{item.color.name}</td>
                                       <td>{item.size.name}</td>
-                                      <td>{item.codeBar}</td>
+                                      <td>
+                                        <svg id={`barcode-${item.id}`}></svg>
+                                      </td>
                                       <td>{item.amount}</td>
                                       <td>{item.sumOrderAmount}</td>
                                       <td>
                                         <button
                                           type="button"
-                                          onClick={() => handleShowAddQuantity(item.id)}
+                                          onClick={() =>
+                                            handleShowAddQuantity(item.id)
+                                          }
                                           className="btn btn-block btn-info"
                                         >
                                           Thêm số lượng
                                         </button>
                                         <button
                                           type="button"
-                                          onClick={() => handleShowChangeQuantity(item.id)}
+                                          onClick={() =>
+                                            handleShowChangeQuantity(item.id)
+                                          }
                                           className="btn btn-block btn-primary"
                                         >
                                           Sửa số lượng
