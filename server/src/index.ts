@@ -4,6 +4,7 @@ import cors from 'cors';
 import { Request, Response, NextFunction } from "express";
 var session = require('express-session');
 const http = require('http');
+const path = require('path');
 //Router
 import UsersRoute from "./API/modules/Users/UsersRoute";
 import ClothesRoute from "./API/modules/Clothes/ClothesRoute";
@@ -32,6 +33,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 }, cors({ maxAge: 84600 }));
 export const io = initSocket(server);
 app.use(bodyParser.json());
+app.use(express.static('src/API/modules/Clothes'));
+app.use('/images', express.static('src/API/modules/Clothes/uploads'));
 
 app.use("/users", UsersRoute);
 app.use("/clothes", ClothesRoute);

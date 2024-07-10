@@ -28,7 +28,6 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
     }
   });
   useEffect(() => {
-    // Mỗi lần filter thì reset mẫu màu đã chọn
     setActiveColor(() => {
       if (!clothDetails || clothDetails.length === 0) {
         return "";
@@ -64,7 +63,6 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
     const singleItem = clothDetails.find((item)=> item.id === clothDetailId);
     const maxQuantity = singleItem !== undefined ? singleItem.amount : 0;
     if (auth && auth !== null) {
-      // Khách hàng đã đăng nhập
       try{
         const itemInAuthCart = authCarts.find((item)=> item.clothDetailId === clothDetailId);
         if(itemInAuthCart){
@@ -84,7 +82,6 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
         showToast(<>Lỗi khi thêm sản phẩm vào giỏ hàng</>, "error");
       }
     } else {
-      //khách hàng chưa đăng nhập
       try {
         const clothInfo = clothDetails.find((cd) => cd.id === clothDetailId);
         const result = {
@@ -125,7 +122,8 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
             <span className="product-label label-new">New</span>
             <Link to={`/single-product/${clothes.id}`}>
               <img
-                src="assets/images/products/product-4.jpg"
+                src={`http://localhost:4000/images/${clothDetails.find((item)=>item.colorId === activeColor)?.image1}`}
+                style={{ width: '280px', height: '280px' }}
                 alt="Product image"
                 className="product-image"
               />
@@ -204,9 +202,9 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
                     }}
                   >
                     <img
-                      src="assets/images/products/product-4-thumb.jpg"
+                      src={`http://localhost:4000/images/${clothDetails.find((itemcd)=>itemcd.colorId === item.colorId)?.image1}`}
                       alt="product desc"
-                      style={{ border: `2px solid ${item.name}` }}
+                      style={{ border: `2px solid ${item.name}`,width: '40px', height: '40px' }}
                     />
                   </a>
                 ))}

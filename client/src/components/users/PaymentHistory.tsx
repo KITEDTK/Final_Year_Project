@@ -25,11 +25,11 @@ export const PaymentHistory = () => {
       "receive_payment_status",
       (data: { paymentId: string; status: string }) => {
         setPaymentHistory((prev) => {
-          return prev.map(item => {
+          return prev.map((item) => {
             if (item.id === data.paymentId) {
               return {
                 ...item,
-                status: data.status
+                status: data.status,
               };
             }
             return item;
@@ -38,6 +38,9 @@ export const PaymentHistory = () => {
       }
     );
   }, [paymentHistory]);
+  const handleSell = (clothDetailId: string) =>{
+    socket.emit("clothDetailId",clothDetailId);
+  }
   return (
     <>
       <table className="table table-wishlist table-mobile">
@@ -86,7 +89,21 @@ export const PaymentHistory = () => {
                   </td>
                   <td className="price-col">{itemm.amount}</td>
                   <td className="stock-col">
-                    <span className="in-stock">{item.status}</span>
+                    <span className="in-stock">
+                      {item.status === "Khách đã nhận" ? (
+                        <>
+                          <div className="col-6 col-lg-4 col-xl-2">
+                            <div className="btn-wrap">
+                              <div onClick={()=>handleSell(item.id)} className="btn btn-primary btn-round">
+                                Bán lại
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        item.status
+                      )}
+                    </span>
                   </td>
                 </tr>
               ))

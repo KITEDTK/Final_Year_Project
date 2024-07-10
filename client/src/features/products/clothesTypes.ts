@@ -17,6 +17,9 @@ export interface ClothDetailsColorSize {
     color: {
       name: string;
     };
+    image1: string;
+    image2: string;
+    image3: string;
   }
 export interface ClothesFilter {
   id: string;

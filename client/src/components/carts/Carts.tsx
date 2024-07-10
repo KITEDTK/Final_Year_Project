@@ -66,7 +66,7 @@ export const Carts = () => {
     clothDetailId: string,
     amount: number
   ) => {
-    console.log(clothDetails);
+    //console.log(clothDetails);
     const itemInCart = clothDetails.find((item) => item.id === clothDetailId);
     const maxQuantity = itemInCart !== undefined ? itemInCart.amount : 0;
     setLocalQuantities((prevQuantities) => {

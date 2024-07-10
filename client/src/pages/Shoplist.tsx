@@ -75,6 +75,8 @@ export const Shoplist = () => {
   useEffect(()=>{
     if(clothesItems.length === maxQuantityClothesByCategory){
       setHasMore(false);
+    }else{
+      setHasMore(true);
     }
   },[clothesItems, maxQuantityClothesByCategory]);
   
