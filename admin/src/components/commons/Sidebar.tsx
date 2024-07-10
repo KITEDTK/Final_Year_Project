@@ -54,12 +54,12 @@ export function Sidebar() {
               data-accordion="false"
             >
               <li className="nav-item menu-open">
-                <a href="#" className="nav-link active">
+                <Link  to='/' className="nav-link active">
                   <i className="nav-icon fas fa-tachometer-alt"></i>
                   <p>
-                    Tổng quan
+                    Thống kê
                   </p>
-                </a>
+                </Link >
               </li>
               <li className="nav-item">
                 <a href="#" className="nav-link">
@@ -94,10 +94,10 @@ export function Sidebar() {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="pages/tables/data.html" className="nav-link">
+                    <Link to='/refunds' className="nav-link">
                       <i className="far fa-circle nav-icon"></i>
-                      <p>DataTables</p>
-                    </a>
+                      <p>Trả hàng</p>
+                    </Link>
                   </li>
                   <li className="nav-item">
                     <a href="pages/tables/jsgrid.html" className="nav-link">
