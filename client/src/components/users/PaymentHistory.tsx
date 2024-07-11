@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 import { formatMoney } from "../../utils/formatMoney";
 import { io } from "socket.io-client";
 const socket = io("http://localhost:4000");
+import { Modal } from "react-bootstrap";
+import { Form } from "react-bootstrap";
+import {Button} from "react-bootstrap";
 export const PaymentHistory = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth.auth);
@@ -38,11 +41,49 @@ export const PaymentHistory = () => {
       }
     );
   }, [paymentHistory]);
+  
+  const [showModal, setShowModal] = useState<boolean>(false);
   const handleSell = (clothDetailId: string) =>{
-    socket.emit("clothDetailId",clothDetailId);
+    setShowModal(true);
+    console.log(clothDetailId);
+  }
+  const handleOnHideModal = () => {
+    setShowModal(false);
   }
   return (
     <>
+     <Modal show={showModal} onHide={handleOnHideModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="name@example.com"
+                autoFocus
+              />
+            </Form.Group>
+            <Form.Group
+              className="mb-3"
+              controlId="exampleForm.ControlTextarea1"
+            >
+              <Form.Label>Example textarea</Form.Label>
+              <Form.Control as="textarea" rows={3} />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" >
+            Close
+          </Button>
+          <Button variant="primary" >
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <table className="table table-wishlist table-mobile">
         <thead>
           <tr>

@@ -9,10 +9,12 @@ import {
   fetchSinglePayment,
   fetchUpdatePaymentStatus,
 } from "../features/payments/paymentSlice";
+
 import { PaymentDetailModal } from "../components/payments/PaymentDetailModal";
 
 import { io } from "socket.io-client";
 import { showToast } from "../utils/showToast";
+
 const socket = io("http://localhost:4000");
 export const Order = () => {
   const [page, setPage] = useState<number>(0);
@@ -122,6 +124,7 @@ export const Order = () => {
       });
     });
   }, [dispatch,paymentTypes]);
+
   return (
     <>
       <section className="content">
