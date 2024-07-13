@@ -172,6 +172,7 @@ model PaymentDetails {
   isEnable    Boolean      @default(true)
   clothDetail ClothDetails @relation(fields: [clothId], references: [id])
   payment     Payments     @relation(fields: [paymentId], references: [id])
+  secondHand SecondHand[]
 }
 
 model Carts {
@@ -230,6 +231,14 @@ model ActionLogs {
   clothDetailId String
   clothDetails  ClothDetails @relation(fields: [clothDetailId], references: [id])
   amount        Int
+  createAt      DateTime     @default(now())
+  updateAt      DateTime?
+}
+model SecondHand {
+  id String @id @default(uuid())
+  paymentDetailId String
+  paymentDetails PaymentDetails @relation(fields: [paymentDetailId], references: [id])
+  amount Int
   createAt      DateTime     @default(now())
   updateAt      DateTime?
 }

@@ -7,6 +7,7 @@ import { io } from "socket.io-client";
 const socket = io("http://localhost:4000");
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
+import { fetchAddSecondHand } from "../../features/secondHand/secondHandSlice";
 export const PaymentHistory = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth.auth);
@@ -42,14 +43,20 @@ export const PaymentHistory = () => {
   }, [paymentHistory]);
 
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [quantityToSell, setQuantityToSell] = useState<number>(0);
-  const handleSell = (paymentId: string, clothDetailId: string) => {
+  const [quantityToSell, setQuantityToSell]= useState<number>(0);
+  const [paymentDetailIdToSell, setPaymentDetialIdToSell] = useState<string>('');
+  const handleShowModalSell = (paymentDetailId: string) => {
     setShowModal(true);
-    console.log('paymentId: ',paymentId, ', clothDetailId:', clothDetailId);
+    setPaymentDetialIdToSell(paymentDetailId);
   };
   const handleOnHideModal = () => {
     setShowModal(false);
   };
+  const handleSell = () => {
+    dispatch(fetchAddSecondHand({paymentDetailId: paymentDetailIdToSell, amount: quantityToSell})).then(()=>{
+      setShowModal(false);
+    })
+  }
   return (
     <>
       <Modal show={showModal} onHide={handleOnHideModal}>
@@ -64,6 +71,7 @@ export const PaymentHistory = () => {
                 className="form-control"
                 id="singin-email-2"
                 name="singin-email"
+                onChange={(event)=>setQuantityToSell(parseInt(event.target.value))}
                 required
               />
             </div>
@@ -72,7 +80,7 @@ export const PaymentHistory = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={()=>setShowModal(false)} variant="secondary">Đóng</Button>
-          <Button variant="primary">Bán lại trên web</Button>
+          <Button onClick={()=>handleSell()} variant="primary">Bán lại trên web</Button>
         </Modal.Footer>
       </Modal>
       <table className="table table-wishlist table-mobile">
@@ -127,7 +135,7 @@ export const PaymentHistory = () => {
                           <div className="col-6 col-lg-4 col-xl-2">
                             <div className="btn-wrap">
                               <div
-                                onClick={() => handleSell(item.id, itemm.id)}
+                                onClick={() => handleShowModalSell( itemm.id)}
                                 className="btn btn-primary btn-round"
                               >
                                 Bán lại
