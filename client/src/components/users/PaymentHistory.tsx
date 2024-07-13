@@ -6,8 +6,7 @@ import { formatMoney } from "../../utils/formatMoney";
 import { io } from "socket.io-client";
 const socket = io("http://localhost:4000");
 import { Modal } from "react-bootstrap";
-import { Form } from "react-bootstrap";
-import {Button} from "react-bootstrap";
+import { Button } from "react-bootstrap";
 export const PaymentHistory = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth.auth);
@@ -41,47 +40,39 @@ export const PaymentHistory = () => {
       }
     );
   }, [paymentHistory]);
-  
+
   const [showModal, setShowModal] = useState<boolean>(false);
-  const handleSell = (clothDetailId: string) =>{
+  const [quantityToSell, setQuantityToSell] = useState<number>(0);
+  const handleSell = (paymentId: string, clothDetailId: string) => {
     setShowModal(true);
-    console.log(clothDetailId);
-  }
+    console.log('paymentId: ',paymentId, ', clothDetailId:', clothDetailId);
+  };
   const handleOnHideModal = () => {
     setShowModal(false);
-  }
+  };
   return (
     <>
-     <Modal show={showModal} onHide={handleOnHideModal}>
+      <Modal show={showModal} onHide={handleOnHideModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Nhập số lượng sản phẩm muốn bán lại</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="name@example.com"
-                autoFocus
+          <form>
+            <div className="form-group">
+              <input
+                type="text"
+                className="form-control"
+                id="singin-email-2"
+                name="singin-email"
+                required
               />
-            </Form.Group>
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
-            >
-              <Form.Label>Example textarea</Form.Label>
-              <Form.Control as="textarea" rows={3} />
-            </Form.Group>
-          </Form>
+            </div>
+          </form>
+        {/* End .form-choice */}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" >
-            Close
-          </Button>
-          <Button variant="primary" >
-            Save Changes
-          </Button>
+          <Button onClick={()=>setShowModal(false)} variant="secondary">Đóng</Button>
+          <Button variant="primary">Bán lại trên web</Button>
         </Modal.Footer>
       </Modal>
       <table className="table table-wishlist table-mobile">
@@ -135,7 +126,10 @@ export const PaymentHistory = () => {
                         <>
                           <div className="col-6 col-lg-4 col-xl-2">
                             <div className="btn-wrap">
-                              <div onClick={()=>handleSell(item.id)} className="btn btn-primary btn-round">
+                              <div
+                                onClick={() => handleSell(item.id, itemm.id)}
+                                className="btn btn-primary btn-round"
+                              >
                                 Bán lại
                               </div>
                             </div>

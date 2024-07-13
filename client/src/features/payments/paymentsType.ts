@@ -32,6 +32,7 @@ export interface PaymentHistory {
   id: string;
   status: string;
   paymentDetails: {
+    id: string,
     amount: number,
     clothDetail: {
       cloth: {

@@ -197,6 +197,7 @@ async function getHistoryPayment(userId: string){
       status: true,
       paymentDetails:{
         select:{
+          id: true,
           amount: true,
           clothDetail:{
             select:{
