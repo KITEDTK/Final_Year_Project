@@ -177,6 +177,32 @@ async function updateStatusPayment(paymentId: string, status: string){
   if(status === 'Đang vận chuyển'){
     // xử lí logic vận chuyển ở đây
   }
+  if(status === 'Khách đã nhận'){
+    const checkExistUser = await prisma.payments.findUnique({
+      where:{
+        id: paymentId
+      }
+    });
+    if (checkExistUser && checkExistUser.userId !== null) {
+      const allData = await prisma.paymentDetails.findMany({
+        where: {
+          paymentId: paymentId,
+        }
+      });
+    
+      const data: any = allData
+        .map(item => ({
+          clothDetailId: item.clothId,
+          amount: item.amount,
+          userId: checkExistUser.userId
+        }))
+        .filter(item => item.userId !== null);
+    
+      await prisma.wardrobe.createMany({
+        data: data
+      });
+    }
+  }
   const update = await prisma.payments.update({
     where:{
       id: paymentId

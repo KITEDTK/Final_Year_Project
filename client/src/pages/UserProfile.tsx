@@ -1,5 +1,5 @@
 import { PaymentHistory } from "../components/users/PaymentHistory";
-
+import { Wardrobe } from "../components/users/Wardrobe";
 export const UserProfile = () => {
   return (
     <>
@@ -66,7 +66,7 @@ export const UserProfile = () => {
                         aria-controls="tab-orders"
                         aria-selected="false"
                       >
-                        Orders
+                        Lịch sử mua hàng
                       </a>
                     </li>
                     <li className="nav-item">
@@ -79,7 +79,7 @@ export const UserProfile = () => {
                         aria-controls="tab-downloads"
                         aria-selected="false"
                       >
-                        Downloads
+                        Tủ quần áo 
                       </a>
                     </li>
                     <li className="nav-item">
@@ -162,17 +162,8 @@ export const UserProfile = () => {
                       role="tabpanel"
                       aria-labelledby="tab-orders-link"
                     >
-                      {/* <p>No order has been made yet.</p>
-                      <a
-                        href="category.html"
-                        className="btn btn-outline-primary-2"
-                      >
-                        <span>GO SHOP</span>
-                        <i className="icon-long-arrow-right"></i>
-                      </a> */}
                       <PaymentHistory/>
                     </div>
-                    {/* .End .tab-pane */}
 
                     <div
                       className="tab-pane fade"
@@ -180,14 +171,7 @@ export const UserProfile = () => {
                       role="tabpanel"
                       aria-labelledby="tab-downloads-link"
                     >
-                      <p>No downloads available yet.</p>
-                      <a
-                        href="category.html"
-                        className="btn btn-outline-primary-2"
-                      >
-                        <span>GO SHOP</span>
-                        <i className="icon-long-arrow-right"></i>
-                      </a>
+                      <Wardrobe/>
                     </div>
                     {/* .End .tab-pane */}
 

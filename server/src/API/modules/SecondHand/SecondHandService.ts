@@ -2,10 +2,10 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-async function create(paymentDetailId: string, amountToSell: number){
+async function create(clothDetailId: string, amountToSell: number){
     const result = await prisma.secondHand.create({
         data:{
-            paymentDetailId: paymentDetailId,
+            clothDetailId: clothDetailId,
             amount: amountToSell
         }
     });

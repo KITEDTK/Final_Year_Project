@@ -1,4 +1,4 @@
 export interface SecondHandAddInput {
-    paymentDetailId: string;
+    clothDetailId: string;
     amount: number;
 }

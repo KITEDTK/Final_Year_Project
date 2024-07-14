@@ -74,6 +74,8 @@ model ClothDetails {
   paymentDetails PaymentDetails[]
   refunds        Refunds[]
   actionLogs     ActionLogs[]
+  wardrobes      Wardrobe[]
+  secondHand     SecondHand[]
 }
 
 model Users {
@@ -95,6 +97,7 @@ model Users {
   refunds          Refunds[]
   permissions      UserPermissions[]
   vouchers         UserVouchers[]
+  wardrobe         Wardrobe[]
 }
 
 model Permissions {
@@ -172,7 +175,6 @@ model PaymentDetails {
   isEnable    Boolean      @default(true)
   clothDetail ClothDetails @relation(fields: [clothId], references: [id])
   payment     Payments     @relation(fields: [paymentId], references: [id])
-  secondHand SecondHand[]
 }
 
 model Carts {
@@ -227,18 +229,30 @@ model CLothesAddExcelTest {
 
 model ActionLogs {
   id            String       @id @default(uuid())
-  actionName    String       
+  actionName    String
   clothDetailId String
   clothDetails  ClothDetails @relation(fields: [clothDetailId], references: [id])
   amount        Int
   createAt      DateTime     @default(now())
   updateAt      DateTime?
 }
+
 model SecondHand {
-  id String @id @default(uuid())
-  paymentDetailId String
-  paymentDetails PaymentDetails @relation(fields: [paymentDetailId], references: [id])
-  amount Int
+  id            String       @id @default(uuid())
+  clothDetailId String
+  clothDetails  ClothDetails @relation(fields: [clothDetailId], references: [id])
+  amount        Int
+  createAt      DateTime     @default(now())
+  updateAt      DateTime?
+}
+
+model Wardrobe {
+  id            String       @id @default(uuid())
+  clothDetailId String
+  clothDetails  ClothDetails @relation(fields: [clothDetailId], references: [id])
+  userId        String
+  users         Users        @relation(fields: [userId], references: [id])
+  amount        Int
   createAt      DateTime     @default(now())
   updateAt      DateTime?
 }
