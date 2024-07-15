@@ -227,6 +227,7 @@ export const Header = () => {
               </a>
 
               <MiniHeaderCart />
+
               {/* End .cart-dropdown */}
             </div>
           </div>

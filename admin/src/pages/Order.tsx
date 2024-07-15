@@ -90,6 +90,9 @@ export const Order = () => {
             userId: item.userId,
             status: nextStatus,
           });
+          if(item.userId !== null && nextStatus === 'Khách đã nhận'){
+            socket.emit('join_user_wardrobe', {userId: item.userId});
+          }
           await dispatch(
             fetchUpdatePaymentStatus({
               paymentId: paymentId,

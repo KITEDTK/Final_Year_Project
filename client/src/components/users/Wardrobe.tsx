@@ -6,6 +6,8 @@ import { formatMoney } from "../../utils/formatMoney";
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { fetchAddSecondHand } from "../../features/secondHand/secondHandSlice";
+import { io } from "socket.io-client";
+const socket = io("http://localhost:4000");
 export const Wardrobe = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth.auth);
@@ -17,23 +19,54 @@ export const Wardrobe = () => {
           setWardrobeItems(res.payload);
         }
       );
+      //join users
+      socket.emit("join_user", { userId: auth.id });
     }
-  });
+    
+  }, [dispatch, auth]);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [quantityToSell, setQuantityToSell]= useState<number>(0);
-  const [clothDetailIdToSell, setClothDetialIdToSell] = useState<string>('');
-  const handleShowModalSell = (paymentDetailId: string) => {
+  const [quantityToSell, setQuantityToSell]= useState<number>(1);
+  const [wardrobelIdToSell, setWardrobeIdToSell] = useState<string>('');
+  const handleShowModalSell = (wardrobelId: string) => {
     setShowModal(true);
-    setClothDetialIdToSell(paymentDetailId);
+    setWardrobeIdToSell(wardrobelId);
   };
   const handleOnHideModal = () => {
     setShowModal(false);
   };
   const handleSell = () => {
-    dispatch(fetchAddSecondHand({clothDetailId: clothDetailIdToSell, amount: quantityToSell})).then(()=>{
+    dispatch(fetchAddSecondHand({wardrobeId: wardrobelIdToSell, amount: quantityToSell})).then(()=>{
       setShowModal(false);
+      if (auth) {
+        dispatch(fetchAllWardrobeByUsers({ userId: auth.id })).then(
+          (res: any) => {
+            setWardrobeItems(res.payload);
+          }
+        );
+      }
     })
+  };
+  const handleOnChangeQuantity = (amount: number) => {
+    const maxQuantity = wardrobeItems?.find((item)=>item.id === wardrobelIdToSell)?.amount;
+    if(maxQuantity){
+      if(amount > maxQuantity){
+        setQuantityToSell(maxQuantity);
+      }
+    }else{
+      setQuantityToSell(0);
+    }
   }
+  useEffect(()=>{
+    socket.on('update_user_wardrobe',()=>{
+      if (auth) {
+        dispatch(fetchAllWardrobeByUsers({ userId: auth.id })).then(
+          (res: any) => {
+            setWardrobeItems(res.payload);
+          }
+        );
+      }
+    })
+  })
   return (
     <>
      <Modal show={showModal} onHide={handleOnHideModal}>
@@ -48,7 +81,8 @@ export const Wardrobe = () => {
                 className="form-control"
                 id="singin-email-2"
                 name="singin-email"
-                onChange={(event)=>setQuantityToSell(parseInt(event.target.value))}
+                value={quantityToSell}
+                onChange={(event)=>handleOnChangeQuantity(parseInt(event.target.value))}
                 required
               />
             </div>

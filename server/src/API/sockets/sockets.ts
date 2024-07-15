@@ -20,6 +20,10 @@ export function initSocket(server: http.Server): Server {
       const { paymentId, userId, status } = data;
       socket.to(userId).emit('receive_payment_status', { paymentId, status });
     });
+    socket.on('join_user_wardrobe', (data: { userId: string }) => {
+      const { userId } = data;
+      socket.to(userId).emit('update_user_wardrobe');
+    });
   });
 
   return io;

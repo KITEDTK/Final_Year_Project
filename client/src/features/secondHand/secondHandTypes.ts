@@ -1,4 +1,5 @@
+
 export interface SecondHandAddInput {
-    clothDetailId: string;
+    wardrobeId: string;
     amount: number;
 }

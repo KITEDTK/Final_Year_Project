@@ -5,7 +5,10 @@ const prisma = new PrismaClient();
 async function getAllByUserId(userId: string) {
   const result = await prisma.wardrobe.findMany({
     where:{
-      userId: userId
+      userId: userId,
+      amount:{
+        not: 0
+      }
     },
     select:{
       id: true,

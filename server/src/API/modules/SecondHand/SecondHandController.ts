@@ -3,9 +3,9 @@ import SecondHandService from "./SecondHandService";
 
 async function add(req: Request, res: Response) {
   try {
-    const { clothDetailId, amount } = req.body;
+    const { wardrobeId, amount } = req.body;
     const result = await SecondHandService.create(
-      clothDetailId,
+      wardrobeId,
       amount
     );
     res.json(result);

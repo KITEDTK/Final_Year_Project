@@ -75,7 +75,6 @@ model ClothDetails {
   refunds        Refunds[]
   actionLogs     ActionLogs[]
   wardrobes      Wardrobe[]
-  secondHand     SecondHand[]
 }
 
 model Users {
@@ -239,8 +238,8 @@ model ActionLogs {
 
 model SecondHand {
   id            String       @id @default(uuid())
-  clothDetailId String
-  clothDetails  ClothDetails @relation(fields: [clothDetailId], references: [id])
+  wardrobeId String
+  wardrobe  Wardrobe @relation(fields: [wardrobeId], references: [id])
   amount        Int
   createAt      DateTime     @default(now())
   updateAt      DateTime?
@@ -255,4 +254,5 @@ model Wardrobe {
   amount        Int
   createAt      DateTime     @default(now())
   updateAt      DateTime?
+  secondHand  SecondHand[]
 }
