@@ -10,9 +10,9 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 export const Navbar = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(fetchAllCategories());
-  },[dispatch]);
+  }, [dispatch]);
   const categories = useAppSelector((state) => state.categories.categories);
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
   const handleOnclickNav = (
@@ -97,7 +97,8 @@ export const Navbar = () => {
                                                           </Link>
                                                         </li>
                                                         {ccc.children &&
-                                                          ccc.children.length > 0 &&
+                                                          ccc.children.length >
+                                                            0 &&
                                                           ccc.children.map(
                                                             (cccc) => {
                                                               return (
@@ -182,7 +183,9 @@ export const Navbar = () => {
                       </>
                     );
                   })}
-
+                <li className={`megamenu-container`} key={1}>
+                  <Link to={`/secondhand`}>Hàng 2hand</Link>
+                </li>
                 {/* End component */}
               </ul>
               {/* End .menu */}

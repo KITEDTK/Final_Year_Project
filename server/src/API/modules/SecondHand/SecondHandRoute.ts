@@ -4,6 +4,6 @@ import SecondHandController from "./SecondHandController";
 const router = Router();
 
 router.post("/", SecondHandController.add);
-router.get("/", SecondHandController.getAll);
+router.get("/:page", SecondHandController.getAll);
 
 export default router;

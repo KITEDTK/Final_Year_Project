@@ -4,24 +4,23 @@ import SecondHandService from "./SecondHandService";
 async function add(req: Request, res: Response) {
   try {
     const { wardrobeId, amount } = req.body;
-    const result = await SecondHandService.create(
-      wardrobeId,
-      amount
-    );
+    const result = await SecondHandService.create(wardrobeId, amount);
     res.json(result);
   } catch (err) {
     console.log(err);
   }
 }
-async function getAll(req: Request, res: Response){
-    try {
-        const result = await SecondHandService.allSecondHand();
-        res.json(result);
-      } catch (err) {
-        console.log(err);
-      }
+async function getAll(req: Request, res: Response) {
+  try {
+    const { page } = req.params;
+    const result = await SecondHandService.allSecondHand(page);
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+  }
 }
 
-export default{
-    add, getAll
-}
+export default {
+  add,
+  getAll,
+};

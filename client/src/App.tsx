@@ -9,7 +9,7 @@ import { SingleClothes } from "./pages/SingleClothes";
 import { Checkout } from "./pages/Checkout";
 import { DoneCheckout } from "./pages/DoneCheckout";
 import { UserProfile } from "./pages/UserProfile";
-
+import { SecondHand } from "./pages/SecondHand";
 function App() {
   return (
     <>
@@ -25,6 +25,7 @@ function App() {
           <Route path="/checkout" element={<Checkout/>}/>
           <Route path="/donepay/:type" element={<DoneCheckout/>}/>
           <Route path="/user" element={<UserProfile/>}/>
+          <Route path="/secondhand" element={<SecondHand/>}/>
         </Routes>
         <Footer/>
       </div>

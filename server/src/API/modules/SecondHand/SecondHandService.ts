@@ -28,11 +28,32 @@ async function create(wardrobeId: string, amountToSell: number) {
   });
   return result;
 }
-async function allSecondHand() {
-  const result = await prisma.secondHand.findMany();
+async function allSecondHand(page: string) {
+  const pageNumber = page ? parseInt(page, 10) : 0;
+  const result = await prisma.secondHand.findMany({
+    skip: pageNumber * 3,
+    take: 3,
+    include:{
+      wardrobe:{
+        include:{
+          clothDetails:{
+            select:{
+              cloth:{
+                select:{
+                  id: true,
+                  name: true,
+                }
+              },
+              size: { select: { name: true } },
+              color: { select: { name: true } },
+            }
+          }
+        }
+      }
+    }
+  });
   return result;
 }
-
 export default {
   create,
   allSecondHand,

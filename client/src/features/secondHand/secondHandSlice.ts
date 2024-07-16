@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { SecondHandAddInput } from "./secondHandTypes";
+import { SecondHand, SecondHandAddInput } from "./secondHandTypes";
 
 const BASE_URL = "http://localhost:4000/secondHand";
 
@@ -19,7 +19,20 @@ export const fetchAddSecondHand = createAsyncThunk<any, SecondHandAddInput>(
     }
   }
 );
-
+export const fetchAllSecondHand = createAsyncThunk<SecondHand[], number>(
+  "secondHand/all",
+  async(page: number) =>{
+    try{
+      const response: AxiosResponse<SecondHand[]> = await axios.get(`${BASE_URL}/${page}`,{
+        headers: { "Content-Type": "application/json" },
+      });
+      return response.data;
+    }catch(err){
+      console.error("Bán lại sản phẩm thất bại", err);
+      throw err;
+    }
+  }
+)
 const secondHandSlice = createSlice({
   name: "secondHand",
   initialState: {
