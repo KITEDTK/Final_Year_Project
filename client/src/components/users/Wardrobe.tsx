@@ -47,15 +47,12 @@ export const Wardrobe = () => {
     })
   };
   const handleOnChangeQuantity = (amount: number) => {
-    const maxQuantity = wardrobeItems?.find((item)=>item.id === wardrobelIdToSell)?.amount;
-    if(maxQuantity){
-      if(amount > maxQuantity){
-        setQuantityToSell(maxQuantity);
-      }
-    }else{
-      setQuantityToSell(0);
+    const maxQuantity = wardrobeItems?.find((item) => item.id === wardrobelIdToSell)?.amount;
+  
+    if (maxQuantity !== undefined) {
+      setQuantityToSell(Math.min(amount, maxQuantity));
     }
-  }
+  };
   useEffect(()=>{
     socket.on('update_user_wardrobe',()=>{
       if (auth) {

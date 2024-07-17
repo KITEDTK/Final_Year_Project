@@ -35,20 +35,6 @@ export const SecondHand = () => {
   const handleColorSelect = (colorIds: string[]) => {
     setColorsFilter(colorIds);
   };
-  useEffect(() => {
-    setClothesItems((prev) => {
-      const data = prev.filter(
-        (item) =>
-          (!colorsFilter ||
-            colorsFilter.length === 0 ||
-            colorsFilter.includes(item.wardrobe.clothDetails.color.id)) &&
-          (!sizesFilter ||
-            sizesFilter.length === 0 ||
-            sizesFilter.includes(item.wardrobe.clothDetails.size.id))
-      );
-      return data;
-    });
-  }, [sizesFilter, colorsFilter]);
   return (
     <>
       <InfiniteScroll
@@ -180,18 +166,31 @@ export const SecondHand = () => {
 
                   <div className="products mb-3">
                     <div className="row justify-content-center">
-                      {clothesItems && // filter trực tiếp ở đây
+                      {clothesItems &&
                         clothesItems.length > 0 &&
-                        clothesItems.map((item) => {
-                          return (
-                            <>
-                              <SingleClothSecondHand
-                                key={item.id}
-                                clothes={item}
-                              />
-                            </>
-                          );
-                        })}
+                        clothesItems
+                          .filter((ft) => {
+                            const colorMatch =
+                              !colorsFilter ||
+                              colorsFilter.length === 0 ||
+                              colorsFilter.includes(
+                                ft.wardrobe.clothDetails.color.id
+                              );
+                            const sizeMatch =
+                              !sizesFilter ||
+                              sizesFilter.length === 0 ||
+                              sizesFilter.includes(
+                                ft.wardrobe.clothDetails.size.id
+                              );
+                            return colorMatch && sizeMatch;
+                          })
+                          .map((item) => (
+                            <SingleClothSecondHand
+                              key={item.id}
+                              clothes={item}
+                            />
+                          ))}
+
                       {/* End .col-sm-6 col-lg-4 */}
                     </div>
                     {/* End .row */}

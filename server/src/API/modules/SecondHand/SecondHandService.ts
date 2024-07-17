@@ -33,24 +33,24 @@ async function allSecondHand(page: string) {
   const result = await prisma.secondHand.findMany({
     skip: pageNumber * 3,
     take: 3,
-    include:{
-      wardrobe:{
-        include:{
-          clothDetails:{
-            select:{
-              cloth:{
-                select:{
+    include: {
+      wardrobe: {
+        include: {
+          clothDetails: {
+            select: {
+              cloth: {
+                select: {
                   id: true,
                   name: true,
-                }
+                },
               },
-              size: { select: { name: true } },
-              color: { select: { name: true } },
-            }
-          }
-        }
-      }
-    }
+              size: { select: { id: true, name: true } },
+              color: { select: { id: true, name: true } },
+            },
+          },
+        },
+      },
+    },
   });
   return result;
 }
