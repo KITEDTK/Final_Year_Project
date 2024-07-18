@@ -90,6 +90,7 @@ model Users {
   createAt         DateTime?         @default(now())
   updateAt         DateTime?
   isEnable         Boolean?          @default(true)
+  secondhandCarts  SecondHandCart[]
   carts            Carts[]
   comments         Comments[]
   payments         Payments[]
@@ -237,12 +238,13 @@ model ActionLogs {
 }
 
 model SecondHand {
-  id            String       @id @default(uuid())
-  wardrobeId String
-  wardrobe  Wardrobe @relation(fields: [wardrobeId], references: [id])
-  amount        Int
-  createAt      DateTime     @default(now())
-  updateAt      DateTime?
+  id             String           @id @default(uuid())
+  wardrobeId     String
+  wardrobe       Wardrobe         @relation(fields: [wardrobeId], references: [id])
+  secondHandCart SecondHandCart[]
+  amount         Int
+  createAt       DateTime         @default(now())
+  updateAt       DateTime?
 }
 
 model Wardrobe {
@@ -254,5 +256,16 @@ model Wardrobe {
   amount        Int
   createAt      DateTime     @default(now())
   updateAt      DateTime?
-  secondHand  SecondHand[]
+  secondHand    SecondHand[]
+}
+
+model SecondHandCart {
+  id           String     @id @default(uuid())
+  userId       String
+  users        Users      @relation(fields: [userId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  secondHandId String
+  seconHands   SecondHand @relation(fields: [secondHandId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  amount       Int
+  createAt     DateTime   @default(now())
+  updateAt     DateTime?
 }

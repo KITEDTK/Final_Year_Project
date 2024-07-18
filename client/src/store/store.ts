@@ -12,6 +12,7 @@ import authSlice from "../features/auth/authSlice";
 import cartsSlice from "../features/carts/cartsSlice";
 import paymentsSlice from "../features/payments/paymentsSlice";
 import secondHandSlice from "../features/secondHand/secondHandSlice";
+import secondHandCartSlice from "../features/secondhandCarts/secondHandCartSlice";
 const persitConfig = {
   key : "root",
   version: 1,
@@ -25,7 +26,8 @@ const reducer = combineReducers({
   auth: authSlice,
   carts: cartsSlice,
   payments: paymentsSlice,
-  secondHand: secondHandSlice
+  secondHand: secondHandSlice,
+  secondHandCart: secondHandCartSlice
 });
 const persistedReducer = persistReducer(persitConfig, reducer);
 

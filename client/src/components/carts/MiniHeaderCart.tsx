@@ -81,16 +81,10 @@ export const MiniHeaderCart = () => {
           {auth ? (
             <>
               <span className="cart-count">{authTotalAmount}</span>
-              <span className="cart-txt">{formatMoney(authTotalPrice)}đ</span>
             </>
           ) : (
             <>
               <span className="cart-count">{LocalCarts.totalAmount}</span>
-              <span className="cart-txt">
-                {LocalCarts.totalPrice !== 0
-                  ? `${formatMoney(LocalCarts.totalPrice)}đ`
-                  : null}
-              </span>
             </>
           )}
         </Link>

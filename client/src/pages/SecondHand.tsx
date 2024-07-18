@@ -187,7 +187,7 @@ export const SecondHand = () => {
                           .map((item) => (
                             <SingleClothSecondHand
                               key={item.id}
-                              clothes={item}
+                              secondhand={item}
                             />
                           ))}
 

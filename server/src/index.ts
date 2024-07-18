@@ -4,7 +4,6 @@ import cors from 'cors';
 import { Request, Response, NextFunction } from "express";
 var session = require('express-session');
 const http = require('http');
-const path = require('path');
 //Router
 import UsersRoute from "./API/modules/Users/UsersRoute";
 import ClothesRoute from "./API/modules/Clothes/ClothesRoute";
@@ -16,6 +15,7 @@ import PaymentsRoute from "./API/modules/Payments/paymentsRoute";
 import StatisticalRoute from "./API/modules/Statistical/StatisticalRoute";
 import SecondHandRoute from "./API/modules/SecondHand/SecondHandRoute";
 import WardrobeRoute from "./API/modules/Wardrobe/WardrobeRoute";
+import SecondHandCartRoute from "./API/modules/SecondhandCarts/secondHandCartRoute";
 
 import { initSocket } from "./API/sockets/sockets";
 
@@ -48,6 +48,7 @@ app.use("/payments", PaymentsRoute);
 app.use("/statistical",StatisticalRoute);
 app.use("/secondHand",SecondHandRoute);
 app.use("/wardrobe",WardrobeRoute);
+app.use("/secondhandCart", SecondHandCartRoute);
 //dump
 import DumpRoute from "./API/modules/DumpData/DumpRoute";
 app.use("/dump",DumpRoute);

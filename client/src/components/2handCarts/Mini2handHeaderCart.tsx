@@ -1,0 +1,146 @@
+import { fetch2handCartByUser } from "../../features/secondhandCarts/secondHandCartSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useEffect } from "react";
+export const Mini2handHeaderCart = () => {
+    const dispatch = useAppDispatch();
+  const auth = useAppSelector((state) => state.auth.auth);
+  useEffect(()=>{
+    if(auth){
+        dispatch(fetch2handCartByUser({userId: auth.id}))
+    }
+  },[dispatch, auth])
+  const local2handCarts = useAppSelector(
+    (state) => state.secondHandCart.local2handCarts
+  );
+  const auth2handCarts = useAppSelector(
+    (state) => state.secondHandCart.secondhandCarts
+  );
+  const maxQuantityAuthCart = auth2handCarts.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.amount,
+    0,
+  );
+  return (
+    <>
+      <div className="dropdown cart-dropdown">
+        <a
+          href="#"
+          className="dropdown-toggle"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+          data-display="static"
+        >
+          <i className="icon-random"></i>
+          <span className="cart-count">{auth && auth !== null ? maxQuantityAuthCart : local2handCarts.totalAmount}</span>
+        </a>
+
+        <div className="dropdown-menu dropdown-menu-right">
+          <div className="dropdown-cart-products">
+            {!auth &&
+              auth === null &&
+              local2handCarts &&
+              local2handCarts.items &&
+              local2handCarts.items.map((item) => {
+                return (
+                  <>
+                    <div className="product">
+                      <div className="product-cart-details">
+                        <h4 className="product-title">
+                          <a href="product.html">{item.clothName}</a>
+                        </h4>
+
+                        <span className="cart-product-info">
+                          <span className="cart-product-qty">
+                            {item.amount}
+                          </span>
+                          x $84.00
+                        </span>
+                      </div>
+                      {/* End .product-cart-details */}
+
+                      <figure className="product-image-container">
+                        <a href="product.html" className="product-image">
+                          <img
+                            src="assets/images/products/cart/product-1.jpg"
+                            alt="product"
+                          />
+                        </a>
+                      </figure>
+                      <a href="#" className="btn-remove" title="Remove Product">
+                        <i className="icon-close"></i>
+                      </a>
+                    </div>
+                  </>
+                );
+              })}
+            {auth &&
+              auth !== null &&
+              auth2handCarts &&
+              auth2handCarts.length > 0 &&
+              auth2handCarts.map((item) => {
+                return (
+                  <>
+                    <div className="product">
+                      <div className="product-cart-details">
+                        <h4 className="product-title">
+                          <a href="product.html">
+                            {item.seconHands.wardrobe.clothDetails.cloth.name}
+                          </a>
+                        </h4>
+
+                        <span className="cart-product-info">
+                          <span className="cart-product-qty">
+                            {item.amount}
+                          </span>
+                          x $84.00
+                        </span>
+                      </div>
+                      {/* End .product-cart-details */}
+
+                      <figure className="product-image-container">
+                        <a href="product.html" className="product-image">
+                          <img
+                            src="assets/images/products/cart/product-1.jpg"
+                            alt="product"
+                          />
+                        </a>
+                      </figure>
+                      <a href="#" className="btn-remove" title="Remove Product">
+                        <i className="icon-close"></i>
+                      </a>
+                    </div>
+                  </>
+                );
+              })}
+
+            {/* End .product */}
+
+            {/* End .product */}
+          </div>
+          {/* End .cart-product */}
+
+          <div className="dropdown-cart-total">
+            <span>Total</span>
+
+            <span className="cart-total-price">$160.00</span>
+          </div>
+          {/* End .dropdown-cart-total */}
+
+          <div className="dropdown-cart-action">
+            <a href="cart.html" className="btn btn-primary">
+              View Cart
+            </a>
+            <a href="checkout.html" className="btn btn-outline-primary-2">
+              <span>Checkout</span>
+              <i className="icon-long-arrow-right"></i>
+            </a>
+          </div>
+          {/* End .dropdown-cart-total */}
+        </div>
+        {/* End .dropdown-menu */}
+      </div>
+      {/* End .cart-dropdown */}
+    </>
+  );
+};

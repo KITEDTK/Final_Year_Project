@@ -12,6 +12,7 @@ import { CLothesSearching } from "../../features/products/clothesTypes";
 import { fetchSearchingClothes } from "../../features/products/clothesSlice";
 import { useEffect } from "react";
 import { formatMoney } from "../../utils/formatMoney";
+import { Mini2handHeaderCart } from "../2handCarts/Mini2handHeaderCart";
 
 export const Header = () => {
   const dispatch = useAppDispatch();
@@ -227,6 +228,8 @@ export const Header = () => {
               </a>
 
               <MiniHeaderCart />
+
+              <Mini2handHeaderCart/>
 
               {/* End .cart-dropdown */}
             </div>
