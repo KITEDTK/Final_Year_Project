@@ -19,8 +19,16 @@ async function getAll(req: Request, res: Response) {
     console.log(err);
   }
 }
-
+async function maxQuantity(req: Request, res: Response){
+  try {
+    const result = await SecondHandService.getMaxQuantity();
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
 export default {
   add,
   getAll,
+  maxQuantity
 };

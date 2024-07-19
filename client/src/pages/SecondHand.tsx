@@ -6,15 +6,19 @@ import { SingleClothSecondHand } from "../components/products/SingleClothSecondH
 import { SecondHand as SecondHandTypes } from "../features/secondHand/secondHandTypes";
 import { useAppDispatch } from "../store/hooks";
 import { useEffect } from "react";
-import { fetchAllSecondHand } from "../features/secondHand/secondHandSlice";
+import { fetchAllSecondHand, fetchMaxQuantity } from "../features/secondHand/secondHandSlice";
 export const SecondHand = () => {
   const dispatch = useAppDispatch();
   const [clothesItems, setClothesItems] = useState<SecondHandTypes[]>([]);
   const [sizesFilter, setSizesFilter] = useState<string[] | null>(null);
   const [colorsFilter, setColorsFilter] = useState<string[] | null>(null);
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [maxQuantity, setMaxQuantity] = useState<number>(0);
   const [page, setPage] = useState<number>(0);
   useEffect(() => {
+    dispatch(fetchMaxQuantity()).then((res: any)=>{
+      setMaxQuantity(res.payload);
+    })
     dispatch(fetchAllSecondHand(page)).then((res: any) => {
       if (page === 0) {
         setClothesItems(res.payload);
@@ -24,7 +28,7 @@ export const SecondHand = () => {
     });
   }, [dispatch, page]);
   const fetchMoreData = () => {
-    if (hasMore) {
+    if (hasMore === true) {
       setPage((prevPage) => prevPage + 1);
     }
   };
@@ -35,6 +39,13 @@ export const SecondHand = () => {
   const handleColorSelect = (colorIds: string[]) => {
     setColorsFilter(colorIds);
   };
+  useEffect(()=>{
+    if(clothesItems.length === maxQuantity){
+      setHasMore(false);
+    }else{
+      setHasMore(true)
+    }
+  },[clothesItems, maxQuantity]);
   return (
     <>
       <InfiniteScroll
@@ -88,7 +99,7 @@ export const SecondHand = () => {
                   <div className="toolbox">
                     <div className="toolbox-left">
                       <div className="toolbox-info">
-                        Hiển thị <span>1 trong số 10</span> sản phẩm
+                        Hiển thị <span>{clothesItems.length} trong số {maxQuantity}</span> sản phẩm
                       </div>
                       {/* End .toolbox-info */}
                     </div>

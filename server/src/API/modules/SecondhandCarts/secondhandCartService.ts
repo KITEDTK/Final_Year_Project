@@ -10,6 +10,7 @@ async function fetch2handCartByUser(userId: string) {
     include: {
       seconHands: {
         select: {
+          id: true,
           wardrobe: {
             select: {
               clothDetails: {
@@ -69,4 +70,20 @@ async function addItemTo2handCart(userId: string, secondhandId: string, amount: 
   }
   return fetch2handCartByUser(userId);
 }
-export default {fetch2handCartByUser, addItemTo2handCart}
+async function deleteItemIn2handCart(secondhandCartId: string){
+  const data = await prisma.secondHandCart.findUnique({
+    where:{
+      id: secondhandCartId
+    }
+  })
+  if(!data){
+    throw 'err';
+  }
+  const result = await prisma.secondHandCart.delete({
+    where:{
+      id: secondhandCartId
+    }
+  });
+  return fetch2handCartByUser(data.userId);
+}
+export default {fetch2handCartByUser, addItemTo2handCart, deleteItemIn2handCart}

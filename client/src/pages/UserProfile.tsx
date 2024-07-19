@@ -85,6 +85,32 @@ export const UserProfile = () => {
                     <li className="nav-item">
                       <a
                         className="nav-link"
+                        id="tab-2hand-items-link"
+                        data-toggle="tab"
+                        href="#tab-2hand-items"
+                        role="tab"
+                        aria-controls="tab-2hand-items"
+                        aria-selected="false"
+                      >
+                        Sản phẩm đang bán lại
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a
+                        className="nav-link"
+                        id="tab-2hand-being-ordered-link"
+                        data-toggle="tab"
+                        href="#tab-2hand-being-ordered-items"
+                        role="tab"
+                        aria-controls="tab-2hand-being-ordered-items"
+                        aria-selected="false"
+                      >
+                        Sản phẩm đang được đặt
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a
+                        className="nav-link"
                         id="tab-address-link"
                         data-toggle="tab"
                         href="#tab-address"
@@ -175,6 +201,24 @@ export const UserProfile = () => {
                     </div>
                     {/* .End .tab-pane */}
 
+                    <div
+                      className="tab-pane fade"
+                      id="tab-2hand-items"
+                      role="tabpanel"
+                      aria-labelledby="tab-2hand-items-link"
+                    >
+                      123
+                    </div>
+                    <div
+                      className="tab-pane fade"
+                      id="tab-2hand-being-ordered-items"
+                      role="tabpanel"
+                      aria-labelledby="tab-2hand-being-ordered-link"
+                    >
+                      456
+                    </div>
+                    {/* .End .tab-pane */}
+                            
                     <div
                       className="tab-pane fade"
                       id="tab-address"

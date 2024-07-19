@@ -33,6 +33,20 @@ export const fetchAllSecondHand = createAsyncThunk<SecondHand[], number>(
     }
   }
 )
+export const fetchMaxQuantity = createAsyncThunk<number>(
+  "seconHand/maxQuantity",
+  async()=>{
+    try{
+      const response: AxiosResponse<number> = await axios.get(`${BASE_URL}`,{
+        headers: { "Content-Type": "application/json" },
+      });
+      return response.data;
+    }catch(err){
+      console.error("Bán lại sản phẩm thất bại", err);
+      throw err;
+    }
+  }
+)
 const secondHandSlice = createSlice({
   name: "secondHand",
   initialState: {

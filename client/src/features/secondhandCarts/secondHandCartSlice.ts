@@ -41,6 +41,21 @@ export const fetch2handCartByUser = createAsyncThunk<SecondhandCart[], any>(
     }
   }
 );
+export const fetchDeleteItemIn2handCart = createAsyncThunk<
+  SecondhandCart[],
+  any
+>("2hand/delete", async ({ secondhandCartId }) => {
+  try {
+    const response: AxiosResponse<SecondhandCart[]> = await axios.delete(
+      `${BASE_URL}/${secondhandCartId}`,
+      { headers: { "Content-Type": "application/json" } }
+    );
+    return response.data;
+  } catch (err) {
+    console.error("Xóa giỏ hàng thất bại", err);
+    throw err;
+  }
+});
 const secondhandCart = createSlice({
   name: "2handCarts",
   initialState: {
@@ -135,6 +150,18 @@ const secondhandCart = createSlice({
         state.secondhandCarts = action.payload;
       })
       .addCase(fetchAddItemTo2handCart.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Unknown error";
+      })
+      .addCase(fetchDeleteItemIn2handCart.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchDeleteItemIn2handCart.fulfilled, (state, action) => {
+        state.loading = false;
+        state.secondhandCarts = action.payload;
+      })
+      .addCase(fetchDeleteItemIn2handCart.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message ?? "Unknown error";
       });

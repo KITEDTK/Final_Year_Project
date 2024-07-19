@@ -1,14 +1,19 @@
-import { fetch2handCartByUser } from "../../features/secondhandCarts/secondHandCartSlice";
+import {
+  fetch2handCartByUser,
+  fetchDeleteItemIn2handCart,
+  removeItemFromLocal2handCart,
+} from "../../features/secondhandCarts/secondHandCartSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useEffect } from "react";
+import { showToast } from "../../utils/showToast";
 export const Mini2handHeaderCart = () => {
-    const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth.auth);
-  useEffect(()=>{
-    if(auth){
-        dispatch(fetch2handCartByUser({userId: auth.id}))
+  useEffect(() => {
+    if (auth) {
+      dispatch(fetch2handCartByUser({ userId: auth.id }));
     }
-  },[dispatch, auth])
+  }, [dispatch, auth]);
   const local2handCarts = useAppSelector(
     (state) => state.secondHandCart.local2handCarts
   );
@@ -17,8 +22,19 @@ export const Mini2handHeaderCart = () => {
   );
   const maxQuantityAuthCart = auth2handCarts.reduce(
     (accumulator, currentValue) => accumulator + currentValue.amount,
-    0,
+    0
   );
+  const handleDeleteAuthCartItem = (secondhandCartId: string) => {
+    dispatch(
+      fetchDeleteItemIn2handCart({ secondhandCartId: secondhandCartId })
+    ).then(() => {
+      showToast("Đã xóa sản phẩm khỏi giỏ hàng 2hand", "error");
+    });
+  };
+  const handleDeleteLocalCartItem = async (secondhandId: string) => {
+    await dispatch(removeItemFromLocal2handCart(secondhandId));
+    showToast("Đã xóa sản phẩm khỏi giỏ hàng 2hand", "error");
+  };
   return (
     <>
       <div className="dropdown cart-dropdown">
@@ -32,7 +48,11 @@ export const Mini2handHeaderCart = () => {
           data-display="static"
         >
           <i className="icon-random"></i>
-          <span className="cart-count">{auth && auth !== null ? maxQuantityAuthCart : local2handCarts.totalAmount}</span>
+          <span className="cart-count">
+            {auth && auth !== null
+              ? maxQuantityAuthCart
+              : local2handCarts.totalAmount}
+          </span>
         </a>
 
         <div className="dropdown-menu dropdown-menu-right">
@@ -67,9 +87,15 @@ export const Mini2handHeaderCart = () => {
                           />
                         </a>
                       </figure>
-                      <a href="#" className="btn-remove" title="Remove Product">
+                      <div
+                        onClick={() =>
+                          handleDeleteLocalCartItem(item.secondhandId)
+                        }
+                        className="btn-remove"
+                        title="Remove Product"
+                      >
                         <i className="icon-close"></i>
-                      </a>
+                      </div>
                     </div>
                   </>
                 );
@@ -106,9 +132,13 @@ export const Mini2handHeaderCart = () => {
                           />
                         </a>
                       </figure>
-                      <a href="#" className="btn-remove" title="Remove Product">
+                      <div
+                        onClick={() => handleDeleteAuthCartItem(item.id)}
+                        className="btn-remove"
+                        title="Remove Product"
+                      >
                         <i className="icon-close"></i>
-                      </a>
+                      </div>
                     </div>
                   </>
                 );

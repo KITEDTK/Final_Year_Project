@@ -7,9 +7,9 @@ export interface SecondhandCartState {
 export interface SecondhandCart {
   id: string;
   userId: string;
-  secondhandId: string;
   amount: number;
   seconHands: {
+    id: string;
     wardrobe: {
       clothDetails: {
         size: {

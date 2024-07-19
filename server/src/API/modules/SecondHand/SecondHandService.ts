@@ -54,7 +54,12 @@ async function allSecondHand(page: string) {
   });
   return result;
 }
+async function getMaxQuantity() {
+  const result = await prisma.secondHand.findMany({});
+  return result.length;
+}
 export default {
   create,
   allSecondHand,
+  getMaxQuantity
 };

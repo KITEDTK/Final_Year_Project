@@ -2,7 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { SecondHand } from "../../features/secondHand/secondHandTypes";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { addItemInLocal2handCart, fetchAddItemTo2handCart } from "../../features/secondhandCarts/secondHandCartSlice";
+import {
+  addItemInLocal2handCart,
+  fetchAddItemTo2handCart,
+} from "../../features/secondhandCarts/secondHandCartSlice";
 import { showToast } from "../../utils/showToast";
 interface Props {
   secondhand: SecondHand;
@@ -10,23 +13,48 @@ interface Props {
 export const SingleClothSecondHand: React.FC<Props> = ({ secondhand }) => {
   const { wardrobe } = secondhand;
   const dispatch = useAppDispatch();
-  const auth = useAppSelector((state)=>state.auth.auth);
+  const auth = useAppSelector((state) => state.auth.auth);
+  const local2handCarts = useAppSelector(
+    (state) => state.secondHandCart.local2handCarts
+  );
+  const auth2handCarts = useAppSelector((state)=>state.secondHandCart.secondhandCarts);
   const { clothDetails } = wardrobe;
   const addItemTo2handCart = async () => {
     if (auth && auth !== null) {
-      dispatch(fetchAddItemTo2handCart({userId: auth.id, secondhandId: secondhand.id, amount: 1})).then(()=>{
-        showToast("Đã thêm sản phẩm vào giỏ hàng", 'success');
-      });
+      const checkExist = auth2handCarts.find((item)=>item.seconHands.id === secondhand.id);
+      console.log(auth2handCarts);
+      if (checkExist && checkExist.amount + 1 > secondhand.amount) {
+        showToast("Số lượng sản phẩm không đủ", "info");
+      } else {
+        dispatch(
+          fetchAddItemTo2handCart({
+            userId: auth.id,
+            secondhandId: secondhand.id,
+            amount: 1,
+          })
+        ).then(() => {
+          showToast("Đã thêm sản phẩm vào giỏ hàng", "success");
+        });
+      }
     } else {
       try {
-        await dispatch(addItemInLocal2handCart({
-          secondhandId: secondhand.id,
-          amount: 1,
-          size: secondhand.wardrobe.clothDetails.size.name,
-          color: secondhand.wardrobe.clothDetails.color.name,
-          clothName: secondhand.wardrobe.clothDetails.cloth.name,
-        }));
-        showToast("Đã thêm sản phẩm vào giỏ hàng", 'success');
+        const checkExist = local2handCarts.items.find(
+          (item) => item.secondhandId === secondhand.id
+        );
+        if (checkExist && checkExist.amount + 1 > secondhand.amount) {
+          showToast("Số lượng sản phẩm không đủ", "info");
+        } else {
+          await dispatch(
+            addItemInLocal2handCart({
+              secondhandId: secondhand.id,
+              amount: 1,
+              size: secondhand.wardrobe.clothDetails.size.name,
+              color: secondhand.wardrobe.clothDetails.color.name,
+              clothName: secondhand.wardrobe.clothDetails.cloth.name,
+            })
+          );
+          showToast("Đã thêm sản phẩm vào giỏ hàng", "success");
+        }
       } catch (error) {
         console.error("Error adding item to cart:", error);
       }

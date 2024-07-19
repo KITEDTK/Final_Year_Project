@@ -24,7 +24,17 @@ async function addItemTo2handCart(req: Request, res: Response) {
     console.log(err);
   }
 }
+async function deleteItem(req: Request, res: Response){
+  try{
+    const {secondhandCartId} = req.params;
+    const result = await secondhandCartService.deleteItemIn2handCart(secondhandCartId);
+    res.json(result);
+  }catch(err){
+    console.log(err);
+  }
+}
 export default {
   getCartByUser,
   addItemTo2handCart,
+  deleteItem
 };
