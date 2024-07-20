@@ -27,8 +27,18 @@ async function maxQuantity(req: Request, res: Response){
     console.log(err);
   }
 }
+async function getSellingItems(req: Request, res: Response){
+  try{
+    const {userId} = req.params;
+    const result = await SecondHandService.getSellingItems(userId);
+    res.json(result);
+  }catch(err){
+    console.log(err);
+  }
+}
 export default {
   add,
   getAll,
-  maxQuantity
+  maxQuantity,
+  getSellingItems
 };

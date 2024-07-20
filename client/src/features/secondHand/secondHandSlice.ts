@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { SecondHand, SecondHandAddInput } from "./secondHandTypes";
+import { SecondHand, SecondHandAddInput, SellingSecondhandProducts } from "./secondHandTypes";
 
 const BASE_URL = "http://localhost:4000/secondHand";
 
@@ -43,6 +43,20 @@ export const fetchMaxQuantity = createAsyncThunk<number>(
       return response.data;
     }catch(err){
       console.error("Bán lại sản phẩm thất bại", err);
+      throw err;
+    }
+  }
+)
+export const fetchSellingItems = createAsyncThunk<SellingSecondhandProducts[], string>(
+  "secondHand/selling-items",
+  async(userId)=>{
+    try{
+      const response: AxiosResponse<SellingSecondhandProducts[]> = await axios.get(`${BASE_URL}/users/${userId}/sellingItems`,{
+        headers: { "Content-Type": "application/json" },
+      });
+      return response.data;
+    }catch(err){
+      console.error("loi", err);
       throw err;
     }
   }

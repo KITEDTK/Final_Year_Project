@@ -1,4 +1,7 @@
+import { BeingOrdered } from "../components/users/BeingOrdered";
+import { OrderingProducts } from "../components/users/OrderingProducts";
 import { PaymentHistory } from "../components/users/PaymentHistory";
+import { SellingProducts } from "../components/users/SellingProducts";
 import { Wardrobe } from "../components/users/Wardrobe";
 export const UserProfile = () => {
   return (
@@ -111,6 +114,19 @@ export const UserProfile = () => {
                     <li className="nav-item">
                       <a
                         className="nav-link"
+                        id="tab-2hand-order-link"
+                        data-toggle="tab"
+                        href="#tab-2hand-order-items"
+                        role="tab"
+                        aria-controls="tab-2hand-order-items"
+                        aria-selected="false"
+                      >
+                        Sản phẩm đang đặt
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a
+                        className="nav-link"
                         id="tab-address-link"
                         data-toggle="tab"
                         href="#tab-address"
@@ -207,7 +223,7 @@ export const UserProfile = () => {
                       role="tabpanel"
                       aria-labelledby="tab-2hand-items-link"
                     >
-                      123
+                      <SellingProducts/>
                     </div>
                     <div
                       className="tab-pane fade"
@@ -215,7 +231,15 @@ export const UserProfile = () => {
                       role="tabpanel"
                       aria-labelledby="tab-2hand-being-ordered-link"
                     >
-                      456
+                      <BeingOrdered/>
+                    </div>
+                    <div
+                      className="tab-pane fade"
+                      id="tab-2hand-order-items"
+                      role="tabpanel"
+                      aria-labelledby="tab-2hand-order-link"
+                    >
+                      <OrderingProducts/>
                     </div>
                     {/* .End .tab-pane */}
                             

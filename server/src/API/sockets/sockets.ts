@@ -24,6 +24,10 @@ export function initSocket(server: http.Server): Server {
       const { userId } = data;
       socket.to(userId).emit('update_user_wardrobe');
     });
+    socket.on('join_user_selling_items', (data: { userId: string }) => {
+      const { userId } = data;
+      socket.to(userId).emit('update_user_selling_items');
+    });
   });
 
   return io;

@@ -6,5 +6,6 @@ const router = Router();
 router.post("/", SecondHandController.add);
 router.get("/:page", SecondHandController.getAll);
 router.get("/", SecondHandController.maxQuantity);
+router.get("/users/:userId/sellingItems", SecondHandController.getSellingItems);
 
 export default router;

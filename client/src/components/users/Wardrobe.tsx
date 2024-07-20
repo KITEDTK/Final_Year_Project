@@ -41,6 +41,7 @@ export const Wardrobe = () => {
         dispatch(fetchAllWardrobeByUsers({ userId: auth.id })).then(
           (res: any) => {
             setWardrobeItems(res.payload);
+            socket.emit('join_user_selling_items',{userId: auth.id});
           }
         );
       }

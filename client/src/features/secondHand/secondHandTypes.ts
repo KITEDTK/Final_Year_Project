@@ -26,3 +26,21 @@ export interface SecondHand {
         }
     }
 }
+export interface SellingSecondhandProducts { 
+    id: string;
+    wardrobeId: string;
+    amount: string;
+    wardrobe: {
+        clothDetails: {
+            cloth:{
+                name: string
+            },
+            size:{
+                name: string;
+            },
+            color: {
+                name: string;
+            }
+        }
+    }
+}
