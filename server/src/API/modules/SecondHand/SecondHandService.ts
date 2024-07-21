@@ -133,6 +133,11 @@ async function pullSellingItems(secondhandId: string){
       amount: data.wardrobe.amount + data.amount
     }
   });
+  await prisma.secondHandCart.deleteMany({
+    where:{
+      secondHandId: secondhandId
+    }
+  });
   await prisma.secondHand.delete({
     where:{
       id: secondhandId
@@ -145,4 +150,5 @@ export default {
   allSecondHand,
   getMaxQuantity,
   getSellingItems,
+  pullSellingItems
 };

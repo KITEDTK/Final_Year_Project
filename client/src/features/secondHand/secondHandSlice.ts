@@ -61,6 +61,20 @@ export const fetchSellingItems = createAsyncThunk<SellingSecondhandProducts[], s
     }
   }
 )
+export const fetchPullItems = createAsyncThunk<any, string>(
+  "secondhand/pullingitems",
+  async(secondhandId)=>{
+    try{
+      const response: AxiosResponse<SellingSecondhandProducts[]> = await axios.delete(`${BASE_URL}/${secondhandId}`,{
+        headers: { "Content-Type": "application/json" },
+      });
+      return response.data;
+    }catch(err){
+      console.error("loi", err);
+      throw err;
+    }
+  }
+)
 const secondHandSlice = createSlice({
   name: "secondHand",
   initialState: {

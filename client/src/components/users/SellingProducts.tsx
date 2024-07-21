@@ -1,4 +1,7 @@
-import { fetchSellingItems } from "../../features/secondHand/secondHandSlice";
+import {
+  fetchPullItems,
+  fetchSellingItems,
+} from "../../features/secondHand/secondHandSlice";
 import { SellingSecondhandProducts } from "../../features/secondHand/secondHandTypes";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useEffect, useState } from "react";
@@ -6,28 +9,40 @@ import { io } from "socket.io-client";
 const socket = io("http://localhost:4000");
 
 export const SellingProducts = () => {
-    const dispatch = useAppDispatch();
-    const auth = useAppSelector((state)=>state.auth.auth);
-    const [sellingItems, setSellingItems] = useState<SellingSecondhandProducts[]>([])
-    useEffect(()=>{
-        if(auth?.id){
-            dispatch(fetchSellingItems(auth.id)).then((res: any)=>{
-                setSellingItems(res.payload);
-            });
-            socket.emit("join_user", { userId: auth.id });
-        }
-    },[dispatch, auth]);
-    useEffect(()=>{
-        socket.on('update_user_selling_items',()=>{
-          if (auth) {
-            dispatch(fetchSellingItems(auth.id)).then((res: any)=>{
-                setSellingItems(res.payload);
-            });
-          }
+  const dispatch = useAppDispatch();
+  const auth = useAppSelector((state) => state.auth.auth);
+  const [sellingItems, setSellingItems] = useState<SellingSecondhandProducts[]>(
+    []
+  );
+  useEffect(() => {
+    if (auth?.id) {
+      dispatch(fetchSellingItems(auth.id)).then((res: any) => {
+        setSellingItems(res.payload);
+      });
+      socket.emit("join_user", { userId: auth.id });
+    }
+  }, [dispatch, auth]);
+  useEffect(() => {
+    socket.on("update_user_selling_items", () => {
+      if (auth) {
+        dispatch(fetchSellingItems(auth.id)).then((res: any) => {
+          setSellingItems(res.payload);
+        });
+      }
+    });
+  });
+  const handleOnClickPullItems = (secondhandId: string) => {
+    dispatch(fetchPullItems(secondhandId)).then(() => {
+      if (auth?.id) {
+        dispatch(fetchSellingItems(auth.id)).then((res: any) => {
+          setSellingItems(res.payload);
         })
-      })
-    return (<>
-          <table className="table table-wishlist table-mobile">
+      }
+    });
+  };
+  return (
+    <>
+      <table className="table table-wishlist table-mobile">
         <thead>
           <tr>
             <th>Product</th>
@@ -66,18 +81,14 @@ export const SellingProducts = () => {
                   </div>
                   {/* End .product */}
                 </td>
-                <td className="price-col">
-                  Chưa làm
-                </td>
+                <td className="price-col">Chưa làm</td>
                 <td className="price-col">{item.amount}</td>
                 <td className="stock-col">
                   <span className="in-stock">
                     <>
                       <div className="col-6 col-lg-4 col-xl-2">
-                        <div className="btn-wrap">
-                          <div
-                            className="btn btn-primary btn-round"
-                          >
+                        <div  className="btn-wrap">
+                          <div onClick={()=>handleOnClickPullItems(item.id)} className="btn btn-primary btn-round">
                             Thu hồi
                           </div>
                         </div>
@@ -89,5 +100,6 @@ export const SellingProducts = () => {
             ))}
         </tbody>
       </table>
-    </>);
-}
+    </>
+  );
+};
