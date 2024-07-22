@@ -1,4 +1,5 @@
 import { BillingDetail } from "../components/payments/BillingDetail";
+import { SecondhandOrder } from "../components/secondhandPayments/SecondhandOrder";
 export const SecondhandCheckout = () => {
   return (
     <>
@@ -29,7 +30,7 @@ export const SecondhandCheckout = () => {
                 {/* End .summary-title */}
 
                 {/* End .table table-summary */}
-
+                <SecondhandOrder/>
                 {/* End .col-lg-3 */}
               </div>
               {/* End .row */}

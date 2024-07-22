@@ -6,6 +6,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useEffect } from "react";
 import { showToast } from "../../utils/showToast";
+import { Link } from "react-router-dom";
 export const Mini2handHeaderCart = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth.auth);
@@ -164,10 +165,10 @@ export const Mini2handHeaderCart = () => {
             <a href="cart.html" className="btn btn-primary">
               View Cart
             </a>
-            <a href="checkout.html" className="btn btn-outline-primary-2">
+            <Link to="/secondhand-checkout" className="btn btn-outline-primary-2">
               <span>Checkout</span>
               <i className="icon-long-arrow-right"></i>
-            </a>
+            </Link>
           </div>
           {/* End .dropdown-cart-total */}
         </div>

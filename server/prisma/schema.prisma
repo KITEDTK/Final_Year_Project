@@ -280,6 +280,7 @@ model SecondhandPayments {
   sellerId        String
   buyer           Users?           @relation("BuyerPayments", fields: [buyerId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   seller          Users            @relation("SellerPayments", fields: [sellerId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  buyerName String
   address         String
   phoneNumer      String
   secondhandCarts SecondHandCart[]
