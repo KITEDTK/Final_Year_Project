@@ -268,8 +268,8 @@ model SecondHandCart {
   secondHandId        String
   seconHands          SecondHand         @relation(fields: [secondHandId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   amount              Int
-  secondhandPaymentId String
-  secondhandPayment   SecondhandPayments @relation(fields: [secondhandPaymentId], references: [id])
+  secondhandPaymentId String?           
+  secondhandPayment   SecondhandPayments? @relation(fields: [secondhandPaymentId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   createAt            DateTime           @default(now())
   updateAt            DateTime?
 }
