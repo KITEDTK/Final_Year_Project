@@ -35,6 +35,9 @@ export const Mini2handHeaderCart = () => {
     await dispatch(removeItemFromLocal2handCart(secondhandId));
     showToast("Đã xóa sản phẩm khỏi giỏ hàng 2hand", "error");
   };
+  useEffect(()=>{
+    
+  })
   return (
     <>
       <div className="dropdown cart-dropdown">

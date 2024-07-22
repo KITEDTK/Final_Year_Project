@@ -78,18 +78,20 @@ model ClothDetails {
 }
 
 model Users {
-  id               String            @id @default(uuid())
-  username         String?           @unique
+  id               String               @id @default(uuid())
+  username         String?              @unique
   password         String?
   fullname         String?
-  email            String?           @unique
+  email            String?              @unique
   phoneNumber      String?
-  point            Int?              @default(0)
+  point            Int?                 @default(0)
   verifyToken      String?
   expiredTokenTime DateTime?
-  createAt         DateTime?         @default(now())
+  createAt         DateTime?            @default(now())
   updateAt         DateTime?
-  isEnable         Boolean?          @default(true)
+  isEnable         Boolean?             @default(true)
+  buyerPayments    SecondhandPayments[] @relation("BuyerPayments")
+  sellerPayments   SecondhandPayments[] @relation("SellerPayments")
   secondhandCarts  SecondHandCart[]
   carts            Carts[]
   comments         Comments[]
@@ -260,12 +262,26 @@ model Wardrobe {
 }
 
 model SecondHandCart {
-  id           String     @id @default(uuid())
-  userId       String
-  users        Users      @relation(fields: [userId], references: [id], onUpdate: NoAction, onDelete: NoAction)
-  secondHandId String
-  seconHands   SecondHand @relation(fields: [secondHandId], references: [id], onUpdate: NoAction, onDelete: NoAction)
-  amount       Int
-  createAt     DateTime   @default(now())
-  updateAt     DateTime?
+  id                  String             @id @default(uuid())
+  userId              String
+  users               Users              @relation(fields: [userId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  secondHandId        String
+  seconHands          SecondHand         @relation(fields: [secondHandId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  amount              Int
+  secondhandPaymentId String
+  secondhandPayment   SecondhandPayments @relation(fields: [secondhandPaymentId], references: [id])
+  createAt            DateTime           @default(now())
+  updateAt            DateTime?
+}
+
+model SecondhandPayments {
+  id              String           @id @default(uuid())
+  buyerId         String?
+  sellerId        String
+  buyer           Users?           @relation("BuyerPayments", fields: [buyerId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  seller          Users            @relation("SellerPayments", fields: [sellerId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  address         String
+  phoneNumer      String
+  secondhandCarts SecondHandCart[]
+  status String
 }
