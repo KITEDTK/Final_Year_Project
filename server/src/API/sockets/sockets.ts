@@ -31,9 +31,11 @@ export function initSocket(server: http.Server): Server {
       const { userId } = data;
       socket.to(userId).emit("update_user_selling_items");
     });
-    socket.on("join_secondhand", (data: {secondhandId: string})=>{
-      const {secondhandId} = data;
-      socket.join(secondhandId);
+    socket.on("join_anyone", (data: string) => {
+      socket.join(data);
+    });
+    socket.on("pull_selling_item",()=>{
+      socket.to('anyone').emit('update_secondhand_item');
     })
   });
 

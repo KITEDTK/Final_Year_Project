@@ -7,6 +7,8 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useEffect } from "react";
 import { showToast } from "../../utils/showToast";
 import { Link } from "react-router-dom";
+import { io } from "socket.io-client";
+const socket = io("http://localhost:4000");
 export const Mini2handHeaderCart = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth.auth);
@@ -37,7 +39,10 @@ export const Mini2handHeaderCart = () => {
     showToast("Đã xóa sản phẩm khỏi giỏ hàng 2hand", "error");
   };
   useEffect(()=>{
-    
+    socket.emit("join_anyone",'anyone');
+    socket.on('update_secondhand_item', () => {
+      console.log('updateeeee');
+    });
   })
   return (
     <>

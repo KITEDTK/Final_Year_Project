@@ -1,9 +1,13 @@
 import { useAppSelector } from "../../store/hooks";
 
-
 export const SecondhandOrder = () => {
-    const local2handCarts = useAppSelector((state) => state.secondHandCart.local2handCarts);
-    const auth2handCarts = useAppSelector((state)=>state.secondHandCart.secondhandCarts);
+  const auth = useAppSelector((state) => state.auth.auth);
+  const local2handCarts = useAppSelector(
+    (state) => state.secondHandCart.local2handCarts
+  );
+  const auth2handCarts = useAppSelector(
+    (state) => state.secondHandCart.secondhandCarts
+  );
 
   return (
     <>
@@ -12,44 +16,79 @@ export const SecondhandOrder = () => {
           <h3 className="summary-title">Hóa đơn của bạn</h3>
           {/* End .summary-title */}
 
-          <table className="table table-summary">
-            <thead>
-              <tr>
-                <th>Sản phẩm</th>
-                <th>Tổng</th>
-              </tr>
-            </thead>
+          {auth && auth !== null && auth2handCarts ? (
+            <table className="table table-summary">
+              <thead>
+                <tr>
+                  <th>Sản phẩm</th>
+                  <th>Tổng</th>
+                </tr>
+              </thead>
 
-            <tbody>
-              <tr>
-                <td>
-                  <a href="#">Beige knitted elastic runner shoes</a>
-                </td>
-                <td>$84.00</td>
-              </tr>
+              <tbody>
+                {auth2handCarts.map((item)=>{
+                  return (<>
+                  <tr>
+                  <td>
+                    <a href="#">{item.seconHands.wardrobe.clothDetails.cloth.name}</a>
+                    <br />
+                    <a href="#">{item.seconHands.wardrobe.clothDetails.color.name}/{item.seconHands.wardrobe.clothDetails.size.name}</a>
+                  </td>
+                  <td>$84.00</td>
+                </tr>
+                  </>)
+                })}
+                <tr className="summary-subtotal">
+                  <td>Tổng giỏ hàng:</td>
+                  <td>$160.00</td>
+                </tr>
+                {/* End .summary-subtotal */}.
+                <tr className="summary-total">
+                  <td>Tổng hóa đơn:</td>
+                  <td>$160.00</td>
+                </tr>
+                {/* End .summary-total */}
+              </tbody>
+            </table>
+          ) : (
+            <table className="table table-summary">
+              <thead>
+                <tr>
+                  <th>Sản phẩm</th>
+                  <th>Tổng</th>
+                </tr>
+              </thead>
 
-              <tr>
-                <td>
-                  <a href="#">Blue utility pinafore denimdress</a>
-                </td>
-                <td>$76,00</td>
-              </tr>
-              <tr className="summary-subtotal">
-                <td>Subtotal:</td>
-                <td>$160.00</td>
-              </tr>
-              {/* End .summary-subtotal */}
-              <tr>
-                <td>Shipping:</td>
-                <td>Free shipping</td>
-              </tr>
-              <tr className="summary-total">
-                <td>Total:</td>
-                <td>$160.00</td>
-              </tr>
-              {/* End .summary-total */}
-            </tbody>
-          </table>
+              <tbody>
+                {local2handCarts && local2handCarts.items.map((item)=>{
+                  return (<>
+                  <tr>
+                  <td>
+                    <a href="#">{item.clothName}</a>
+                    <br />
+                    <a href="#">{item.color}/{item.size}</a>
+                  </td>
+                  <td>$84.00</td>
+                </tr></>)
+                })}
+                <tr className="summary-subtotal">
+                  <td>Subtotal:</td>
+                  <td>$160.00</td>
+                </tr>
+                {/* End .summary-subtotal */}
+                <tr>
+                  <td>Shipping:</td>
+                  <td>Free shipping</td>
+                </tr>
+                <tr className="summary-total">
+                  <td>Total:</td>
+                  <td>$160.00</td>
+                </tr>
+                {/* End .summary-total */}
+              </tbody>
+            </table>
+          )}
+
           {/* End .table table-summary */}
 
           {/* End .accordion */}
