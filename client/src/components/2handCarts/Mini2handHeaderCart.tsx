@@ -40,10 +40,22 @@ export const Mini2handHeaderCart = () => {
   };
   useEffect(()=>{
     socket.emit("join_anyone",'anyone');
-    socket.on('update_secondhand_item', () => {
-      console.log('updateeeee');
+    socket.on('update_secondhand_item', (data: {secondhandId: string}) => {
+      if(auth && auth !== null){
+        const checkExist = auth2handCarts.find((item)=>item.seconHands.id === data.secondhandId);
+        if(checkExist){
+          dispatch(fetch2handCartByUser({ userId: auth.id }));
+          showToast('Người bán vừa thu hồi lại sản phẩm khỏi website', 'info');
+        }
+      }else{
+        const checkExist = local2handCarts.items.find((item)=>item.secondhandId === data.secondhandId);
+        if(checkExist){
+          dispatch(removeItemFromLocal2handCart(data.secondhandId));
+          showToast('Người bán vừa thu hồi lại sản phẩm khỏi website', 'info');
+        }
+      }
     });
-  })
+  });
   return (
     <>
       <div className="dropdown cart-dropdown">

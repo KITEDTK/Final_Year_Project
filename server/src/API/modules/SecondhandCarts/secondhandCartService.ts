@@ -79,7 +79,7 @@ async function deleteItemIn2handCart(secondhandCartId: string){
   if(!data){
     throw 'err';
   }
-  const result = await prisma.secondHandCart.delete({
+  await prisma.secondHandCart.delete({
     where:{
       id: secondhandCartId
     }

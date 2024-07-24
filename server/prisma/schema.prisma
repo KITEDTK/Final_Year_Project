@@ -91,7 +91,6 @@ model Users {
   updateAt         DateTime?
   isEnable         Boolean?             @default(true)
   buyerPayments    SecondhandPayments[] @relation("BuyerPayments")
-  sellerPayments   SecondhandPayments[] @relation("SellerPayments")
   secondhandCarts  SecondHandCart[]
   carts            Carts[]
   comments         Comments[]
@@ -244,6 +243,7 @@ model SecondHand {
   wardrobeId     String
   wardrobe       Wardrobe         @relation(fields: [wardrobeId], references: [id])
   secondHandCart SecondHandCart[]
+  price          Int?
   amount         Int
   createAt       DateTime         @default(now())
   updateAt       DateTime?
@@ -262,27 +262,26 @@ model Wardrobe {
 }
 
 model SecondHandCart {
-  id                  String             @id @default(uuid())
+  id                  String              @id @default(uuid())
   userId              String
-  users               Users              @relation(fields: [userId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  users               Users               @relation(fields: [userId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   secondHandId        String
-  seconHands          SecondHand         @relation(fields: [secondHandId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  seconHands          SecondHand          @relation(fields: [secondHandId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   amount              Int
-  secondhandPaymentId String?           
+  secondhandPaymentId String?
   secondhandPayment   SecondhandPayments? @relation(fields: [secondhandPaymentId], references: [id], onUpdate: NoAction, onDelete: NoAction)
-  createAt            DateTime           @default(now())
+  createAt            DateTime            @default(now())
   updateAt            DateTime?
 }
 
 model SecondhandPayments {
   id              String           @id @default(uuid())
   buyerId         String?
-  sellerId        String
   buyer           Users?           @relation("BuyerPayments", fields: [buyerId], references: [id], onUpdate: NoAction, onDelete: NoAction)
-  seller          Users            @relation("SellerPayments", fields: [sellerId], references: [id], onUpdate: NoAction, onDelete: NoAction)
-  buyerName String
+  buyerName       String
   address         String
   phoneNumer      String
+  price           Int?
   secondhandCarts SecondHandCart[]
-  status String
+  status          String
 }

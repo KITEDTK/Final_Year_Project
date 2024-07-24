@@ -16,6 +16,7 @@ import StatisticalRoute from "./API/modules/Statistical/StatisticalRoute";
 import SecondHandRoute from "./API/modules/SecondHand/SecondHandRoute";
 import WardrobeRoute from "./API/modules/Wardrobe/WardrobeRoute";
 import SecondHandCartRoute from "./API/modules/SecondhandCarts/secondHandCartRoute";
+import SecondhandPaymentsRoute from "./API/modules/SecondhandPayments/SecondhandPaymentRoute";
 
 import { initSocket } from "./API/sockets/sockets";
 
@@ -49,6 +50,7 @@ app.use("/statistical",StatisticalRoute);
 app.use("/secondHand",SecondHandRoute);
 app.use("/wardrobe",WardrobeRoute);
 app.use("/secondhandCart", SecondHandCartRoute);
+app.use("/secondhandPayments", SecondhandPaymentsRoute);
 //dump
 import DumpRoute from "./API/modules/DumpData/DumpRoute";
 app.use("/dump",DumpRoute);

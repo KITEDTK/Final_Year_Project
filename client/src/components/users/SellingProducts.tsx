@@ -37,8 +37,8 @@ export const SellingProducts = () => {
         dispatch(fetchSellingItems(auth.id)).then((res: any) => {
           setSellingItems(res.payload);
         })
-      };
-      socket.emit('pull_selling_item');
+      }
+      socket.emit('pull_selling_item',{secondhandId: secondhandId});
     });
   };
   return (

@@ -34,8 +34,9 @@ export function initSocket(server: http.Server): Server {
     socket.on("join_anyone", (data: string) => {
       socket.join(data);
     });
-    socket.on("pull_selling_item",()=>{
-      socket.to('anyone').emit('update_secondhand_item');
+    socket.on("pull_selling_item",(data: {secondhandId: string})=>{
+      const {secondhandId} = data;
+      socket.to('anyone').emit('update_secondhand_item',{secondhandId});
     })
   });
 

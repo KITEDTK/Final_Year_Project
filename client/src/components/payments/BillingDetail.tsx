@@ -60,11 +60,6 @@ export const BillingDetail = () => {
           </div>
           {/* End .row */}
 
-          <label>Company Name (Optional)</label>
-          <input type="text" className="form-control" />
-
-          <label>Country *</label>
-          <input type="text" className="form-control" />
 
           <label>Street address *</label>
           <input
@@ -72,32 +67,9 @@ export const BillingDetail = () => {
             className="form-control"
             placeholder="House number and Street name"
           />
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Appartments, suite, unit etc ..."
-          />
-
-          <div className="row">
-            <div className="col-sm-6">
-              <label>Town / City *</label>
-              <input type="text" className="form-control" />
-            </div>
-            {/* End .col-sm-6 */}
-
-            <div className="col-sm-6">
-              <label>State / County *</label>
-              <input type="text" className="form-control" />
-            </div>
-            {/* End .col-sm-6 */}
-          </div>
           {/* End .row */}
 
           <div className="row">
-            <div className="col-sm-6">
-              <label>Postcode / ZIP *</label>
-              <input type="text" className="form-control" />
-            </div>
             {/* End .col-sm-6 */}
 
             <div className="col-sm-6">
