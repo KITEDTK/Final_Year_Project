@@ -2,6 +2,7 @@ import { useState, ChangeEvent, useEffect } from "react";
 import { useAppSelector } from "../../store/hooks";
 import { useAppDispatch } from "../../store/hooks";
 import { updateLocalPaymentInfo } from "../../features/payments/paymentsSlice";
+import { updateLocal2handPayment } from "../../features/secondhandPayments/secondhandPaymentsSlice";
 
 export const BillingDetail = () => {
   const dispatch = useAppDispatch();
@@ -38,6 +39,7 @@ export const BillingDetail = () => {
   };
   useEffect(() => {
     dispatch(updateLocalPaymentInfo(infoLocal));
+    dispatch(updateLocal2handPayment(infoLocal));
   }, [infoLocal, dispatch]);
   return (
     <>

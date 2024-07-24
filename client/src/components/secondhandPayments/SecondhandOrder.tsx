@@ -1,14 +1,46 @@
-import { useAppSelector } from "../../store/hooks";
+import { fetchAdd2handPayment } from "../../features/secondhandPayments/secondhandPaymentsSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { showToast } from "../../utils/showToast";
 
 export const SecondhandOrder = () => {
   const auth = useAppSelector((state) => state.auth.auth);
+  const dispatch = useAppDispatch();
   const local2handCarts = useAppSelector(
     (state) => state.secondHandCart.local2handCarts
   );
   const auth2handCarts = useAppSelector(
     (state) => state.secondHandCart.secondhandCarts
   );
-
+  const local2handPaymentInfo = useAppSelector((state)=>state.secondhandPayments.local2handPaymentInfo);
+  const handleOnClickCreatePayment = () => {
+    if(auth && auth!== null){
+      const secondhandIds = auth2handCarts.map((item)=>{return item.id});
+      dispatch(fetchAdd2handPayment({
+        buyerId: auth.id,
+        address: 'Ha Noi',
+        buyerName: auth.fullname,
+        phoneNumber: auth.fullname,
+        status: 'Chưa thanh toán',
+        secondhandCartIds: secondhandIds,
+      })).then(()=>{
+        showToast('Bạn đã đặt hàng thành công','success');
+      })
+    }else{
+      const secondhandIds = local2handCarts.items.map((item)=>{
+        return item.secondhandId;
+      });
+      dispatch(fetchAdd2handPayment({
+        buyerId: '',
+        address: local2handPaymentInfo.address,
+        buyerName: local2handPaymentInfo.fullName,
+        phoneNumber: local2handPaymentInfo.phoneNumber,
+        status: 'Chưa thanh toán',
+        secondhandCartIds: secondhandIds,
+      })).then(()=>{
+        showToast('Bạn đã đặt hàng thành công','success');
+      })
+    }
+  }
   return (
     <>
       <aside className="col-lg-3">
@@ -94,7 +126,8 @@ export const SecondhandOrder = () => {
           {/* End .accordion */}
 
           <button
-            type="submit"
+            type="button"
+            onClick={()=>{handleOnClickCreatePayment()}}
             className="btn btn-outline-primary-2 btn-order btn-block"
           >
             <span className="btn-text">Place Order</span>
