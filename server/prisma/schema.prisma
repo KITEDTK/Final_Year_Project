@@ -263,8 +263,8 @@ model Wardrobe {
 
 model SecondHandCart {
   id                  String              @id @default(uuid())
-  userId              String
-  users               Users               @relation(fields: [userId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  userId              String?
+  users               Users?               @relation(fields: [userId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   secondHandId        String
   seconHands          SecondHand          @relation(fields: [secondHandId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   amount              Int

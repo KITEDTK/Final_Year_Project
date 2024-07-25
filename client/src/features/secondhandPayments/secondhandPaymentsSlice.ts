@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
 import {
+  Create2handGuestPaymentInput,
   Create2HandPaymentInput,
   SecondhandPaymentState,
 } from "./secondhandPaymentType";
@@ -43,6 +44,27 @@ export const fetchAdd2handPayment = createAsyncThunk<
     }
   }
 );
+export const fetchAddLocal2handPayment = createAsyncThunk<any, Create2handGuestPaymentInput>(
+  "secondhand/guest/add",
+  async({address,buyerName, phoneNumber, price, status, local2handCarts })=>{
+    try{
+      const response: AxiosResponse<any> = await axios.post(`${BASE_URL}/guest`,
+        {
+          address: address,
+          buyerName: buyerName,
+          phoneNumber: phoneNumber,
+          status: status,
+          price: price,
+          local2handCarts: local2handCarts
+        }
+      );
+      return response.data;
+    }catch (err) {
+      console.error("Thêm hóa đơn thất bại", err);
+      throw err;
+    }
+  }
+)
 const secondhandPaymentSlice = createSlice({
   name: "secondHandPayment",
   initialState: {

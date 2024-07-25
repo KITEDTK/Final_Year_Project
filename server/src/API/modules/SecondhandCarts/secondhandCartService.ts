@@ -84,6 +84,9 @@ async function deleteItemIn2handCart(secondhandCartId: string){
       id: secondhandCartId
     }
   });
+  if(!data.userId){
+    throw 'err';
+  }
   return fetch2handCartByUser(data.userId);
 }
 export default {fetch2handCartByUser, addItemTo2handCart, deleteItemIn2handCart}

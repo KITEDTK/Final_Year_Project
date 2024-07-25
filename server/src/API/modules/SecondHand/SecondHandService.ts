@@ -142,7 +142,7 @@ async function pullSellingItems(secondhandId: string){
     where:{
       id: secondhandId
     }
-  })
+  });
   return true;
 }
 export default {

@@ -8,3 +8,14 @@ export interface Create2HandPaymentInput{
     status: string;
     secondhandCartIds: string[];
 }
+export interface Create2handGuestPaymentInput{
+    buyerName: string;
+    address: string;
+    phoneNumber: string;
+    status: string;
+    price: number;
+    local2handCarts: {
+        secondhandId: string;
+        amount: number;
+    }[]
+}

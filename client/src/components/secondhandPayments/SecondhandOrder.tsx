@@ -1,4 +1,4 @@
-import { fetchAdd2handPayment } from "../../features/secondhandPayments/secondhandPaymentsSlice";
+import { fetchAdd2handPayment, fetchAddLocal2handPayment } from "../../features/secondhandPayments/secondhandPaymentsSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { showToast } from "../../utils/showToast";
 
@@ -27,15 +27,17 @@ export const SecondhandOrder = () => {
       })
     }else{
       const secondhandIds = local2handCarts.items.map((item)=>{
-        return item.secondhandId;
+        return {
+          secondhandId: item.secondhandId,
+          amount: item.amount
+        };
       });
-      dispatch(fetchAdd2handPayment({
-        buyerId: '',
+      dispatch(fetchAddLocal2handPayment({
         address: local2handPaymentInfo.address,
         buyerName: local2handPaymentInfo.fullName,
         phoneNumber: local2handPaymentInfo.phoneNumber,
         status: 'Chưa thanh toán',
-        secondhandCartIds: secondhandIds,
+        local2handCarts: secondhandIds
       })).then(()=>{
         showToast('Bạn đã đặt hàng thành công','success');
       })
