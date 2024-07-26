@@ -6,5 +6,6 @@ const router = Router();
 router.get("/users/:userId", secondhandCartController.getCartByUser);
 router.post("/users/:userId/secondhand/:secondhandId", secondhandCartController.addItemTo2handCart);
 router.delete("/:secondhandCartId", secondhandCartController.deleteItem);
+router.get("/users/:userId/beingOrdered", secondhandCartController.getBeingOrderedItems);
 
 export default router;

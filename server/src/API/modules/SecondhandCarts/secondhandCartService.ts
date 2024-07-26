@@ -89,4 +89,63 @@ async function deleteItemIn2handCart(secondhandCartId: string){
   }
   return fetch2handCartByUser(data.userId);
 }
-export default {fetch2handCartByUser, addItemTo2handCart, deleteItemIn2handCart}
+async function getBeingOrderedItem(userId: string){
+  const data = await prisma.secondHandCart.findMany({
+    where:{
+      secondhandPaymentId:{
+        not: null
+      },
+      seconHands:{
+        wardrobe:{
+          userId: userId
+        }
+      }
+    },
+    select:{
+      id: true,
+      secondhandPayment:{
+        select: {
+          buyerId: true,
+          address: true,
+          phoneNumer: true, 
+          status: true,
+          buyerName: true,
+          price: true
+        }
+      },
+      seconHands:{
+        select:{
+          amount: true,
+          wardrobe:{
+            select:{
+              clothDetails:{
+                select:{
+                  size:{
+                    select:{
+                      id: true,
+                      name: true,
+                    },
+                  },
+                  cloth:{
+                    select: {
+                      id: true,
+                      name: true
+                    }
+                  },
+                  color:{
+                    select:{
+                      id: true, 
+                      name: true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  });
+  return data;
+}
+export default {fetch2handCartByUser, addItemTo2handCart, deleteItemIn2handCart, getBeingOrderedItem}
