@@ -19,7 +19,7 @@ export const SecondhandOrder = () => {
         buyerId: auth.id,
         address: 'Ha Noi',
         buyerName: auth.fullname,
-        phoneNumber: auth.fullname,
+        phoneNumber: auth.phoneNumber,
         status: 'Chưa thanh toán',
         secondhandCartIds: secondhandIds,
       })).then(()=>{

@@ -270,6 +270,7 @@ model SecondHandCart {
   amount              Int
   secondhandPaymentId String?
   secondhandPayment   SecondhandPayments? @relation(fields: [secondhandPaymentId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  status String? 
   createAt            DateTime            @default(now())
   updateAt            DateTime?
 }

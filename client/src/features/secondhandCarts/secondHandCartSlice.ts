@@ -42,6 +42,20 @@ export const fetch2handCartByUser = createAsyncThunk<SecondhandCart[], any>(
     }
   }
 );
+export const fetchUpdate2handCartStatus = createAsyncThunk<any, string>(
+  "2handcart/update-status",
+  async(cartId) =>{
+    try{
+      const response: AxiosResponse<any> = await axios.patch(
+        `${BASE_URL}/${cartId}/status`
+      )
+      return response.data;
+    }catch(err) {
+      console.error("Thêm vào giỏ hàng thất bại", err);
+      throw err;
+    }
+  }
+)
 export const fetchDeleteItemIn2handCart = createAsyncThunk<
   SecondhandCart[],
   any

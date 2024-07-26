@@ -148,4 +148,15 @@ async function getBeingOrderedItem(userId: string){
   });
   return data;
 }
-export default {fetch2handCartByUser, addItemTo2handCart, deleteItemIn2handCart, getBeingOrderedItem}
+async function updateStatusCart(cartId: string){
+  const update = await prisma.secondHandCart.update({
+    where:{
+      id: cartId
+    },
+    data:{
+      status: 'Đang vận chuyển'
+    }
+  });
+  return update;
+}
+export default {fetch2handCartByUser, addItemTo2handCart, deleteItemIn2handCart, getBeingOrderedItem, updateStatusCart}
