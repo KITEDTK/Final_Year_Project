@@ -5,5 +5,7 @@ const router =  Router();
 
 router.post("/", SecondhandPaymentsController.create);
 router.post("/guest", SecondhandPaymentsController.createGuestPayment);
+router.get("/paymentDetails/:sellerId", SecondhandPaymentsController.getBeingOrderedItem);
+router.patch("/paymentDetails/:paymentDetailId/status",SecondhandPaymentsController.updateStatus);
 
 export default router;

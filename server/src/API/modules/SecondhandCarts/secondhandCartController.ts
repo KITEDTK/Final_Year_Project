@@ -33,28 +33,8 @@ async function deleteItem(req: Request, res: Response){
     console.log(err);
   }
 }
-async function getBeingOrderedItems(req: Request, res: Response){
-  try{
-    const {userId} = req.params;
-    const result = await secondhandCartService.getBeingOrderedItem(userId);
-    res.json(result);
-  }catch(err){
-    console.log(err);
-  }
-}
-async function updateStatus(req: Request, res: Response){
-  try{
-    const {cartId} = req.params;
-    const result = await secondhandCartService.updateStatusCart(cartId);
-    res.json(result);
-  }catch(err){
-    console.log(err);
-  }
-}
 export default {
   getCartByUser,
   addItemTo2handCart,
   deleteItem,
-  getBeingOrderedItems,
-  updateStatus
 };

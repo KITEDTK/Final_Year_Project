@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
 import {
+  BeingOrderedItems,
   Create2handGuestPaymentInput,
   Create2HandPaymentInput,
   SecondhandPaymentState,
@@ -19,9 +20,8 @@ export const fetchAdd2handPayment = createAsyncThunk<
     address,
     buyerName,
     phoneNumber,
-    price,
     status,
-    secondhandCartIds,
+    secondhandCartInfo,
   }) => {
     try {
       const response: AxiosResponse<any> = await axios.post(
@@ -31,9 +31,8 @@ export const fetchAdd2handPayment = createAsyncThunk<
           address: address,
           buyerName: buyerName,
           phoneNumber: phoneNumber,
-          price: price,
           status: status,
-          secondhandCartIds: secondhandCartIds,
+          secondhandCartInfo: secondhandCartInfo,
         },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -44,27 +43,68 @@ export const fetchAdd2handPayment = createAsyncThunk<
     }
   }
 );
-export const fetchAddLocal2handPayment = createAsyncThunk<any, Create2handGuestPaymentInput>(
+export const fetchAddLocal2handPayment = createAsyncThunk<
+  any,
+  Create2handGuestPaymentInput
+>(
   "secondhand/guest/add",
-  async({address,buyerName, phoneNumber, price, status, local2handCarts })=>{
-    try{
-      const response: AxiosResponse<any> = await axios.post(`${BASE_URL}/guest`,
+  async ({
+    address,
+    buyerName,
+    phoneNumber,
+    price,
+    status,
+    local2handCarts,
+  }) => {
+    try {
+      const response: AxiosResponse<any> = await axios.post(
+        `${BASE_URL}/guest`,
         {
           address: address,
           buyerName: buyerName,
           phoneNumber: phoneNumber,
           status: status,
           price: price,
-          local2handCarts: local2handCarts
+          local2handCarts: local2handCarts,
         }
       );
       return response.data;
-    }catch (err) {
+    } catch (err) {
       console.error("Thêm hóa đơn thất bại", err);
       throw err;
     }
   }
-)
+);
+export const fetchBeingOrderedItems = createAsyncThunk<BeingOrderedItems[], string>(
+  "secondhandPayment/sellerId",
+  async (sellerId) => {
+    try {
+      const response: AxiosResponse<BeingOrderedItems[]> = await axios.get(
+        `${BASE_URL}/paymentDetails/${sellerId}`,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      return response.data;
+    } catch (err) {
+      console.error("Thêm hóa đơn thất bại", err);
+      throw err;
+    }
+  }
+);
+export const fetchUpdateStatus2hand = createAsyncThunk<any, string>(
+  "secondhandPayment/sellerId",
+  async (paymentDetailId) => {
+    try {
+      const response: AxiosResponse<any> = await axios.patch(
+        `${BASE_URL}/paymentDetails/${paymentDetailId}/status`,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      return response.data;
+    } catch (err) {
+      console.error("Thêm hóa đơn thất bại", err);
+      throw err;
+    }
+  }
+);
 const secondhandPaymentSlice = createSlice({
   name: "secondHandPayment",
   initialState: {

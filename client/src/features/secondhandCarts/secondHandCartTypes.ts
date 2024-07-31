@@ -40,33 +40,4 @@ export interface BaseLocal2handCart {
   color: string;
   clothName: string;
 }
-export interface BeingOrderedItem {
-  id: string;
-  secondhandPayment:{
-    buyerId: string | null;
-    address: string;
-    phoneNumer: string;
-    status: string;
-    buyerName: string;
-    price: number | null
-  },
-  seconHands:{
-    amount: number,
-    wardrobe:{
-      clothDetails:{
-        size:{
-          id: string,
-          name: string
-        },
-        cloth:{
-          id: string;
-          name: string;
-        },
-        color: {
-          id: string,
-          name: string
-        }
-      }
-    }
-  }
-}
+

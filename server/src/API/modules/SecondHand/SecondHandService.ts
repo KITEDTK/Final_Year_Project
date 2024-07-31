@@ -138,6 +138,11 @@ async function pullSellingItems(secondhandId: string){
       secondHandId: secondhandId
     }
   });
+  await prisma.secondhandPaymentDetails.deleteMany({
+    where:{
+      secondhandId: secondhandId
+    }
+  })
   await prisma.secondHand.delete({
     where:{
       id: secondhandId

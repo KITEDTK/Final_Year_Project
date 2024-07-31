@@ -280,7 +280,6 @@ model SecondhandPayments {
   buyerName  String
   address    String
   phoneNumer String
-  price      Int?
   SecondhandPaymentDetails SecondhandPaymentDetails[]
 }
 
@@ -290,8 +289,9 @@ model SecondhandPaymentDetails {
   secondhand   SecondHand @relation(fields: [secondhandId], references: [id])
   amount       Int
   price        Int?
+  status String?
   createAt     DateTime   @default(now())
   updateAt     DateTime?
-  secondhandPaymentId String
-  secondhandPayments SecondhandPayments[]
+  secondhandPaymentsId String
+  secondhandPayments SecondhandPayments @relation(fields: [secondhandPaymentsId], references: [id])
 }

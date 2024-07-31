@@ -1,3 +1,4 @@
+import { resetLocal2handCarts } from "../../features/secondhandCarts/secondHandCartSlice";
 import { fetchAdd2handPayment, fetchAddLocal2handPayment } from "../../features/secondhandPayments/secondhandPaymentsSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { showToast } from "../../utils/showToast";
@@ -14,16 +15,22 @@ export const SecondhandOrder = () => {
   const local2handPaymentInfo = useAppSelector((state)=>state.secondhandPayments.local2handPaymentInfo);
   const handleOnClickCreatePayment = () => {
     if(auth && auth!== null){
-      const secondhandIds = auth2handCarts.map((item)=>{return item.id});
+      const secondhandCartInfo = auth2handCarts.map((item)=>{return {
+        secondhandId: item.seconHands.id,
+        amount: item.amount,
+        price: 0
+      }});
       dispatch(fetchAdd2handPayment({
         buyerId: auth.id,
         address: 'Ha Noi',
         buyerName: auth.fullname,
         phoneNumber: auth.phoneNumber,
         status: 'Chưa thanh toán',
-        secondhandCartIds: secondhandIds,
+        secondhandCartInfo: secondhandCartInfo
       })).then(()=>{
         showToast('Bạn đã đặt hàng thành công','success');
+        dispatch(resetLocal2handCarts());
+        window.location.href = 'http://localhost:3000/secondhand';
       })
     }else{
       const secondhandIds = local2handCarts.items.map((item)=>{

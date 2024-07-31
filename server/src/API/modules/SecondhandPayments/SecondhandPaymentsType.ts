@@ -1,12 +1,14 @@
 export interface Create2HandPaymentInput{
     buyerId?: string;
-    sellerId: string;
     address: string;
     buyerName: string;
-    price: number;
     phoneNumber: string;
     status: string;
-    secondhandCartIds: string[];
+    secondhandCartInfo:{
+        secondhandId: string;
+        amount: number;
+        price?: number;
+    }[]
 }
 export interface Create2handGuestPaymentInput{
     buyerName: string;
@@ -16,6 +18,7 @@ export interface Create2handGuestPaymentInput{
     price: number;
     local2handCarts: {
         secondhandId: string;
+        price?: number;
         amount: number;
     }[]
 }

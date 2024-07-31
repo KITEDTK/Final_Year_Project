@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
 import {
   BaseLocal2handCart,
-  BeingOrderedItem,
   Local2handCarts,
   SecondhandCart,
   SecondhandCartState,
@@ -71,20 +70,6 @@ export const fetchDeleteItemIn2handCart = createAsyncThunk<
     throw err;
   }
 });
-export const fetchBeingOrderedItem = createAsyncThunk<BeingOrderedItem[],string>(
-  "2hand/beingordered",
-  async(userId)=>{
-    try{
-      const response: AxiosResponse<BeingOrderedItem[]> = await axios.get(`${BASE_URL}/users/${userId}/beingOrdered`,
-        { headers: { "Content-Type": "application/json" } }
-      );
-      return response.data;
-    }catch(err){
-      console.log("err", err);
-      throw err;
-    }
-  }
-)
 const secondhandCart = createSlice({
   name: "2handCarts",
   initialState: {
