@@ -40,6 +40,7 @@ export const SecondhandOrder = () => {
         local2handCarts: secondhandIds
       })).then(()=>{
         showToast('Bạn đã đặt hàng thành công','success');
+        window.location.href = 'http://localhost:3000/secondhand';
       })
     }
   }

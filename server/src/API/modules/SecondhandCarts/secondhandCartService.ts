@@ -6,6 +6,7 @@ async function fetch2handCartByUser(userId: string) {
   const data = await prisma.secondHandCart.findMany({
     where: {
       userId: userId,
+      status: null
     },
     include: {
       seconHands: {
@@ -157,6 +158,7 @@ async function updateStatusCart(cartId: string){
       status: 'Đang vận chuyển'
     }
   });
+  
   return update;
 }
 export default {fetch2handCartByUser, addItemTo2handCart, deleteItemIn2handCart, getBeingOrderedItem, updateStatusCart}

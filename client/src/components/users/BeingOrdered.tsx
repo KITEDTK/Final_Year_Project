@@ -45,6 +45,11 @@ export const BeingOrdered = () => {
   const handleOnClickUpdateStatus = (cartId: string) =>{
     dispatch(fetchUpdate2handCartStatus(cartId)).then(()=>{
       showToast('Đã duyệt sản phẩm thành công','success');
+      if (auth?.id) {
+        dispatch(fetchBeingOrderedItem(auth.id)).then((res: any) => {
+          setBeingOrderedItems(res.payload);
+        });
+      }
     });
   }
   return (
@@ -143,6 +148,7 @@ export const BeingOrdered = () => {
                     <div className="btn-wrap">
                       <div onClick={()=>handleShowModal(item)} className="btn btn-primary btn-round">Xem</div>
                     </div>
+
                     <div className="btn-wrap">
                       <div onClick={()=>handleOnClickUpdateStatus(item.id)} className="btn btn-primary btn-round">Duyệt</div>
                     </div>
