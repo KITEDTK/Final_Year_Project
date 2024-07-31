@@ -19,30 +19,18 @@ async function create2handPayment(input: Create2HandPaymentInput) {
       buyerName: buyerName,
       ...(price ? { price: price } : {}),
       phoneNumer: phoneNumber,
-      status: status,
     },
   });
-  await prisma.secondHandCart.updateMany({
-    where: {
-      id: {
-        in: secondhandCartIds,
-      },
-    },
-    data: {
-      secondhandPaymentId: payment.id,
-    },
-  });
-  return true;
+  return payment;
 }
 async function createGuest2handPayment(input: Create2handGuestPaymentInput) {
-  const {address, phoneNumber, status, buyerName, local2handCarts} = input;
+  const {address, phoneNumber, buyerName, local2handCarts} = input;
  
   const payment = await prisma.secondhandPayments.create({
     data: {
       address: address,
       buyerName: buyerName,
       phoneNumer: phoneNumber,
-      status: status,
     },
   });
   const cartData = local2handCarts.map((item)=>{
