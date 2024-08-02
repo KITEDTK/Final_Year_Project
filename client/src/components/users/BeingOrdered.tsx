@@ -45,7 +45,16 @@ export const BeingOrdered = () => {
     await setShowModal(true);
   };
   const handleOnClickUpdateStatus = (paymentId: string) => {
-    dispatch(fetchUpdateStatus2hand(paymentId)).then(() => {
+    dispatch(fetchUpdateStatus2hand({paymentDetailId: paymentId, status: 'Đang vận chuyển'})).then(() => {
+      if (auth?.id) {
+        dispatch(fetchBeingOrderedItems(auth.id)).then((res: any) => {
+          setBeingOrderedItems(res.payload);
+        });
+      }
+    });
+  };
+  const handleOnClickPullStatus = (paymentId: string) => {
+    dispatch(fetchUpdateStatus2hand({paymentDetailId: paymentId, status: 'Chưa thanh toán'})).then(() => {
       if (auth?.id) {
         dispatch(fetchBeingOrderedItems(auth.id)).then((res: any) => {
           setBeingOrderedItems(res.payload);
@@ -165,7 +174,7 @@ export const BeingOrdered = () => {
                       </div>
                     ) : (
                       <div className="btn-wrap">
-                        <div className="btn btn-primary btn-round">Thu hồi</div>
+                        <div onClick={()=> handleOnClickPullStatus(item.id)} className="btn btn-primary btn-round">Thu hồi</div>
                       </div>
                     )}
                   </span>

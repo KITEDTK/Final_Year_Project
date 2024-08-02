@@ -7,6 +7,7 @@ import {
   SecondhandPaymentState,
 } from "./secondhandPaymentType";
 import { LocalPaymentInfo } from "../payments/paymentsType";
+import { UpdateStatus2hand, Odering2handItems } from './secondhandPaymentType';
 
 const BASE_URL = "http://localhost:4000/secondhandPayments";
 
@@ -90,12 +91,13 @@ export const fetchBeingOrderedItems = createAsyncThunk<BeingOrderedItems[], stri
     }
   }
 );
-export const fetchUpdateStatus2hand = createAsyncThunk<any, string>(
+export const fetchUpdateStatus2hand = createAsyncThunk<any, UpdateStatus2hand>(
   "secondhandPayment/sellerId",
-  async (paymentDetailId) => {
+  async ({paymentDetailId, status}) => {
     try {
       const response: AxiosResponse<any> = await axios.patch(
         `${BASE_URL}/paymentDetails/${paymentDetailId}/status`,
+        {status: status},
         { headers: { "Content-Type": "application/json" } }
       );
       return response.data;
@@ -105,6 +107,21 @@ export const fetchUpdateStatus2hand = createAsyncThunk<any, string>(
     }
   }
 );
+export const fetchOderingItems = createAsyncThunk<Odering2handItems[], string>(
+  'secondhandPayment/oderingItems',
+  async(userId) =>{
+    try {
+      const response: AxiosResponse<Odering2handItems[]> = await axios.get(
+        `${BASE_URL}/paymentDetails/${userId}/orderingItems`,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      return response.data;
+    } catch (err) {
+      console.error("Thêm hóa đơn thất bại", err);
+      throw err;
+    }
+  }
+)
 const secondhandPaymentSlice = createSlice({
   name: "secondHandPayment",
   initialState: {

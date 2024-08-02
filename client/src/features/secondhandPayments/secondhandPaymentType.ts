@@ -51,9 +51,36 @@ export interface BeingOrderedItems {
         color: {
           name: string;
         };
-        cloth:{
+        cloth: {
+          name: string;
+        };
+      };
+    };
+  };
+}
+export interface UpdateStatus2hand {
+  paymentDetailId: string;
+  status: string;
+}
+export interface Odering2handItems {
+  id: string;
+  buyerId: string;
+  SecondhandPaymentDetails: {
+    secondhand: {
+      price: number;
+      wardrobe: {
+        clothDetails: {
+          image1: string;
+          cloth: {
             name: string;
-        }
+          };
+          color: {
+            name: string;
+          };
+          size: {
+            name: string;
+          };
+        };
       };
     };
   };

@@ -1,5 +1,8 @@
 import { PrismaClient } from "@prisma/client";
-import { Create2handGuestPaymentInput, Create2HandPaymentInput } from "./SecondhandPaymentsType";
+import {
+  Create2handGuestPaymentInput,
+  Create2HandPaymentInput,
+} from "./SecondhandPaymentsType";
 const prisma = new PrismaClient();
 
 async function create2handPayment(input: Create2HandPaymentInput) {
@@ -19,28 +22,28 @@ async function create2handPayment(input: Create2HandPaymentInput) {
       phoneNumer: phoneNumber,
     },
   });
-  const filteredDetailData = secondhandCartInfo.map((item)=>{
+  const filteredDetailData = secondhandCartInfo.map((item) => {
     return {
       secondhandId: item.secondhandId,
       amount: item.amount,
       price: item.price || null,
       secondhandPaymentsId: payment.id,
-      status: status
-    }
-  })
+      status: status,
+    };
+  });
   const createPaymentDetail = await prisma.secondhandPaymentDetails.createMany({
-    data: filteredDetailData
+    data: filteredDetailData,
   });
   await prisma.secondHandCart.deleteMany({
-    where:{
-      userId: buyerId
-    }
+    where: {
+      userId: buyerId,
+    },
   });
   return createPaymentDetail;
 }
 async function createGuest2handPayment(input: Create2handGuestPaymentInput) {
-  const {address, phoneNumber, buyerName, local2handCarts, status} = input;
- 
+  const { address, phoneNumber, buyerName, local2handCarts, status } = input;
+
   const payment = await prisma.secondhandPayments.create({
     data: {
       address: address,
@@ -48,89 +51,141 @@ async function createGuest2handPayment(input: Create2handGuestPaymentInput) {
       phoneNumer: phoneNumber,
     },
   });
-  const cartData = local2handCarts.map((item)=>{
+  const cartData = local2handCarts.map((item) => {
     return {
       secondhandId: item.secondhandId,
       amount: item.amount,
       price: item.price || null,
       secondhandPaymentsId: payment.id,
-      status: status
-    }
+      status: status,
+    };
   });
   const createPaymentDetail = await prisma.secondhandPaymentDetails.createMany({
-    data: cartData
-  })
+    data: cartData,
+  });
   return createPaymentDetail;
 }
 async function fetchBeingOrderedItem(sellerId: string) {
   const data = await prisma.secondhandPaymentDetails.findMany({
-    where:{
-      secondhand:{
-        wardrobe:{
-          userId: sellerId
-        }
-      }
+    where: {
+      secondhand: {
+        wardrobe: {
+          userId: sellerId,
+        },
+      },
     },
-    select:{
+    select: {
       id: true,
       status: true,
       secondhandId: true,
       amount: true,
       price: true,
-      secondhandPayments:{
-        select:{
+      secondhandPayments: {
+        select: {
           id: true,
           buyerId: true,
           address: true,
           phoneNumer: true,
-          buyerName: true
-        }
+          buyerName: true,
+        },
       },
-      secondhand:{
-        select:{
-          wardrobe:{
-            select:{
-              clothDetails:{
-                select:{
+      secondhand: {
+        select: {
+          wardrobe: {
+            select: {
+              clothDetails: {
+                select: {
                   id: true,
-                  cloth:{
-                    select:{
-                      name: true
-                    }
-                  },
-                  size:{
-                    select:{
-                      name: true,
-                    }
-                  },
-                  color:{
+                  cloth: {
                     select: {
-                      name: true
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+                      name: true,
+                    },
+                  },
+                  size: {
+                    select: {
+                      name: true,
+                    },
+                  },
+                  color: {
+                    select: {
+                      name: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   });
   return data;
 }
-async function updateStatus(paymentId: string){
+async function updateStatus(paymentId: string, status: string) {
   const data = await prisma.secondhandPaymentDetails.update({
-    where:{
-      id: paymentId
+    where: {
+      id: paymentId,
     },
-    data:{
-      status: 'Đang vận chuyển'
-    }
-  })
+    data: {
+      status: status,
+    },
+  });
+  return data;
+}
+async function getOrdering(userId: string) {
+  const data = await prisma.secondhandPayments.findMany({
+    where: {
+      buyerId: userId,
+      SecondhandPaymentDetails:{
+        some:{
+          status: 'Đang vận chuyển'
+        }
+      }
+    },
+    select: {
+      id: true,
+      buyerId: true,
+      SecondhandPaymentDetails: {
+        select: {
+          secondhand: {
+            select: {
+              price: true,
+              wardrobe: {
+                select: {
+                  clothDetails: {
+                    select: {
+                      image1: true,
+                      cloth: {
+                        select: {
+                          name: true,
+                        },
+                      },
+                      color: {
+                        select: {
+                          name: true,
+                        },
+                      },
+                      size: {
+                        select: {
+                          name: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  return data;
 }
 export default {
   create2handPayment,
   createGuest2handPayment,
   fetchBeingOrderedItem,
-  updateStatus
+  updateStatus,
+  getOrdering
 };
