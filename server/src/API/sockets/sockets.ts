@@ -38,6 +38,10 @@ export function initSocket(server: http.Server): Server {
       const {secondhandId} = data;
       socket.to('anyone').emit('update_secondhand_item',{secondhandId});
     });
+    socket.on("update_ordering_items_status",(data: {userId: string})=>{
+      const {userId} = data;
+      socket.to(userId).emit('update_ordering_items');
+    })
   });
 
   return io;

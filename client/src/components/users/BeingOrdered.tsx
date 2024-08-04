@@ -49,6 +49,9 @@ export const BeingOrdered = () => {
       if (auth?.id) {
         dispatch(fetchBeingOrderedItems(auth.id)).then((res: any) => {
           setBeingOrderedItems(res.payload);
+        }).then(()=>{
+          const buyerId = beingOrderedItems.find((item)=> item.id === paymentId);
+          socket.emit('update_ordering_items_status',{userId: buyerId?.secondhandPayments.buyerId});
         });
       }
     });
@@ -58,6 +61,9 @@ export const BeingOrdered = () => {
       if (auth?.id) {
         dispatch(fetchBeingOrderedItems(auth.id)).then((res: any) => {
           setBeingOrderedItems(res.payload);
+        }).then(()=>{
+          const buyerId = beingOrderedItems.find((item)=> item.id === paymentId);
+          socket.emit('update_ordering_items_status',{userId: buyerId?.secondhandPayments.buyerId});
         });
       }
     });

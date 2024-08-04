@@ -64,11 +64,13 @@ export interface UpdateStatus2hand {
 }
 export interface Odering2handItems {
   id: string;
-  buyerId: string;
   SecondhandPaymentDetails: {
+    amount: number,
+    status: string,
     secondhand: {
       price: number;
       wardrobe: {
+        userId: string;
         clothDetails: {
           image1: string;
           cloth: {
@@ -83,5 +85,5 @@ export interface Odering2handItems {
         };
       };
     };
-  };
+  }[];
 }

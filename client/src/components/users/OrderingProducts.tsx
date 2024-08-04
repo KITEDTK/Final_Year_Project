@@ -1,3 +1,88 @@
-export const OrderingProducts = ()=>{
-    return (<></>)
-}
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { formatMoney } from "../../utils/formatMoney";
+import { Odering2handItems } from "../../features/secondhandPayments/secondhandPaymentType";
+import { useEffect, useState } from "react";
+import { fetchOderingItems } from "../../features/secondhandPayments/secondhandPaymentsSlice";
+import { io } from "socket.io-client";
+const socket = io("http://localhost:4000");
+export const OrderingProducts = () => {
+  const dispatch = useAppDispatch();
+  const auth = useAppSelector((state) => state.auth.auth);
+  const [orderingItems, setOrderingItems] = useState<Odering2handItems[]>();
+  useEffect(() => {
+    if (auth) {
+      dispatch(fetchOderingItems(auth.id)).then((res: any) => {
+        setOrderingItems(res.payload);
+      });
+      socket.emit("join_user", { userId: auth.id });
+    }
+  }, [dispatch, auth]);
+  useEffect(() => {
+    socket.on("update_ordering_items", () => {
+      if (auth) {
+        dispatch(fetchOderingItems(auth.id)).then((res: any) => {
+          setOrderingItems(res.payload);
+        });
+      }
+    });
+  });
+  return (
+    <>
+      <table className="table table-wishlist table-mobile">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Số lượng</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {auth &&
+            auth !== null &&
+            orderingItems &&
+            orderingItems.length > 0 &&
+            orderingItems.map((item) =>
+              item.SecondhandPaymentDetails.map((itemm, index) => (
+                <>
+                  <tr key={index}>
+                    <td className="product-col">
+                      <div className="product">
+                        <figure className="product-media">
+                          <a href="#">
+                            <img
+                              src="assets/images/products/table/product-1.jpg"
+                              alt="Product image"
+                            />
+                          </a>
+                        </figure>
+
+                        <h3 className="product-title">
+                          <a href="#">
+                            {itemm.secondhand.wardrobe.clothDetails.cloth.name}
+                            <br />
+                            {itemm.secondhand.wardrobe.clothDetails.color.name}/
+                            {itemm.secondhand.wardrobe.clothDetails.size.name}
+                          </a>
+                        </h3>
+                        {/* End .product-title */}
+                      </div>
+                      {/* End .product */}
+                    </td>
+                    <td className="price-col">
+                      {formatMoney(itemm.amount * itemm.secondhand.price)}đ
+                    </td>
+                    <td className="price-col">{itemm.amount}</td>
+                    <td className="stock-col">
+                      <span className="in-stock">{itemm.status}</span>
+                    </td>
+                  </tr>
+                </>
+              ))
+            )}
+        </tbody>
+      </table>
+    </>
+  );
+};

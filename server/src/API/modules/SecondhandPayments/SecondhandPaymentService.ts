@@ -147,11 +147,14 @@ async function getOrdering(userId: string) {
       buyerId: true,
       SecondhandPaymentDetails: {
         select: {
+          amount: true,
+          status: true,
           secondhand: {
             select: {
               price: true,
               wardrobe: {
                 select: {
+                  userId: true,
                   clothDetails: {
                     select: {
                       image1: true,

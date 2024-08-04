@@ -51,5 +51,6 @@ export default {
   create,
   createGuestPayment,
   getBeingOrderedItem,
-  updateStatus
+  updateStatus,
+  getOrdering,
 };
