@@ -121,6 +121,21 @@ export const fetchOderingItems = createAsyncThunk<Odering2handItems[], string>(
       throw err;
     }
   }
+);
+export const ftechPassSecondhandItems = createAsyncThunk<any, any>(
+  'secondhandPayment/passSecondhandItems',
+  async({buyerId, secondhandPaymentDetailId})=>{
+    try {
+      const response: AxiosResponse<Odering2handItems[]> = await axios.patch(
+        `${BASE_URL}/paymentDetails/${secondhandPaymentDetailId}/users/${buyerId}/pass`,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      return response.data;
+    } catch (err) {
+      console.error("Thêm hóa đơn thất bại", err);
+      throw err;
+    }
+  }
 )
 const secondhandPaymentSlice = createSlice({
   name: "secondHandPayment",

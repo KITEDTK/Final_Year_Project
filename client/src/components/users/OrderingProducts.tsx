@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { formatMoney } from "../../utils/formatMoney";
 import { Odering2handItems } from "../../features/secondhandPayments/secondhandPaymentType";
 import { useEffect, useState } from "react";
-import { fetchOderingItems } from "../../features/secondhandPayments/secondhandPaymentsSlice";
+import { fetchOderingItems, ftechPassSecondhandItems } from "../../features/secondhandPayments/secondhandPaymentsSlice";
 import { io } from "socket.io-client";
 const socket = io("http://localhost:4000");
 export const OrderingProducts = () => {
@@ -26,6 +26,16 @@ export const OrderingProducts = () => {
       }
     });
   });
+  const handleOnClickRecieve = (buyerId: string, secondhandPaymentDetailId: string)=>{
+    dispatch(ftechPassSecondhandItems({buyerId: buyerId, secondhandPaymentDetailId})).then(()=>{
+      socket.emit('join_user_wardrobe',{userId: buyerId});
+      if (auth) {
+        dispatch(fetchOderingItems(auth.id)).then((res: any) => {
+          setOrderingItems(res.payload);
+        });
+      }
+    })
+  }
   return (
     <>
       <table className="table table-wishlist table-mobile">
@@ -76,6 +86,9 @@ export const OrderingProducts = () => {
                     <td className="price-col">{itemm.amount}</td>
                     <td className="stock-col">
                       <span className="in-stock">{itemm.status}</span>
+                      <div className="btn-wrap">
+                        <div onClick={()=> handleOnClickRecieve(auth.id,itemm.id)} className="btn btn-primary btn-round">Đã nhận hàng</div>
+                      </div>
                     </td>
                   </tr>
                 </>

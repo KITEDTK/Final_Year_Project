@@ -47,10 +47,20 @@ async function getOrdering(req: Request, res: Response){
     console.log(err);
   }
 }
+async function passSecondhandItems(req: Request, res: Response) {
+  try{
+    const {buyerId, secondhandPaymentDetailId} = req.params;
+    const restult = await SecondhandPaymentService.passSecondhandItems(buyerId,secondhandPaymentDetailId);
+    res.json(restult);
+  }catch(err){
+    console.log(err);
+  }
+}
 export default {
   create,
   createGuestPayment,
   getBeingOrderedItem,
   updateStatus,
   getOrdering,
+  passSecondhandItems
 };

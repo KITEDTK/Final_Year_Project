@@ -136,17 +136,18 @@ async function getOrdering(userId: string) {
   const data = await prisma.secondhandPayments.findMany({
     where: {
       buyerId: userId,
-      SecondhandPaymentDetails:{
-        some:{
-          status: 'Đang vận chuyển'
-        }
-      }
+      SecondhandPaymentDetails: {
+        some: {
+          status: "Đang vận chuyển",
+        },
+      },
     },
     select: {
       id: true,
       buyerId: true,
       SecondhandPaymentDetails: {
         select: {
+          id: true,
           amount: true,
           status: true,
           secondhand: {
@@ -185,10 +186,91 @@ async function getOrdering(userId: string) {
   });
   return data;
 }
+async function passSecondhandItems(
+  buyerId: string,
+  secondhandPaymentDetailId: string
+) {
+  const secondhandPaymentDetailInfo =
+    await prisma.secondhandPaymentDetails.findUnique({
+      where: {
+        id: secondhandPaymentDetailId,
+      },
+      include: {
+        secondhand: {
+          select: {
+            amount: true,
+            wardrobe: {
+              select: {
+                clothDetailId: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  if (!secondhandPaymentDetailInfo) {
+    throw "err";
+  }
+  const checkExistInWardrobe = await prisma.wardrobe.findFirst({
+    where: {
+      userId: buyerId,
+      clothDetailId:
+        secondhandPaymentDetailInfo.secondhand.wardrobe.clothDetailId,
+    },
+  });
+  if (checkExistInWardrobe) {
+    await prisma.wardrobe.update({
+      where: {
+        id: checkExistInWardrobe.id,
+      },
+      data: {
+        amount:
+          checkExistInWardrobe.amount + secondhandPaymentDetailInfo.amount,
+      },
+    });
+    await prisma.secondhandPaymentDetails.delete({
+      where: {
+        id: secondhandPaymentDetailId,
+      },
+    });
+    await prisma.secondHand.update({
+      where:{
+        id: secondhandPaymentDetailInfo.secondhandId
+      },
+      data:{
+        amount: secondhandPaymentDetailInfo.secondhand.amount - secondhandPaymentDetailInfo.amount
+      }
+    })
+  } else {
+    await prisma.wardrobe.create({
+      data: {
+        userId: buyerId,
+        clothDetailId:
+          secondhandPaymentDetailInfo.secondhand.wardrobe.clothDetailId,
+        amount: secondhandPaymentDetailInfo.amount,
+      },
+    });
+    await prisma.secondhandPaymentDetails.delete({
+      where: {
+        id: secondhandPaymentDetailId,
+      },
+    });
+    await prisma.secondHand.update({
+      where:{
+        id: secondhandPaymentDetailInfo.secondhandId
+      },
+      data:{
+        amount: secondhandPaymentDetailInfo.secondhand.amount - secondhandPaymentDetailInfo.amount
+      }
+    })
+  }
+  return true;
+}
 export default {
   create2handPayment,
   createGuest2handPayment,
   fetchBeingOrderedItem,
   updateStatus,
-  getOrdering
+  getOrdering,
+  passSecondhandItems,
 };

@@ -65,6 +65,7 @@ export interface UpdateStatus2hand {
 export interface Odering2handItems {
   id: string;
   SecondhandPaymentDetails: {
+    id: string;
     amount: number,
     status: string,
     secondhand: {
