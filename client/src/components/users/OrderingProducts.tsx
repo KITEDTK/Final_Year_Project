@@ -2,7 +2,10 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { formatMoney } from "../../utils/formatMoney";
 import { Odering2handItems } from "../../features/secondhandPayments/secondhandPaymentType";
 import { useEffect, useState } from "react";
-import { fetchOderingItems, ftechPassSecondhandItems } from "../../features/secondhandPayments/secondhandPaymentsSlice";
+import {
+  fetchOderingItems,
+  ftechPassSecondhandItems,
+} from "../../features/secondhandPayments/secondhandPaymentsSlice";
 import { io } from "socket.io-client";
 const socket = io("http://localhost:4000");
 export const OrderingProducts = () => {
@@ -26,16 +29,33 @@ export const OrderingProducts = () => {
       }
     });
   });
-  const handleOnClickRecieve = (buyerId: string, secondhandPaymentDetailId: string)=>{
-    dispatch(ftechPassSecondhandItems({buyerId: buyerId, secondhandPaymentDetailId})).then(()=>{
-      socket.emit('join_user_wardrobe',{userId: buyerId});
+  const handleOnClickRecieve = (
+    buyerId: string,
+    secondhandPaymentDetailId: string
+  ) => {
+    dispatch(
+      ftechPassSecondhandItems({ buyerId: buyerId, secondhandPaymentDetailId })
+    ).then(() => {
+      socket.emit("join_user_wardrobe", { userId: buyerId });
+      const sellerId: string | undefined = orderingItems
+        ?.find((item) => {
+          const result = item.SecondhandPaymentDetails.find(
+            (itemm) => itemm.id === secondhandPaymentDetailId
+          );
+          return result !== undefined;
+        })
+        ?.SecondhandPaymentDetails.find(
+          (itemm) => itemm.id === secondhandPaymentDetailId
+        )?.secondhand.wardrobe.userId;
+      socket.emit("join_user_being_ordered_item", { sellerId: sellerId });
+      socket.emit("join_user_selling_items",{userId: sellerId});
       if (auth) {
         dispatch(fetchOderingItems(auth.id)).then((res: any) => {
           setOrderingItems(res.payload);
         });
       }
-    })
-  }
+    });
+  };
   return (
     <>
       <table className="table table-wishlist table-mobile">
@@ -87,7 +107,14 @@ export const OrderingProducts = () => {
                     <td className="stock-col">
                       <span className="in-stock">{itemm.status}</span>
                       <div className="btn-wrap">
-                        <div onClick={()=> handleOnClickRecieve(auth.id,itemm.id)} className="btn btn-primary btn-round">Đã nhận hàng</div>
+                        <div
+                          onClick={() =>
+                            handleOnClickRecieve(auth.id, itemm.id)
+                          }
+                          className="btn btn-primary btn-round"
+                        >
+                          Đã nhận hàng
+                        </div>
                       </div>
                     </td>
                   </tr>

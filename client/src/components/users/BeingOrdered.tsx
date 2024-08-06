@@ -34,6 +34,13 @@ export const BeingOrdered = () => {
       }
       console.log(data);
     });
+    socket.on('update_being_ordered_items_seller',()=>{
+      if (auth?.id) {
+        dispatch(fetchBeingOrderedItems(auth.id)).then((res: any) => {
+          setBeingOrderedItems(res.payload);
+        });
+      }
+    })
   });
   const [itemInModal, setItemInModal] = useState<BeingOrderedItems>();
   const [showModal, setShowModal] = useState<boolean>();
@@ -44,20 +51,8 @@ export const BeingOrdered = () => {
     await setItemInModal(item);
     await setShowModal(true);
   };
-  const handleOnClickUpdateStatus = (paymentId: string) => {
-    dispatch(fetchUpdateStatus2hand({paymentDetailId: paymentId, status: 'Đang vận chuyển'})).then(() => {
-      if (auth?.id) {
-        dispatch(fetchBeingOrderedItems(auth.id)).then((res: any) => {
-          setBeingOrderedItems(res.payload);
-        }).then(()=>{
-          const buyerId = beingOrderedItems.find((item)=> item.id === paymentId);
-          socket.emit('update_ordering_items_status',{userId: buyerId?.secondhandPayments.buyerId});
-        });
-      }
-    });
-  };
-  const handleOnClickPullStatus = (paymentId: string) => {
-    dispatch(fetchUpdateStatus2hand({paymentDetailId: paymentId, status: 'Chưa thanh toán'})).then(() => {
+  const handleOnClickUpdateStatus = (paymentId: string, status: string) => {
+    dispatch(fetchUpdateStatus2hand({paymentDetailId: paymentId, status: status})).then(() => {
       if (auth?.id) {
         dispatch(fetchBeingOrderedItems(auth.id)).then((res: any) => {
           setBeingOrderedItems(res.payload);
@@ -172,7 +167,7 @@ export const BeingOrdered = () => {
                     {item.status === "Chưa thanh toán" ? (
                       <div className="btn-wrap">
                         <div
-                          onClick={() => handleOnClickUpdateStatus(item.id)}
+                          onClick={() => handleOnClickUpdateStatus(item.id, 'Đang vận chuyển')}
                           className="btn btn-primary btn-round"
                         >
                           Vận chuyển
@@ -180,7 +175,7 @@ export const BeingOrdered = () => {
                       </div>
                     ) : (
                       <div className="btn-wrap">
-                        <div onClick={()=> handleOnClickPullStatus(item.id)} className="btn btn-primary btn-round">Thu hồi</div>
+                        <div onClick={()=> handleOnClickUpdateStatus(item.id, 'Chưa thanh toán')} className="btn btn-primary btn-round">Thu hồi</div>
                       </div>
                     )}
                   </span>

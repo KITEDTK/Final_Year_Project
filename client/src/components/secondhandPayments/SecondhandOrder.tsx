@@ -2,7 +2,8 @@ import { resetLocal2handCarts } from "../../features/secondhandCarts/secondHandC
 import { fetchAdd2handPayment, fetchAddLocal2handPayment } from "../../features/secondhandPayments/secondhandPaymentsSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { showToast } from "../../utils/showToast";
-
+import { io } from "socket.io-client";
+const socket = io("http://localhost:4000");
 export const SecondhandOrder = () => {
   const auth = useAppSelector((state) => state.auth.auth);
   const dispatch = useAppDispatch();
@@ -32,7 +33,7 @@ export const SecondhandOrder = () => {
         secondhandCartInfo: secondhandCartInfo
       })).then(()=>{
         showToast('Bạn đã đặt hàng thành công','success');
-        dispatch(resetLocal2handCarts());
+        socket.emit('order_items',{sellerIds: secondhandSellerIds});
         window.location.href = 'http://localhost:3000/secondhand';
       })
     }else{
@@ -49,7 +50,8 @@ export const SecondhandOrder = () => {
         status: 'Chưa thanh toán',
         local2handCarts: secondhandIds
       })).then(()=>{
-        showToast('Bạn đã đặt hàng thành công','success');
+        showToast('Bạn đã đặt hàng thành công','success'); 
+        dispatch(resetLocal2handCarts());
         window.location.href = 'http://localhost:3000/secondhand';
       })
     }
