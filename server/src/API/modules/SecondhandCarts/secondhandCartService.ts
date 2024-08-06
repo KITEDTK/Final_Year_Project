@@ -13,6 +13,7 @@ async function fetch2handCartByUser(userId: string) {
           id: true,
           wardrobe: {
             select: {
+              userId: true,
               clothDetails: {
                 select: {
                   size: {

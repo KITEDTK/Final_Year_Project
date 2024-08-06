@@ -41,6 +41,12 @@ export function initSocket(server: http.Server): Server {
     socket.on("update_ordering_items_status",(data: {userId: string})=>{
       const {userId} = data;
       socket.to(userId).emit('update_ordering_items');
+    });
+    socket.on('order_items', (data:{sellerIds: string[]})=>{
+      const {sellerIds} = data;
+      sellerIds.forEach((item)=>{
+        socket.to(item).emit('update_being_ordered_items');
+      })
     })
   });
 

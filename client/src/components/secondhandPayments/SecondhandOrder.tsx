@@ -20,6 +20,9 @@ export const SecondhandOrder = () => {
         amount: item.amount,
         price: 0
       }});
+      const secondhandSellerIds = auth2handCarts.map((item)=>{
+        return item.seconHands.wardrobe.userId;
+      });
       dispatch(fetchAdd2handPayment({
         buyerId: auth.id,
         address: 'Ha Noi',
