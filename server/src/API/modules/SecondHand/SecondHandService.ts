@@ -150,8 +150,32 @@ async function pullSellingItems(secondhandId: string){
   });
   return true;
 }
+async function getAll(){
+  const result = await prisma.secondHand.findMany({
+    include: {
+      wardrobe: {
+        include: {
+          clothDetails: {
+            select: {
+              cloth: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+              size: { select: { id: true, name: true } },
+              color: { select: { id: true, name: true } },
+            },
+          },
+        },
+      },
+    },
+  });
+  return result;
+}
 export default {
   create,
+  getAll,
   allSecondHand,
   getMaxQuantity,
   getSellingItems,

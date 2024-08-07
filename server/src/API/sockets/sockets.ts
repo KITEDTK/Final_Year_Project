@@ -42,18 +42,11 @@ export function initSocket(server: http.Server): Server {
       const {userId} = data;
       socket.to(userId).emit('update_ordering_items');
     });
-    socket.on('order_items', (data:{sellerIds: string[]})=>{
-      const {sellerIds} = data;
-      sellerIds.forEach((item)=>{
-        socket.to(item).emit('update_being_ordered_items');
-      })
-    });
     socket.on('join_user_being_ordered_item',(data: {sellerId: string})=>{
       const {sellerId} = data;
       socket.to(sellerId).emit('update_being_ordered_items_seller');
     })
   });
-
   return io;
 }
 

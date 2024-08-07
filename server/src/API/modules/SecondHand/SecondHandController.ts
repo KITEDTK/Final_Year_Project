@@ -45,10 +45,19 @@ async function pullSellingItems(req: Request, res: Response){
     console.log(err);
   }
 }
+async function getAllSecondhandItems(req: Request, res: Response){
+  try{
+    const result = await SecondHandService.getAll();
+    res.json(result);
+  }catch(err){
+    console.log(err);
+  }
+}
 export default {
   add,
   getAll,
   maxQuantity,
   getSellingItems,
-  pullSellingItems
+  pullSellingItems,
+  getAllSecondhandItems
 };
