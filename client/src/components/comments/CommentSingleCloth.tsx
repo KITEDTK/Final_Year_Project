@@ -7,7 +7,7 @@ interface Props {
   commentInfo: SingleComment[];
 }
 export const CommentSingleCloth: React.FC<Props> = ({ commentInfo }) => {
-  console.log(commentInfo)
+  console.log(commentInfo);
   const { clothesId } = useParams<string>();
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth.auth);

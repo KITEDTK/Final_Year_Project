@@ -13,6 +13,7 @@ export const Navbar = () => {
   useEffect(() => {
     dispatch(fetchAllCategories());
   }, [dispatch]);
+  const auth = useAppSelector((state) => state.auth.auth);
   const categories = useAppSelector((state) => state.categories.categories);
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
   const handleOnclickNav = (
@@ -183,9 +184,12 @@ export const Navbar = () => {
                       </>
                     );
                   })}
-                <li className={`megamenu-container`} key={1}>
-                  <Link to={`/secondhand`}>Hàng 2hand</Link>
-                </li>
+                {auth && auth !== null && (
+                  <li className={`megamenu-container`} key={1}>
+                    <Link to={`/secondhand`}>Hàng 2hand</Link>
+                  </li>
+                )}
+
                 {/* End component */}
               </ul>
               {/* End .menu */}

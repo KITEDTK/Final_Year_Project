@@ -167,7 +167,7 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
 
           <div className="product-body">
             <div className="product-cat">
-              <a href="#">Women</a>
+              <a href="#">Người bán: Shop</a>
             </div>
             {/* End .product-cat */}
             <h3 className="product-title">

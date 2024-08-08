@@ -2,13 +2,13 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-async function create(wardrobeId: string, amountToSell: number) {
+async function create(wardrobeId: string, amountToSell: number, price: number) {
   const checkExistSecondhand = await prisma.secondHand.findFirst({
     where: {
       wardrobeId: wardrobeId,
     },
   });
-  if (checkExistSecondhand) {
+  if (checkExistSecondhand && checkExistSecondhand.price === price) {
     await prisma.secondHand.update({
       where: {
         id: checkExistSecondhand.id,
@@ -22,6 +22,7 @@ async function create(wardrobeId: string, amountToSell: number) {
       data: {
         wardrobeId: wardrobeId,
         amount: amountToSell,
+        price: price
       },
     });
   }
@@ -52,8 +53,14 @@ async function allSecondHand(page: string) {
     include: {
       wardrobe: {
         include: {
+          users:{
+            select:{
+              fullname: true
+            }
+          },
           clothDetails: {
             select: {
+              image1: true,
               cloth: {
                 select: {
                   id: true,

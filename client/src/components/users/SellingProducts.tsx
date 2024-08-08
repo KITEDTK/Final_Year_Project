@@ -6,6 +6,7 @@ import { SellingSecondhandProducts } from "../../features/secondHand/secondHandT
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import { formatMoney } from '../../utils/formatMoney';
 const socket = io("http://localhost:4000");
 
 export const SellingProducts = () => {
@@ -36,6 +37,7 @@ export const SellingProducts = () => {
       if (auth?.id) {
         dispatch(fetchSellingItems(auth.id)).then((res: any) => {
           setSellingItems(res.payload);
+          socket.emit('update_selling_item',{userId: auth.id});
         })
       }
       socket.emit('pull_selling_item',{secondhandId: secondhandId});
@@ -82,7 +84,7 @@ export const SellingProducts = () => {
                   </div>
                   {/* End .product */}
                 </td>
-                <td className="price-col">Chưa làm</td>
+                <td className="price-col">{formatMoney(item.price)} đ</td>
                 <td className="price-col">{item.amount}</td>
                 <td className="stock-col">
                   <span className="in-stock">

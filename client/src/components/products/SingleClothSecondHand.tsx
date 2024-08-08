@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { SecondHand } from "../../features/secondHand/secondHandTypes";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
@@ -7,6 +6,7 @@ import {
   fetchAddItemTo2handCart,
 } from "../../features/secondhandCarts/secondHandCartSlice";
 import { showToast } from "../../utils/showToast";
+import { formatMoney } from '../../utils/formatMoney';
 interface Props {
   secondhand: SecondHand;
 }
@@ -22,9 +22,11 @@ export const SingleClothSecondHand: React.FC<Props> = ({ secondhand }) => {
   const addItemTo2handCart = async () => {
     if (auth && auth !== null) {
       const checkExist = auth2handCarts.find((item)=>item.seconHands.id === secondhand.id);
-      console.log(auth2handCarts);
       if (checkExist && checkExist.amount + 1 > secondhand.amount) {
         showToast("Số lượng sản phẩm không đủ", "info");
+        console.log(auth.id);
+      } else if (secondhand.wardrobe.userId === auth.id) {
+        showToast("Bạn không thể mua sản phẩm của chính mình", "info");
       } else {
         dispatch(
           fetchAddItemTo2handCart({
@@ -66,14 +68,14 @@ export const SingleClothSecondHand: React.FC<Props> = ({ secondhand }) => {
         <div className="product product-7 text-center">
           <figure className="product-media">
             <span className="product-label label-new">New</span>
-            <Link to={`/single-product/${secondhand.id}`}>
+            <div>
               <img
                 src={`http://localhost:4000/images/${clothDetails.image1}`}
                 style={{ width: "280px", height: "280px" }}
                 alt="Product image"
                 className="product-image"
               />
-            </Link>
+            </div>
 
             <div className="product-action-vertical">
               <a className="btn-product-icon btn-wishlist btn-expandable">
@@ -106,12 +108,13 @@ export const SingleClothSecondHand: React.FC<Props> = ({ secondhand }) => {
 
           <div className="product-body">
             <div className="product-cat">
-              <a href="#">Women</a>
+              <a href="#">Người bán: {secondhand.wardrobe.users.fullname}
+              </a>
             </div>
             {/* End .product-cat */}
             <h3 className="product-title">{clothDetails.cloth.name}</h3>
             {/* End .product-title */}
-            <div className="product-price">Chưa làm đ</div>
+            <div className="product-price">{formatMoney(secondhand.price)} đ</div>
             {/* End .product-price */}
             <div className="ratings-container">
               <div className="ratings">

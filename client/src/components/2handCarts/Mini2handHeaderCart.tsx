@@ -34,24 +34,24 @@ export const Mini2handHeaderCart = () => {
       showToast("Đã xóa sản phẩm khỏi giỏ hàng 2hand", "error");
     });
   };
-  const handleDeleteLocalCartItem = async (secondhandId: string) => {
-    await dispatch(removeItemFromLocal2handCart(secondhandId));
-    showToast("Đã xóa sản phẩm khỏi giỏ hàng 2hand", "error");
-  };
-  useEffect(()=>{
-    socket.emit("join_anyone",'anyone');
-    socket.on('update_secondhand_item', (data: {secondhandId: string}) => {
-      if(auth && auth !== null){
-        const checkExist = auth2handCarts.find((item)=>item.seconHands.id === data.secondhandId);
-        if(checkExist){
+  useEffect(() => {
+    socket.emit("join_anyone", "anyone");
+    socket.on("update_secondhand_item", (data: { secondhandId: string }) => {
+      if (auth && auth !== null) {
+        const checkExist = auth2handCarts.find(
+          (item) => item.seconHands.id === data.secondhandId
+        );
+        if (checkExist) {
           dispatch(fetch2handCartByUser({ userId: auth.id }));
-          showToast('Người bán vừa thu hồi lại sản phẩm khỏi website', 'info');
+          showToast("Người bán vừa thu hồi lại sản phẩm khỏi website", "info");
         }
-      }else{
-        const checkExist = local2handCarts.items.find((item)=>item.secondhandId === data.secondhandId);
-        if(checkExist){
+      } else {
+        const checkExist = local2handCarts.items.find(
+          (item) => item.secondhandId === data.secondhandId
+        );
+        if (checkExist) {
           dispatch(removeItemFromLocal2handCart(data.secondhandId));
-          showToast('Người bán vừa thu hồi lại sản phẩm khỏi website', 'info');
+          showToast("Người bán vừa thu hồi lại sản phẩm khỏi website", "info");
         }
       }
     });
@@ -68,59 +68,17 @@ export const Mini2handHeaderCart = () => {
           aria-expanded="false"
           data-display="static"
         >
-          <i className="icon-random"></i>
-          <span className="cart-count">
-            {auth && auth !== null
-              ? maxQuantityAuthCart
-              : local2handCarts.totalAmount}
-          </span>
+          {auth && auth !== null && (
+            <>
+              <i className="icon-random"></i>
+              <span className="cart-count">
+                {auth && auth !== null && maxQuantityAuthCart}
+              </span>
+            </>
+          )}
         </a>
-
         <div className="dropdown-menu dropdown-menu-right">
           <div className="dropdown-cart-products">
-            {!auth &&
-              auth === null &&
-              local2handCarts &&
-              local2handCarts.items &&
-              local2handCarts.items.map((item) => {
-                return (
-                  <>
-                    <div className="product">
-                      <div className="product-cart-details">
-                        <h4 className="product-title">
-                          <a href="product.html">{item.clothName}</a>
-                        </h4>
-
-                        <span className="cart-product-info">
-                          <span className="cart-product-qty">
-                            {item.amount}
-                          </span>
-                          x $84.00
-                        </span>
-                      </div>
-                      {/* End .product-cart-details */}
-
-                      <figure className="product-image-container">
-                        <a href="product.html" className="product-image">
-                          <img
-                            src="assets/images/products/cart/product-1.jpg"
-                            alt="product"
-                          />
-                        </a>
-                      </figure>
-                      <div
-                        onClick={() =>
-                          handleDeleteLocalCartItem(item.secondhandId)
-                        }
-                        className="btn-remove"
-                        title="Remove Product"
-                      >
-                        <i className="icon-close"></i>
-                      </div>
-                    </div>
-                  </>
-                );
-              })}
             {auth &&
               auth !== null &&
               auth2handCarts &&
@@ -182,7 +140,10 @@ export const Mini2handHeaderCart = () => {
             <a href="cart.html" className="btn btn-primary">
               View Cart
             </a>
-            <Link to="/secondhand-checkout" className="btn btn-outline-primary-2">
+            <Link
+              to="/secondhand-checkout"
+              className="btn btn-outline-primary-2"
+            >
               <span>Checkout</span>
               <i className="icon-long-arrow-right"></i>
             </Link>

@@ -3,8 +3,8 @@ import SecondHandService from "./SecondHandService";
 
 async function add(req: Request, res: Response) {
   try {
-    const { wardrobeId, amount } = req.body;
-    const result = await SecondHandService.create(wardrobeId, amount);
+    const { wardrobeId, amount, price } = req.body;
+    const result = await SecondHandService.create(wardrobeId, amount, price);
     res.json(result);
   } catch (err) {
     console.log(err);

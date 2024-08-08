@@ -10,11 +10,12 @@ const BASE_URL = "http://localhost:4000/secondHand";
 
 export const fetchAddSecondHand = createAsyncThunk<any, SecondHandAddInput>(
   "secondHand/add",
-  async ({ wardrobeId, amount }) => {
+  async ({ wardrobeId, amount, price }) => {
     try {
       const response: AxiosResponse<any> = await axios.post(`${BASE_URL}`, {
         wardrobeId: wardrobeId,
         amount: amount,
+        price: price
       });
       return response.data;
     } catch (err) {
