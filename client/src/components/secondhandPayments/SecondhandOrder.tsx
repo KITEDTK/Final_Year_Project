@@ -7,6 +7,7 @@ import { SecondHand } from "../../features/secondHand/secondHandTypes";
 import { fetchAllItemsSecondhand } from "../../features/secondHand/secondHandSlice";
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
+import { formatMoney } from "../../utils/formatMoney";
 const socket = io("http://localhost:4000");
 export const SecondhandOrder = () => {
   const auth = useAppSelector((state) => state.auth.auth);
@@ -184,10 +185,10 @@ export const SecondhandOrder = () => {
                           <br />
                           <a href="#">
                             {item.seconHands.wardrobe.clothDetails.color.name}/
-                            {item.seconHands.wardrobe.clothDetails.size.name}
+                            {item.seconHands.wardrobe.clothDetails.size.name} x {item.amount}
                           </a>
                         </td>
-                        <td>$84.00</td>
+                        <td>{formatMoney(item.seconHands.price * item.amount)} đ</td>
                       </tr>
                     </>
                   );

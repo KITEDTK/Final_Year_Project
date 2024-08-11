@@ -10,6 +10,7 @@ export interface SecondhandCart {
   amount: number;
   seconHands: {
     id: string;
+    price: number;
     wardrobe: {
       userId: string,
       clothDetails: {

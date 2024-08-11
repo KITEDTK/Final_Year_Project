@@ -136,11 +136,11 @@ async function getOrdering(userId: string) {
   const data = await prisma.secondhandPayments.findMany({
     where: {
       buyerId: userId,
-      SecondhandPaymentDetails: {
-        some: {
-          status: "Đang vận chuyển",
-        },
-      },
+      SecondhandPaymentDetails:{
+        some:{
+          status: 'Đang vận chuyển'
+        }
+      }
     },
     select: {
       id: true,
@@ -184,7 +184,20 @@ async function getOrdering(userId: string) {
       },
     },
   });
-  return data;
+  const filterData = data.map((item) => {
+    const filteredDetails = item.SecondhandPaymentDetails.map((detail)=>{
+      if(detail.status === 'Đang vận chuyển'){
+        return detail;
+      }else{
+        return null;
+      }
+    }).filter((itemm)=>itemm !== null);
+    return {
+      ...item,
+      SecondhandPaymentDetails: filteredDetails
+    };
+  });
+  return filterData;
 }
 async function passSecondhandItems(
   buyerId: string,
@@ -240,7 +253,14 @@ async function passSecondhandItems(
       data:{
         amount: secondhandPaymentDetailInfo.secondhand.amount - secondhandPaymentDetailInfo.amount
       }
-    })
+    });
+    if(secondhandPaymentDetailInfo.secondhand.amount - secondhandPaymentDetailInfo.amount === 0){
+      await prisma.secondHand.delete({
+        where:{
+          id : secondhandPaymentDetailInfo.secondhandId
+        }
+      })
+    }
   } else {
     await prisma.wardrobe.create({
       data: {

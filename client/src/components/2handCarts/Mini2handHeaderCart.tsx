@@ -43,7 +43,7 @@ export const Mini2handHeaderCart = () => {
         );
         if (checkExist) {
           dispatch(fetch2handCartByUser({ userId: auth.id }));
-          showToast("Người bán vừa thu hồi lại sản phẩm khỏi website", "info");
+          //showToast("Người bán vừa thu hồi lại sản phẩm khỏi website", "info");
         }
       } else {
         const checkExist = local2handCarts.items.find(
@@ -51,7 +51,7 @@ export const Mini2handHeaderCart = () => {
         );
         if (checkExist) {
           dispatch(removeItemFromLocal2handCart(data.secondhandId));
-          showToast("Người bán vừa thu hồi lại sản phẩm khỏi website", "info");
+          //showToast("Người bán vừa thu hồi lại sản phẩm khỏi website", "info");
         }
       }
     });

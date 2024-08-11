@@ -11,6 +11,7 @@ async function fetch2handCartByUser(userId: string) {
       seconHands: {
         select: {
           id: true,
+          price: true,
           wardrobe: {
             select: {
               userId: true,
