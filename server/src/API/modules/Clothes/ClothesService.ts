@@ -534,6 +534,33 @@ async function updateQuantity(clothDetailId: string, quantity: number){
   });
   return result;
 }
+async function getByBarcode(barcode: string){
+  const data = await prisma.clothDetails.findUnique({
+    where:{
+      codeBar: barcode
+    },
+    select:{
+      id: true,
+      image1: true,
+      size:{
+        select:{
+          name: true
+        }
+      },
+      color:{
+        select:{
+          name: true
+        }
+      },
+      cloth:{
+        select:{
+          name: true
+        }
+      }
+    }
+  });
+  return data;
+}
 export default {
   getMaxQuantityClothesByRootCategory,
   getClothesByRootCategory,
@@ -549,6 +576,7 @@ export default {
   getAllClothes,
   createClothes,
   readExcelFile,
+  getByBarcode,
   updateQuantity,
   addQuantity,
   addComment,

@@ -76,3 +76,16 @@ export interface ClothDetailsUpdateInput {
   clothDetailId: string;
   quantity: number;
 }
+export interface ClothByBarcode{
+  id: string;
+  image1: string;
+  size:{
+    name: string;
+  };
+  color:{
+    name: string;
+  };
+  cloth:{
+    name: string;
+  }
+}

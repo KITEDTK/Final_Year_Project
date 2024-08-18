@@ -186,6 +186,15 @@ async function updateClothDetailQuantity(req: Request, res: Response){
     console.log(err);
   }
 }
+async function getByBarcode(req: Request, res: Response){
+  try{
+    const {barcode} = req.body;
+    const result = await ClothesService.getByBarcode(barcode);
+    res.json(result);
+  }catch(err){
+    console.log(err);
+  }
+}
 export default {
   addClothDetailQuantity,
   updateClothDetailQuantity,
@@ -196,6 +205,7 @@ export default {
   generateBarcode,
   getMaxQuantityClothes,
   getAllClothesAdmin,
+  getByBarcode,
   filterClothes,
   clothesToCSV,
   getAllClothes,

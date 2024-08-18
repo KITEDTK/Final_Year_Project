@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
 
 import {
+  ClothByBarcode,
   ClothDetailsUpdateInput,
   Clothes,
   ClothesState,
@@ -111,14 +112,15 @@ export const fetchGenerateBarcode = createAsyncThunk<
     throw err;
   }
 });
-export const fetchCreateClothes = createAsyncThunk<Clothes,CreateClothesInput>(
-  "clothes/create", async({name, brand, location, initPrice, price, categoryId})=>{
+export const fetchCreateClothes = createAsyncThunk<Clothes, CreateClothesInput>(
+  "clothes/create",
+  async ({ name, brand, location, initPrice, price, categoryId }) => {
     try {
       const response: AxiosResponse<Clothes> = await axios.post(
         `${BASE_URL}`,
         {
           name: name,
-          brand: brand, 
+          brand: brand,
           location: location,
           initPrice: initPrice,
           price: price,
@@ -134,14 +136,55 @@ export const fetchCreateClothes = createAsyncThunk<Clothes,CreateClothesInput>(
       throw err;
     }
   }
-)
-export const fetchAddClothDetailQuantity = createAsyncThunk<any, ClothDetailsUpdateInput>(
-  "clothes/clothDetails/add-quantity", async({clothDetailId, quantity})=>{
+);
+export const fetchAddClothDetailQuantity = createAsyncThunk<
+  any,
+  ClothDetailsUpdateInput
+>("clothes/clothDetails/add-quantity", async ({ clothDetailId, quantity }) => {
+  try {
+    const response: AxiosResponse<any> = await axios.patch(
+      `${BASE_URL}/clothDetails/${clothDetailId}/add-quantity`,
+      {
+        quantity: quantity,
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.error("fetching error", err);
+    throw err;
+  }
+});
+export const fetchUpdateClothDetailQuantity = createAsyncThunk<
+  any,
+  ClothDetailsUpdateInput
+>("clothes/clothDetails/add-quantity", async ({ clothDetailId, quantity }) => {
+  try {
+    const response: AxiosResponse<any> = await axios.patch(
+      `${BASE_URL}/clothDetails/${clothDetailId}/update-quantity`,
+      {
+        quantity: quantity,
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.error("fetching error", err);
+    throw err;
+  }
+});
+export const fetchClothByBarcode = createAsyncThunk<ClothByBarcode, string>(
+  "cloth/barcode",
+  async (barcode) => {
     try {
-      const response: AxiosResponse<any> = await axios.patch(
-        `${BASE_URL}/clothDetails/${clothDetailId}/add-quantity`,
+      const response: AxiosResponse<ClothByBarcode> = await axios.post(
+        `${BASE_URL}/barcode/search`,
         {
-          quantity : quantity
+          barcode: barcode,
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -153,26 +196,7 @@ export const fetchAddClothDetailQuantity = createAsyncThunk<any, ClothDetailsUpd
       throw err;
     }
   }
-)
-export const fetchUpdateClothDetailQuantity = createAsyncThunk<any, ClothDetailsUpdateInput>(
-  "clothes/clothDetails/add-quantity", async({clothDetailId, quantity})=>{
-    try {
-      const response: AxiosResponse<any> = await axios.patch(
-        `${BASE_URL}/clothDetails/${clothDetailId}/update-quantity`,
-        {
-          quantity : quantity
-        },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      return response.data;
-    } catch (err) {
-      console.error("fetching error", err);
-      throw err;
-    }
-  }
-)
+);
 const clothesSlice = createSlice({
   name: "clothes",
   initialState: {
