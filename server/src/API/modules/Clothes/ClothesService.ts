@@ -561,6 +561,25 @@ async function getByBarcode(barcode: string){
   });
   return data;
 }
+async function refund(clothDetailId: string, amount: number){
+  const data = await prisma.clothDetails.findUnique({
+    where:{
+      id: clothDetailId
+    }
+  });
+  if(!data){
+    throw 'err';
+  }
+  const update = await prisma.clothDetails.update({
+    where:{
+      id: clothDetailId
+    },
+    data:{
+      amount: data?.amount + amount
+    }
+  });
+  return update;
+}
 export default {
   getMaxQuantityClothesByRootCategory,
   getClothesByRootCategory,
@@ -581,4 +600,5 @@ export default {
   addQuantity,
   addComment,
   searching,
+  refund,
 };

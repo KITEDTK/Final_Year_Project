@@ -195,6 +195,15 @@ async function getByBarcode(req: Request, res: Response){
     console.log(err);
   }
 }
+async function refund(req: Request, res: Response){
+  try{
+    const {clothDetailId, amount} = req.body;
+    const result = await ClothesService.refund(clothDetailId,amount);
+    res.json(result);
+  }catch(err){
+    console.log(err);
+  }
+}
 export default {
   addClothDetailQuantity,
   updateClothDetailQuantity,
@@ -214,5 +223,6 @@ export default {
   getAllClothDetail,
   addCommentInClothes,
   getSingleClothesAdmin,
-  updateSingleClothes
+  updateSingleClothes,
+  refund
 };

@@ -8,6 +8,7 @@ import {
   ClothesState,
   CreateClothesInput,
   GenerateBarcodeInput,
+  RefundInput,
   SingleClothes,
   UpdateClothesInput,
 } from "./clothesType";
@@ -197,6 +198,24 @@ export const fetchClothByBarcode = createAsyncThunk<ClothByBarcode, string>(
     }
   }
 );
+export const fetchRefunds = createAsyncThunk<any,RefundInput>(
+  "cloth/refunds",
+  async({clothDetailId, amount})=> {
+    try{
+      const response: AxiosResponse<RefundInput> = await axios.patch(
+        `${BASE_URL}/refunds`,
+        {
+          clothDetailId: clothDetailId,
+          amount: amount
+        }
+      );
+      return response.data;
+    }catch(err){
+      console.error("fetching error", err);
+      throw err;
+    }
+  }
+)
 const clothesSlice = createSlice({
   name: "clothes",
   initialState: {

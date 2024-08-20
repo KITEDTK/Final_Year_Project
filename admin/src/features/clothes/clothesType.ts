@@ -89,3 +89,7 @@ export interface ClothByBarcode{
     name: string;
   }
 }
+export interface RefundInput {
+  clothDetailId: string;
+  amount: number;
+}

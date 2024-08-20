@@ -62,6 +62,7 @@ router.post(
 );
 router.post("/admin/barcode", ClothesController.generateBarcode);
 router.get("/admin/page/:page", ClothesController.getAllClothes);
+router.patch("/admin/refunds",ClothesController.refund);
 router.patch("/admin/:clothesId", ClothesController.updateSingleClothes);
 router.post(
   "/admin/:clothesId/clothDetails",
@@ -86,5 +87,6 @@ router.post("/admin/barcode/search",ClothesController.getByBarcode);
 router.post("/searching", ClothesController.searching);
 router.patch("/admin/clothDetails/:clothDetailId/add-quantity",ClothesController.addClothDetailQuantity);
 router.patch("/admin/clothDetails/:clothDetailId/update-quantity", ClothesController.updateClothDetailQuantity);
+
 
 export default router;
