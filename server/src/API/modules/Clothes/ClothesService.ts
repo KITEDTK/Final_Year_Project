@@ -208,7 +208,7 @@ async function getSingleClothes(clothesId: string) {
         },
       },
       category: {},
-      commets: {
+      comments: {
         select: {
           id: true,
           userId: true,

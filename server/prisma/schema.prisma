@@ -20,7 +20,7 @@ model Clothes {
   initPrice    Int?
   clothDetails ClothDetails[]
   category     Categories     @relation(fields: [categoryId], references: [id])
-  commets      Comments[]
+  comments      Comments[]
 }
 
 model Sizes {

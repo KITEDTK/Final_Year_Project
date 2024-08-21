@@ -3,6 +3,7 @@ import { SingleComment } from "../../features/comments/commentsTypes";
 import { fetchAddComment } from "../../features/products/clothesSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useParams } from "react-router-dom";
+import { showToast } from "../../utils/showToast";
 interface Props {
   commentInfo: SingleComment[];
 }
@@ -13,21 +14,24 @@ export const CommentSingleCloth: React.FC<Props> = ({ commentInfo }) => {
   const auth = useAppSelector((state) => state.auth.auth);
   const [commentText, setCommentText] = useState<string>();
   const handleOnClickAddComment = () => {
+    console.log(clothesId);
     if (auth && clothesId) {
-      if(commentText){
+      if (commentText) {
         dispatch(
           fetchAddComment({
             clothesId: clothesId,
             content: commentText,
             userId: auth.id,
           })
-        );
+        ).then(() => {
+          showToast("Đã thêm sản phẩn thành công", "success");
+        });
       }
     }
   };
-  const handleOnChangeComment = (event:ChangeEvent<HTMLTextAreaElement>) =>{
+  const handleOnChangeComment = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setCommentText(event.target.value);
-  }
+  };
   return (
     <>
       <div
@@ -36,59 +40,67 @@ export const CommentSingleCloth: React.FC<Props> = ({ commentInfo }) => {
         role="tabpanel"
         aria-labelledby="product-review-link"
       >
-        <textarea
-          onChange={(event)=>handleOnChangeComment(event)}
-          value={commentText}
-          className="form-control"
-          cols={30}
-          rows={1}
-          placeholder="Notes about your order, e.g. special notes for delivery"
-        ></textarea>
-        <button onClick={() => handleOnClickAddComment()}>thêm comment</button>
-        <div className="reviews">
-          {commentInfo && commentInfo.length && commentInfo.map((item)=>(<>
-            <h3>Reviews ({commentInfo.length})</h3>
-            <div className="review">
-            <div className="row no-gutters">
-              <div className="col-auto">
-                <h4>
-                  <a href="#">{item.user.fullname}</a>
-                </h4>
-                <div className="ratings-container">
-                  <div className="ratings">
-                    <div className="ratings-val" style={{ width: "80%" }}></div>
-                    {/*  End .ratings-val */}
-                  </div>
-                  {/*  End .ratings */}
-                </div>
-                {/*  End .rating-container */}
-                <span className="review-date">6 days ago</span>
-              </div>
-              {/*  End .col */}
-              <div className="col">
-                <h4>{item.cloth.name}</h4>
-                <div className="review-content">
-                  <p>
-                    {item.content}
-                  </p>
-                </div>
-                {/*  End .review-content */}
+        {auth && (
+          <>
+            {" "}
+            <textarea
+              onChange={(event) => handleOnChangeComment(event)}
+              value={commentText}
+              className="form-control"
+              cols={30}
+              rows={1}
+              placeholder="Notes about your order, e.g. special notes for delivery"
+            ></textarea>
+            <button onClick={() => handleOnClickAddComment()}>
+              thêm comment
+            </button>
+          </>
+        )}
 
-                <div className="review-action">
-                  <a href="#">
-                    <i className="icon-thumbs-up"></i>Helpful (2)
-                  </a>
-                  <a href="#">
-                    <i className="icon-thumbs-down"></i>Unhelpful (0)
-                  </a>
+        <br />
+        <br />
+        <h3>Reviews ({commentInfo.length})</h3>
+        <div className="reviews">
+          {commentInfo &&
+            commentInfo.length &&
+            commentInfo.map((item) => (
+              <>
+                <div className="review">
+                  <div className="row no-gutters">
+                    <div className="col-auto">
+                      <h4>
+                        <a href="#">{item.user.fullname}</a>
+                      </h4>
+                      <div className="ratings-container">
+                        <div className="ratings">
+                          <div
+                            className="ratings-val"
+                            style={{ width: "80%" }}
+                          ></div>
+                          {/*  End .ratings-val */}
+                        </div>
+                        {/*  End .ratings */}
+                      </div>
+                      {/*  End .rating-container */}
+                      <span className="review-date">6 days ago</span>
+                    </div>
+                    {/*  End .col */}
+                    <div className="col">
+                      <h4>{item.cloth.name}</h4>
+                      <div className="review-content">
+                        <p>{item.content}</p>
+                      </div>
+                      {/*  End .review-content */}
+
+                      {/*  End .review-action */}
+                    </div>
+                    {/*  End .col-auto */}
+                  </div>
+                  {/*  End .row */}
                 </div>
-                {/*  End .review-action */}
-              </div>
-              {/*  End .col-auto */}
-            </div>
-            {/*  End .row */}
-          </div></>))}
-          
+              </>
+            ))}
+
           {/*  End .review */}
 
           {/*  End .review */}
