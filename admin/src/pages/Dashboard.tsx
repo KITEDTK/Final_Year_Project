@@ -7,10 +7,15 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Bar } from "react-chartjs-2";
 import { useAppDispatch } from "../store/hooks";
-import { fetchPaymentPrice, fetchInitPrice } from "../features/statistiscal/statististicalSlice";
+import _ from "lodash";
+import {
+  fetchPaymentPrice,
+  fetchInitPrice,
+} from "../features/statistiscal/statististicalSlice";
+import { formatMoney } from "../../../client/src/utils/formatMoney";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -39,34 +44,61 @@ export const Dashboard = () => {
   const dispatch = useAppDispatch();
   const [paymentPrice, setPaymentPrice] = useState<number[]>([]);
   const [initPrice, setInitPrice] = useState<number[]>([]);
+  const [yearToStats, setYearToStats] = useState<number>(2024);
   useEffect(() => {
     const fetchAllInitPrices = async () => {
       const prices = [];
       for (let i = 1; i < 13; i++) {
-        const res = await dispatch(fetchInitPrice({ year: 2024, month: i })).then((res: any)=>{
+        const res = await dispatch(
+          fetchInitPrice({ year: yearToStats, month: i })
+        ).then((res: any) => {
           return res.payload;
         });
         prices.push(res);
       }
       setInitPrice(prices);
     };
-  
+
     fetchAllInitPrices();
-  }, [dispatch]); 
+  }, [dispatch, yearToStats]);
   useEffect(() => {
     const fetchAllPaymentPrices = async () => {
       const prices = [];
       for (let i = 1; i < 13; i++) {
-        const res = await dispatch(fetchPaymentPrice({ year: 2024, month: i })).then((res: any)=>{
+        const res = await dispatch(
+          fetchPaymentPrice({ year: yearToStats, month: i })
+        ).then((res: any) => {
           return res.payload;
         });
         prices.push(res);
       }
       setPaymentPrice(prices);
     };
-  
+
     fetchAllPaymentPrices();
-  }, [dispatch]); 
+  }, [dispatch, yearToStats]);
+  const totalInitPrice = initPrice.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue;
+  }, 0);
+  const totalPaymentPrice = paymentPrice.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue;
+  }, 0);
+  const handleOnChangeYear = (data: number) => {
+    debouncedSearch(data);
+  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedSearch = useCallback(
+    _.debounce((year) => {
+      setYearToStats(year);
+    }, 300),
+    [dispatch]
+  );
+
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
   const options = {
     responsive: true,
     plugins: {
@@ -75,20 +107,20 @@ export const Dashboard = () => {
       },
       title: {
         display: true,
-        text: "Bảng thống kê doanh thu năm 2024",
-      },
+        text: "Bảng thống kê doanh thu năm " + yearToStats,
+      }, 
     },
   };
   const data = {
     labels,
     datasets: [
       {
-        label: "Tiền hàng nhập",
+        label: "Tổng tiền hàng nhập: " + formatMoney(totalInitPrice) + "đ",
         data: initPrice,
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
       {
-        label: "Tiền hàng bán",
+        label: "Tổng tiền hàng bán: " + formatMoney(totalPaymentPrice) + "đ",
         data: paymentPrice,
         backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
@@ -96,7 +128,13 @@ export const Dashboard = () => {
   };
   return (
     <>
-      <Bar options={options} data={data} />
+      <h5>Nhập năm bạn muốn thống kê</h5>
+      <input
+        type="text"
+        className="form-control"
+        onChange={(event) => handleOnChangeYear(parseInt(event.target.value))}
+        style={{ width: 200 }}
+      />
       <Bar options={options} data={data} />
     </>
   );
