@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { User, UserArray, Login } from "./UsersType";
+const nodemailer = require("nodemailer");
 
 const prisma = new PrismaClient();
 
@@ -36,4 +37,37 @@ async function login(input: Login) {
   });
   return result;
 }
-export default { createManyUsers, updateUser, getAllUsers, login };
+async function sendEmail() {
+  // Create a transporter object using the default SMTP transport
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+   secure: true,
+    auth: {
+      user: "kitegaming1709@gmail.com", // Your email address
+      pass: "dapz umgt qfkp vzvv", // Your email password or app-specific password
+    },
+  });
+
+  // Set up email options
+  const mailOptions = {
+    from: '"Maddison Foo Koch 👻" <kitegaming1709@gmail.com>', // Sender address
+    to: "kite.dtk@gmail.com", // List of receivers
+    subject: "Hello ✔", // Subject line
+    text: "Hello world?", // Plain text body
+    html: "<b>Hello world?</b>", // HTML body
+  };
+
+  transporter.sendMail(mailOptions, function (error: any, info: any) {
+    if (error) {
+      console.log('Error in sending email  ' + error);
+      return true;
+    } else {
+     console.log('Email sent: ' + info.response);
+     return false;
+    }
+   });
+}
+
+export default { createManyUsers, updateUser, getAllUsers, login, sendEmail };

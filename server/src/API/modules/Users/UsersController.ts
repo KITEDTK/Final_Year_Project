@@ -31,4 +31,12 @@ async function login(req: Request, res: Response){
     console.log(err);
   }
 }
-export default {createManyUsers, getAllUsers, login}
+async function sendEmail(req: Request, res: Response){
+  try{
+    const result = await UsersService.sendEmail();
+    res.send(result);
+  }catch(err){
+    console.log(err);
+  }
+}
+export default {createManyUsers, getAllUsers, login, sendEmail}
