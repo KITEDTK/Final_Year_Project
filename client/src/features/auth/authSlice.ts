@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { Auth, InputLogin, AuthState } from "./authTypes";
+import { Auth, InputLogin, AuthState, RegisterOutput, RegisterInput } from "./authTypes";
 
 const BASE_URL = "http://localhost:4000/users";
 
@@ -17,6 +17,23 @@ export const fetchLogin = createAsyncThunk<Auth, InputLogin>(
     return response.data;
   }
 );
+export const fetchRegister = createAsyncThunk<RegisterOutput, RegisterInput>(
+  "user/register",
+  async ({ email, phoneNumber, password, fullname, username }) => {
+    const response: AxiosResponse<RegisterOutput> = await axios.post(
+      `${BASE_URL}/register`,
+      {
+        username: username,
+        password: password,
+        fullname: fullname,
+        phoneNumber: phoneNumber,
+        email: email,
+      }
+    );
+    return response.data;
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {

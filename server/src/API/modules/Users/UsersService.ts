@@ -1,8 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { User, UserArray, Login } from "./UsersType";
-const nodemailer = require("nodemailer");
-import * as dotenv from "dotenv";
-dotenv.config();
+import { sendEmail } from "../../../utils/sendEmail";
 const prisma = new PrismaClient();
 
 async function getAllUsers() {
@@ -61,19 +59,35 @@ async function register(
   });
   return create;
 }
-async function verify(userId: string, ){
-  
+async function verifyRegister(email: string, token: string) {
+  const now = new Date();
+  const user = await prisma.users.findUnique({
+    where:{
+      email: email
+    }
+  });
+  if(user && user.expiredTokenTime){
+    if(user.verifyToken === token && now < user.expiredTokenTime){
+      await prisma.users.update({
+        where:{
+          email: email
+        },
+        data:{
+          isEnable: true
+        }
+      });
+      return true;
+    }else{
+      return false;
+    }
+  }else{
+    return false;
+  };
 }
-async function sendEmail(email: string) {
-  // Create a transporter object using the default SMTP transport
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_USERNAME, // Your email address
-      pass: process.env.EMAIL_PASSWORD, // Your email password or app-specific password
+async function sendVerifyToken(email: string) {
+  const user = await prisma.users.findUnique({
+    where: {
+      email: email,
     },
   });
   const html = `<div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
@@ -85,29 +99,17 @@ async function sendEmail(email: string) {
     <p>Shop gửi bạn mã xác thực OTP. Mã có hiệu lực trong 10p. Vui lòng không chia sẻ mã cho bất kì ai.
      </p>
     <h2 style="background: #00466a; margin: 0 auto; padding: 0 10px; color: #fff; border-radius: 4px; text-align: center; font-size: 32px; width: fit-content;">
-  324457
+${user?.verifyToken}
 </h2>
     </div>
   </div>
-</div>`; // HTML body with a button
-  // Set up email options
-  const mailOptions = {
-    from: '"Shop KITE " <kitegaming1709@gmail.com>', // Sender address
-    to: email, // List of receivers
-    subject: "Cảm ơn bạn đã đăng kí tài khoản trên shop KITE", // Subject line
-    text: "", // Plain text body
-    html: html, // HTML body
-  };
+</div>`;
 
-  transporter.sendMail(mailOptions, function (error: any, info: any) {
-    if (error) {
-      console.log("Error in sending email  " + error);
-      return true;
-    } else {
-      console.log("Email sent: " + info.response);
-      return false;
-    }
-  });
+  await sendEmail(
+    email,
+    html,
+    "Cảm ơn bạn đã đăng kí tài khoản trên shop KITE"
+  );
 }
 
 export default {
@@ -117,4 +119,6 @@ export default {
   login,
   sendEmail,
   register,
+  sendVerifyToken,
+  verifyRegister
 };

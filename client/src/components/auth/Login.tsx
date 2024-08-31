@@ -68,48 +68,18 @@ export const Login = () => {
                 className="btn btn-outline-primary-2"
                 onClick={()=>handleLogin()}
               >
-                <span>LOG IN</span>
+                <span>ĐĂNG NHẬP</span>
                 <i className="icon-long-arrow-right"></i>
               </button>
 
-              <div className="custom-control custom-checkbox">
-                <input
-                  type="checkbox"
-                  className="custom-control-input"
-                  id="signin-remember-2"
-                />
-                <label className="custom-control-label" htmlFor="signin-remember-2">
-                  Remember Me
-                </label>
-              </div>
               {/* End .custom-checkbox */}
 
               <a href="#" className="forgot-link">
-                Forgot Your Password?
+                Bạn quên mật khẩu ?
               </a>
             </div>
             {/* End .form-footer */}
           </form>
-        <div className="form-choice">
-          <p className="text-center">or sign in with</p>
-          <div className="row">
-            <div className="col-sm-6">
-              <a href="#" className="btn btn-login btn-g">
-                <i className="icon-google"></i>
-                Login With Google
-              </a>
-            </div>
-            {/* End .col-6 */}
-            <div className="col-sm-6">
-              <a href="#" className="btn btn-login btn-f">
-                <i className="icon-facebook-f"></i>
-                Login With Facebook
-              </a>
-            </div>
-            {/* End .col-6 */}
-          </div>
-          {/* End .row */}
-        </div>
         {/* End .form-choice */}
       </div>
     </>
