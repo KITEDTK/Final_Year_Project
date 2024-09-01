@@ -51,8 +51,8 @@ async function register(req: Request, res: Response) {
       phoneNumber
     );
     res.json(result);
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    res.status(409).json({ message: error });
   }
 }
 async function verifyRegister(req: Request, res: Response){

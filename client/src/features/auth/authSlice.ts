@@ -1,6 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { Auth, InputLogin, AuthState, RegisterOutput, RegisterInput } from "./authTypes";
+import {
+  Auth,
+  InputLogin,
+  AuthState,
+  RegisterOutput,
+  RegisterInput,
+  VerifyRegisterInput,
+} from "./authTypes";
 
 const BASE_URL = "http://localhost:4000/users";
 
@@ -20,20 +27,61 @@ export const fetchLogin = createAsyncThunk<Auth, InputLogin>(
 export const fetchRegister = createAsyncThunk<RegisterOutput, RegisterInput>(
   "user/register",
   async ({ email, phoneNumber, password, fullname, username }) => {
-    const response: AxiosResponse<RegisterOutput> = await axios.post(
-      `${BASE_URL}/register`,
+    try {
+      const response: AxiosResponse<RegisterOutput> = await axios.post(
+        `${BASE_URL}/register`,
+        {
+          username,
+          password,
+          fullname,
+          phoneNumber,
+          email,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      if (error.response) {
+        return error.response
+      } else if(error.request) {
+        return error.request
+      }
+    }
+  }
+);
+export const fetchSendVerifyToken = createAsyncThunk<any, string>(
+  "user/send-email",
+  async (email) => {
+    const response: AxiosResponse<any> = await axios.post(
+      `${BASE_URL}/send-token`,
       {
-        username: username,
-        password: password,
-        fullname: fullname,
-        phoneNumber: phoneNumber,
         email: email,
+      },
+      {
+        headers: { "Content-Type": "application/json" },
       }
     );
     return response.data;
   }
 );
-
+export const fetchVerifyToken = createAsyncThunk<boolean,VerifyRegisterInput>(
+  "user/verify",
+  async({email, token})=>{
+    const response: AxiosResponse<boolean> = await axios.post(
+      `${BASE_URL}/verify-register`,
+      {
+        email: email,
+        token: token
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.data;
+  }
+)
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -61,6 +109,19 @@ const authSlice = createSlice({
       .addCase(fetchLogin.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message ?? "Unknown error";
+      })
+      .addCase(fetchRegister.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchRegister.fulfilled, (state) => {
+        state.loading = false;
+
+      })
+      .addCase(fetchRegister.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Unknown error";
+        console.log('error');
       });
   },
 });

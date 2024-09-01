@@ -45,19 +45,44 @@ async function register(
 ) {
   const randomSixDigitNumber = Math.floor(100000 + Math.random() * 900000);
   const now = new Date();
-  const expirationTime = new Date(now.getTime() + 10 * 60 * 1000); // 5 minutes from now
-  const create = await prisma.users.create({
-    data: {
+  const expirationTime = new Date(now.getTime() + 10 * 60 * 1000);
+  const checkExist = await prisma.users.findUnique({
+    where:{
       email: email,
-      username: username,
-      password: password,
-      fullname: fullname,
-      phoneNumber: phoneNumber,
-      verifyToken: randomSixDigitNumber.toString(),
-      expiredTokenTime: expirationTime,
-    },
+    }
   });
-  return create;
+  if(checkExist && checkExist.isEnable === false){
+    const update = await prisma.users.update({
+      where:{
+        email: email
+      },
+      data:{
+        verifyToken: randomSixDigitNumber.toString(),
+        expiredTokenTime: expirationTime,
+      }
+    });
+    return update;
+  };
+  if(checkExist && checkExist.isEnable === true){
+    const error = new Error("User with this email already exists");
+    throw error;
+  }
+  if(!checkExist){
+    const create = await prisma.users.create({
+      data: {
+        email: email,
+        username: username,
+        password: password,
+        fullname: fullname,
+        phoneNumber: phoneNumber,
+        verifyToken: randomSixDigitNumber.toString(),
+        expiredTokenTime: expirationTime,
+        isEnable: false
+      },
+    });
+    return create;
+  }
+ 
 }
 async function verifyRegister(email: string, token: string) {
   const now = new Date();

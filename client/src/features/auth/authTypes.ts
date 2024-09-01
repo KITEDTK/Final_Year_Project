@@ -42,3 +42,7 @@ export interface RegisterOutput {
   updateAt: Date | null;
   isEnable: boolean | null;
 }
+export interface VerifyRegisterInput {
+  email: string,
+  token: string
+}
