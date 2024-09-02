@@ -175,7 +175,37 @@ async function getPaymentDetail(paymentId: string){
 }
 async function updateStatusPayment(paymentId: string, status: string){
   if(status === 'Đang vận chuyển'){
-    // xử lí logic vận chuyển ở đây
+    const dataPayment =  await prisma.paymentDetails.findMany({
+      where:{
+        paymentId: paymentId
+      }
+    });
+    dataPayment.forEach(async (item)=>{
+      const data = await prisma.clothDetails.findUnique({
+        where:{
+          id: item.clothId
+        }
+      });
+      if(data && item.amount){
+        await prisma.clothDetails.update({
+          where:{
+            id : item.clothId
+          },
+          data:{
+            amount: data?.amount - item.amount
+          }
+        });
+        await prisma.actionLogs.create({
+          data:{
+            actionName: "Bán được",
+            clothDetailId: item.clothId,
+            amount: item.amount
+          }
+        })
+      }else{
+        throw 'err';
+      }
+    });
   }
   if(status === 'Khách đã nhận'){
     const checkExistUser = await prisma.payments.findUnique({
@@ -197,7 +227,6 @@ async function updateStatusPayment(paymentId: string, status: string){
           userId: checkExistUser.userId
         }))
         .filter(item => item.userId !== null);
-    
       await prisma.wardrobe.createMany({
         data: data
       });

@@ -28,7 +28,7 @@ async function login(req: Request, res: Response) {
     // }
     res.send(result);
   } catch (err) {
-    console.log(err);
+    res.status(409).json({ message: err });
   }
 }
 async function sendverifyToken(req: Request, res: Response) {

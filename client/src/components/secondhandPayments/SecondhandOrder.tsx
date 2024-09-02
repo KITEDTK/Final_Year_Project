@@ -100,13 +100,13 @@ export const SecondhandOrder = () => {
                 return {
                   secondhandId: item.seconHands.id,
                   amount: checkAmount,
-                  price: 0,
+                  price: item.seconHands.price,
                 };
               } else {
                 return {
                   secondhandId: item.seconHands.id,
                   amount: item.amount,
-                  price: 0,
+                  price: item.seconHands.price,
                 };
               }
             });

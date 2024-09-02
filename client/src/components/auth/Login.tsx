@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useAppDispatch,useAppSelector } from '../../store/hooks';
 import { fetchLogin } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
+import { showToast } from "../../utils/showToast";
 
 
 export const Login = () => {
@@ -18,7 +19,11 @@ export const Login = () => {
     setPassword(value);
   };
   const handleLogin = () =>{
-    dispatch(fetchLogin({usernameOrEmail,password}));
+    dispatch(fetchLogin({usernameOrEmail,password})).then((res: any)=>{
+      if(res.error){
+        showToast('Tài khoản của bạn không tồn tại hoặc chưa đăng kí','error');
+      }
+    });
   };
   useEffect(() => {
     if (auth) {

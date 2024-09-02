@@ -32,8 +32,13 @@ async function login(input: Login) {
         ? { email: usernameOrEmail }
         : { username: usernameOrEmail }),
       password: password,
+      isEnable: true
     },
   });
+  if(!result){
+    const error = new Error("account is not exist");
+    throw error;
+  }
   return result;
 }
 async function register(
@@ -54,9 +59,13 @@ async function register(
   if(checkExist && checkExist.isEnable === false){
     const update = await prisma.users.update({
       where:{
-        email: email
+        email: email,
       },
       data:{
+        username: username,
+        password: password,
+        fullname: fullname,
+        phoneNumber: phoneNumber,
         verifyToken: randomSixDigitNumber.toString(),
         expiredTokenTime: expirationTime,
       }
