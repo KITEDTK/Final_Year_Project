@@ -26,7 +26,9 @@ export interface PaymentState {
 export interface PaymentDetail {
     id: string;
     amount: number;
+    paymentId: string;
     clothDetail: {
+        id: string;
         codeBar: string;
         amount: number;
         cloth:{

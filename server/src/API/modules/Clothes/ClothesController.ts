@@ -204,6 +204,15 @@ async function refund(req: Request, res: Response){
     console.log(err);
   }
 }
+async function getQuantityDetail(req: Request, res: Response){
+  try{
+    const {clothDetailId} = req.params;
+    const result = await ClothesService.getQuantityClothDetail(clothDetailId);
+    res.json(result);
+  }catch(err){
+    console.log(err)
+  }
+}
 export default {
   addClothDetailQuantity,
   updateClothDetailQuantity,
@@ -224,5 +233,6 @@ export default {
   addCommentInClothes,
   getSingleClothesAdmin,
   updateSingleClothes,
-  refund
+  refund,
+  getQuantityDetail
 };

@@ -62,7 +62,7 @@ async function updatePaymentStatus(req: Request, res: Response) {
     const result = await paymentsService.updateStatusPayment(paymentId, status);
     res.json(result);
   } catch (err) {
-    console.log(err);
+    res.status(409).json({ message: err });
   }
 }
 async function getHistoryPayment(req: Request, res: Response){

@@ -51,6 +51,7 @@ router.get("/clothDetails", ClothesController.getAllClothDetail);
 router.get("/:clothesId", ClothesController.getSingleCLothes); // Make sure this route points to a specific handler
 
 // Admin routes
+router.get("/admin/quantity/:clothDetailId", ClothesController.getQuantityDetail);
 router.post("/admin", ClothesController.createClothes);
 router.post("/admin/csv", ClothesController.clothesToCSV);
 router.get("/admin/orderAmount", ClothesController.getAllClothesAdmin);

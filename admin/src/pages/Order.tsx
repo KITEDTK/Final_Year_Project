@@ -14,6 +14,7 @@ import { PaymentDetailModal } from "../components/payments/PaymentDetailModal";
 
 import { io } from "socket.io-client";
 import { showToast } from "../utils/showToast";
+import { fetchQuantityClothDetail } from "../features/clothes/clothesSlice";
 
 const socket = io("http://localhost:4000");
 export const Order = () => {
@@ -85,13 +86,22 @@ export const Order = () => {
         if (item.id === paymentId) {
           const nextStatusIndex = statuses.indexOf(item.status) + 1;
           const nextStatus = statuses[nextStatusIndex];
-          socket.emit("update_payment_status", {
-            paymentId: paymentId,
-            userId: item.userId,
-            status: nextStatus,
-          });
-          if(item.userId !== null && nextStatus === 'Khách đã nhận'){
-            socket.emit('join_user_wardrobe', {userId: item.userId});
+          if (item.userId !== null && nextStatus === "Khách đã nhận") {
+            socket.emit("join_user_wardrobe", { userId: item.userId });
+          }
+          if (nextStatus === 'Đã duyệt đơn') {
+            const paymentDetailsResponse: any = await dispatch(fetchPaymentDetails(paymentId)); //Sản phẩm trong hóa đơn
+            const paymentDetails: PaymentDetail[] = paymentDetailsResponse.payload;
+
+            for (const detail of paymentDetails) {
+              const quantityResponse: any = await dispatch(fetchQuantityClothDetail(detail.clothDetail.id)); //sản phẩm trong shop
+              const availableQuantity = quantityResponse.payload;
+
+              if (availableQuantity < detail.amount) {
+                showToast('Có sản phẩm trong hóa đơn không đủ số lượng', 'error');
+                return item; // Return early without updating the status
+              }
+            }
           }
           await dispatch(
             fetchUpdatePaymentStatus({
@@ -106,27 +116,33 @@ export const Order = () => {
     );
     setPaymentItems(updatedItems);
   };
+
   useEffect(() => {
     socket.emit("join_user", { userId: "admin" });
     socket.on("payment_create", (data: { paymentId: string }) => {
-      showToast('Bạn vừa có đơn hàng mới','success');
+      showToast("Bạn vừa có đơn hàng mới", "success");
       dispatch(fetchSinglePayment(data.paymentId)).then((res: any) => {
         if (
-          (paymentTypes === 'onlinePay' && res.payload.onlinePay === true) ||
-          (paymentTypes === 'offlinePay' && res.payload.onlinePay === false)
+          (paymentTypes === "onlinePay" && res.payload.onlinePay === true) ||
+          (paymentTypes === "offlinePay" && res.payload.onlinePay === false)
         ) {
-            setPaymentItems(prev => {
-              const checkExist = prev.find((item)=>{item.id === res.payload.id});
-              if(!checkExist){
-                return [res.payload, ...prev];
-              }else{
-                return [...prev];
-              }
+          setPaymentItems((prev) => {
+            const checkExist = prev.find((item) => {
+              item.id === res.payload.id;
             });
+            if (!checkExist) {
+              return [res.payload, ...prev];
+            } else {
+              return [...prev];
+            }
+          });
         }
       });
     });
-  }, [dispatch,paymentTypes]);
+    return () => {
+      socket.off("payment_create"); // Clean up the event listener
+    };
+  }, [dispatch, paymentTypes]);
 
   return (
     <>

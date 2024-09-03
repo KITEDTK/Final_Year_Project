@@ -32,6 +32,23 @@ export const fetchAllClothes = createAsyncThunk<Clothes[], number>(
     }
   }
 );
+export const fetchQuantityClothDetail = createAsyncThunk<number, string>(
+  "clothes/admin/get-all-clothes",
+  async (clothDetailId: string) => {
+    try {
+      const response: AxiosResponse<number> = await axios.get(
+        `${BASE_URL}/quantity/${clothDetailId}`,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      console.error("fetching error", err);
+      throw err;
+    }
+  }
+);
 export const fetchSingleClothes = createAsyncThunk<SingleClothes, string>(
   "clothes/fetchSingleClothes",
   async (clothesId: string) => {

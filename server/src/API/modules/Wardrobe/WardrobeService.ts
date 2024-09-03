@@ -10,6 +10,9 @@ async function getAllByUserId(userId: string) {
         not: 0
       }
     },
+    orderBy:{
+      createAt: 'desc'
+    },
     select:{
       id: true,
       amount: true,

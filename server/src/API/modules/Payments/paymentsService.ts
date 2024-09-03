@@ -126,6 +126,9 @@ async function getPayments(page: number, payType: string) {
     where: {
       onlinePay: paymentType,
     },
+    orderBy:{
+      createAt: 'desc'
+    }
   });
   return result;
 }
@@ -145,9 +148,12 @@ async function getPaymentDetail(paymentId: string){
         paymentId: paymentId
     },
     select:{
+      id: true,
       amount: true,
+      payment: true,
       clothDetail:{
         select:{
+          id: true,
           codeBar: true,
           amount: true,
           cloth:{
@@ -246,6 +252,9 @@ async function getHistoryPayment(userId: string){
   const result = await prisma.payments.findMany({
     where:{
       userId: userId,
+    },
+    orderBy:{
+      createAt: 'desc'
     },
     select:{
       id: true,

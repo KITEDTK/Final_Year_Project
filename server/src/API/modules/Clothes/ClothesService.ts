@@ -108,6 +108,14 @@ async function getAllClothes(pages: any) {
   }));
   return result;
 }
+async function getQuantityClothDetail(clothDetailId: string){
+  const amount = await prisma.clothDetails.findUnique({
+    where:{
+      id:clothDetailId
+    }
+  });
+  return amount?.amount;
+}
 async function readExcelFile(file: string) {
   const excelData = excelToJson({
     sourceFile: file,
@@ -601,4 +609,5 @@ export default {
   addComment,
   searching,
   refund,
+  getQuantityClothDetail,
 };

@@ -33,7 +33,7 @@ async function getInitProductPrice(year: number, month: number) {
         gte: startDate,
         lt: endDate,
       },
-      actionName: "Bán được",
+      actionName: "Bớt đi",
     },
     select: {
       id: true,

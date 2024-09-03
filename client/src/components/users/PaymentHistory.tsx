@@ -38,6 +38,9 @@ export const PaymentHistory = () => {
       }
     );
   }, [paymentHistory]);
+  const handleOnClickDelete = (paymentDetailId: string)=>{
+    console.log(paymentDetailId)
+  }
   return (
     <>
       <table className="table table-wishlist table-mobile">
@@ -87,6 +90,9 @@ export const PaymentHistory = () => {
                   <td className="price-col">{itemm.amount}</td>
                   <td className="stock-col">
                     <span className="in-stock">{item.status}</span>
+                    {item.status === 'Chưa duyệt đơn' && <div className="btn-wrap">
+                        <div onClick={()=>handleOnClickDelete(itemm.id)} className="btn btn-primary btn-round">Hủy đơn</div>
+                      </div>}
                   </td>
                 </tr>
               ))
