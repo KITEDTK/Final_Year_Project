@@ -15,9 +15,11 @@ async function returnVnpay(req: Request, res: Response) {
   try {
     const result = await paymentsService.returnVnpay(req, res);
     if (result === "success") {
-      const paymentId = await paymentsService.createPaymentVNpay(paymentInfoData);
+      const paymentId = await paymentsService.createPaymentVNpay(
+        paymentInfoData
+      );
       paymentInfoData = {};
-      io.emit('payment_create', {paymentId: paymentId});
+      io.emit("payment_create", { paymentId: paymentId });
       res.redirect(`http://localhost:3000/donepay/success`);
     } else {
       paymentInfoData = {};
@@ -65,41 +67,53 @@ async function updatePaymentStatus(req: Request, res: Response) {
     res.status(409).json({ message: err });
   }
 }
-async function getHistoryPayment(req: Request, res: Response){
-  try{
-    const {userId} = req.params;
+async function getHistoryPayment(req: Request, res: Response) {
+  try {
+    const { userId } = req.params;
     const result = await paymentsService.getHistoryPayment(userId);
     res.json(result);
-  }catch(err){
-    console.log(err);
-  }
-}
-async function getSinglePayment(req: Request, res: Response){
-  try{
-    const {paymentId} = req.params;
-    const result = await paymentsService.getSinglePayment(paymentId);
-    res.json(result);
-  }catch(err){
-    console.log(err);
-  }
-}
-async function returnPayWhenRecived(req: Request, res: Response){
-  try {
-      const paymentId = await paymentsService.createPaymentPayWhenReceive(req.body);
-      io.emit('payment_create', {paymentId: paymentId});
-      res.json(`http://localhost:3000/donepay/success`);
   } catch (err) {
     console.log(err);
   }
 }
-async function barChartMonth(req: Request, res: Response){
+async function getSinglePayment(req: Request, res: Response) {
   try {
-    const {year, month} = req.body;
+    const { paymentId } = req.params;
+    const result = await paymentsService.getSinglePayment(paymentId);
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
+async function returnPayWhenRecived(req: Request, res: Response) {
+  try {
+    const paymentId = await paymentsService.createPaymentPayWhenReceive(
+      req.body
+    );
+    io.emit("payment_create", { paymentId: paymentId });
+    res.json(`http://localhost:3000/donepay/success`);
+  } catch (err) {
+    console.log(err);
+  }
+}
+async function barChartMonth(req: Request, res: Response) {
+  try {
+    const { year, month } = req.body;
     const result = await paymentsService.barChartMonth(year, month);
     res.json(result);
-} catch (err) {
-  console.log(err);
+  } catch (err) {
+    console.log(err);
+  }
 }
+async function deletePaymentDetail(req: Request, res: Response){
+  try{
+    const {paymentDetailId} = req.params;
+    const result = await paymentsService.deletePaymentDetail(paymentDetailId);
+    io.emit("payment_delete", { paymentId: result });
+    res.json(result);
+  }catch(err){
+    console.log(err);
+  }
 }
 export default {
   barChartMonth,
@@ -112,4 +126,5 @@ export default {
   getPaymentDetail,
   updatePaymentStatus,
   getHistoryPayment,
+  deletePaymentDetail
 };

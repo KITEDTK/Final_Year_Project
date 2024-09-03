@@ -27,15 +27,22 @@ export const SingleClothSecondHand: React.FC<Props> = ({ secondhand }) => {
         console.log(auth.id);
       } else if (secondhand.wardrobe.userId === auth.id) {
         showToast("Bạn không thể mua sản phẩm của chính mình", "info");
-      } else {
+      }else if(secondhand.amount === 0){
+        showToast("Số lượng sản phẩm không đủ", "info");
+      }
+       else {
         dispatch(
           fetchAddItemTo2handCart({
             userId: auth.id,
             secondhandId: secondhand.id,
             amount: 1,
           })
-        ).then(() => {
-          showToast("Đã thêm sản phẩm vào giỏ hàng", "success");
+        ).then((res: any) => {
+          if(res.error){
+            showToast("Sản phẩm không tồn tại hoặc không đủ số lượng",'info');
+          }else{
+            showToast("Đã thêm sản phẩm vào giỏ hàng", "success");
+          }
         });
       }
     } else {

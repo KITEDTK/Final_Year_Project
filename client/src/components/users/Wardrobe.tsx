@@ -77,6 +77,10 @@ export const Wardrobe = () => {
         );
       }
     })
+    return () => {
+      socket.off("update_user_wardrobe"); // Clean up the event listener
+      socket.off("update_all_selling_items");
+    };
   })
   return (
     <>

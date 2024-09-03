@@ -52,6 +52,20 @@ async function addItemTo2handCart(userId: string, secondhandId: string, amount: 
       secondHandId: secondhandId,
     }
   });
+  const checkAmount =  await prisma.secondHand.findUnique({
+    where:{
+      id: secondhandId
+    },
+    select :{
+      amount: true
+    }
+  });
+  if(checkAmount && checkAmount.amount ){
+    if(checkAmount.amount < amount){
+      const error = new Error("not enough amount");
+      throw error;
+    }
+  }
   if(checkExist){
     await prisma.secondHandCart.update({
       where:{

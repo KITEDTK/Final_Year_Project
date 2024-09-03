@@ -31,6 +31,9 @@ export const SellingProducts = () => {
         });
       }
     });
+    return () => {
+      socket.off("update_user_selling_items"); // Clean up the event listener
+    };
   });
   const handleOnClickPullItems = (secondhandId: string) => {
     dispatch(fetchPullItems(secondhandId)).then(() => {

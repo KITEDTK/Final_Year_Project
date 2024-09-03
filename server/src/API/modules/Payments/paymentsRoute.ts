@@ -22,4 +22,6 @@ router.get("/history/:userId/users", PaymentsController.getHistoryPayment);
 router.get("/:paymentId/single", PaymentsController.getSinglePayment);
 
 router.post("/statistical/month",PaymentsController.barChartMonth);
+
+router.delete("/paymentDetails/:paymentDetailId", PaymentsController.deletePaymentDetail);
 export default router;

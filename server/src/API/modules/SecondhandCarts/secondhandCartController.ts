@@ -21,7 +21,7 @@ async function addItemTo2handCart(req: Request, res: Response) {
     );
     res.json(result);
   } catch (err) {
-    console.log(err);
+    res.status(401).json({ message: err });
   }
 }
 async function deleteItem(req: Request, res: Response){

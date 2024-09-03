@@ -35,7 +35,7 @@ async function updateStatus(req: Request, res: Response){
     const result = await SecondhandPaymentService.updateStatus(paymentDetailId, status);
     res.json(result);
   } catch (err) {
-    console.log(err);
+    res.status(400).json({message: err});
   }
 }
 async function getOrdering(req: Request, res: Response){

@@ -108,7 +108,9 @@ export const Order = () => {
               paymentId: paymentId,
               status: nextStatus,
             })
-          );
+          ).then(()=>{
+              socket.emit("update_payment_status", {paymentId: paymentId, userId: item.userId, status:nextStatus });
+          });
           return { ...item, status: nextStatus };
         }
         return item;
@@ -139,8 +141,28 @@ export const Order = () => {
         }
       });
     });
+    socket.on("payment_delete", (data: { paymentId: string }) => {
+      dispatch(fetchSinglePayment(data.paymentId)).then((res: any) => {
+        if (
+          (paymentTypes === "onlinePay" && res.payload.onlinePay === true) ||
+          (paymentTypes === "offlinePay" && res.payload.onlinePay === false)
+        ) {
+          setPaymentItems((prev) => {
+            const checkExist = prev.find((item) => {
+              item.id === res.payload.id;
+            });
+            if (!checkExist) {
+              return [res.payload, ...prev];
+            } else {
+              return [...prev];
+            }
+          });
+        }
+      });
+    });
     return () => {
       socket.off("payment_create"); // Clean up the event listener
+      socket.off("payment_delete");
     };
   }, [dispatch, paymentTypes]);
 
@@ -248,7 +270,7 @@ export const Order = () => {
                                   >
                                     Xem
                                   </button>
-                                  {item.status !== "Khách đã nhận" && (
+                                  {item.status !== "Khách đã nhận" && item.status !== "Khách đã hủy đơn" && (
                                     <button
                                       type="button"
                                       onClick={() =>

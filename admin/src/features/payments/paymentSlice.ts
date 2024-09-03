@@ -94,7 +94,20 @@ export const fetchSinglePayment = createAsyncThunk<Payment, string>(
       throw err;
     }
   }
-  
+)
+export const fetchDeletePaymentDetail = createAsyncThunk<any, string>(
+  "payment/delete",
+  async(paymentDetaildId: string)=>{
+    try{
+      const response: AxiosResponse<any> = await axios.delete(`${BASE_URL}/paymentDetails/${paymentDetaildId}`,{
+        headers: { "Content-Type": "application/json" },
+      });
+      return response.data;
+    }catch(err){
+      console.error("fetching error", err);
+      throw err;
+    }
+  }
 )
 const paymentsSlice = createSlice({
   name: "payments",

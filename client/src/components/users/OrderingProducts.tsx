@@ -21,6 +21,14 @@ export const OrderingProducts = () => {
     }
   }, [dispatch, auth]);
   useEffect(() => {
+    socket.emit("join_anyone", "anyone");
+    socket.on("update_odering",()=>{
+      if (auth) {
+        dispatch(fetchOderingItems(auth.id)).then((res: any) => {
+          setOrderingItems(res.payload);
+        });
+      }
+    });
     socket.on("update_ordering_items", () => {
       if (auth) {
         dispatch(fetchOderingItems(auth.id)).then((res: any) => {
@@ -28,6 +36,10 @@ export const OrderingProducts = () => {
         });
       }
     });
+    return () => {
+      socket.off("update_odering"); // Clean up the event listener
+      socket.off("update_ordering_items");
+    };
   });
   const handleOnClickRecieve = (
     buyerId: string,

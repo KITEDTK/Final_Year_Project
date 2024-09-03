@@ -10,6 +10,7 @@ import {
   fetchBeingOrderedItems,
   fetchUpdateStatus2hand,
 } from "../../features/secondhandPayments/secondhandPaymentsSlice";
+import { showToast } from "../../utils/showToast";
 export const BeingOrdered = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth.auth);
@@ -41,6 +42,10 @@ export const BeingOrdered = () => {
         });
       }
     })
+    return () => {
+      socket.off("update_secondhand_item"); 
+      socket.off("update_being_ordered_items_seller");
+    };
   });
   const [itemInModal, setItemInModal] = useState<BeingOrderedItems>();
   const [showModal, setShowModal] = useState<boolean>();
@@ -52,14 +57,19 @@ export const BeingOrdered = () => {
     await setShowModal(true);
   };
   const handleOnClickUpdateStatus = (paymentId: string, status: string) => {
-    dispatch(fetchUpdateStatus2hand({paymentDetailId: paymentId, status: status})).then(() => {
-      if (auth?.id) {
-        dispatch(fetchBeingOrderedItems(auth.id)).then((res: any) => {
-          setBeingOrderedItems(res.payload);
-        }).then(()=>{
-          const buyerId = beingOrderedItems.find((item)=> item.id === paymentId);
-          socket.emit('update_ordering_items_status',{userId: buyerId?.secondhandPayments.buyerId});
-        });
+    dispatch(fetchUpdateStatus2hand({paymentDetailId: paymentId, status: status})).then((res: any) => {
+      if(res.error){
+        showToast('Bạn không đủ số lượng để vận chuyển','error')
+      }else{
+        if (auth?.id) {
+          dispatch(fetchBeingOrderedItems(auth.id)).then((res: any) => {
+            setBeingOrderedItems(res.payload);
+          }).then(()=>{
+            const buyerId = beingOrderedItems.find((item)=> item.id === paymentId);
+            socket.emit('update_ordering_items_status',{userId: buyerId?.secondhandPayments.buyerId});
+            socket.emit('join_user_selling_items',{userId: auth.id})
+          });
+        }
       }
     });
   };
@@ -152,7 +162,7 @@ export const BeingOrdered = () => {
                     </h3>
                   </div>
                 </td>
-                <td className="price-col">{formatMoney(item.amount)}đ</td>
+                <td className="price-col">{formatMoney(item.secondhand.price * item.amount)}đ</td>
                 <td className="price-col">{item.amount}</td>
                 <td className="stock-col">
                   <span className="in-stock">

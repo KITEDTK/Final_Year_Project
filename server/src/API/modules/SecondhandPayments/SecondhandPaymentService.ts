@@ -91,6 +91,7 @@ async function fetchBeingOrderedItem(sellerId: string) {
       },
       secondhand: {
         select: {
+          price: true,
           wardrobe: {
             select: {
               clothDetails: {
@@ -121,26 +122,69 @@ async function fetchBeingOrderedItem(sellerId: string) {
   });
   return data;
 }
-async function updateStatus(paymentId: string, status: string) {
-  const data = await prisma.secondhandPaymentDetails.update({
+async function updateStatus(paymentDetailId: string, status: string) {
+  const secondhandPaymentDetail =
+    await prisma.secondhandPaymentDetails.findUnique({
+      where: {
+        id: paymentDetailId,
+      },
+    });
+  const secondhand = await prisma.secondHand.findUnique({
     where: {
-      id: paymentId,
-    },
-    data: {
-      status: status,
+      id: secondhandPaymentDetail?.secondhandId,
     },
   });
-  return data;
+  if (status === "Đang vận chuyển" && secondhand && secondhandPaymentDetail) {
+    if (secondhand.amount < secondhandPaymentDetail.amount) {
+      const error = new Error("Không đủ số lượng trong tủ");
+      throw error;
+    } else {
+      await prisma.secondHand.update({
+        where: {
+          id: secondhand.id,
+        },
+        data: {
+          amount: secondhand.amount - secondhandPaymentDetail.amount,
+        },
+      });
+      return await prisma.secondhandPaymentDetails.update({
+        where: {
+          id: paymentDetailId,
+        },
+        data: {
+          status: status,
+        },
+      });
+    }
+  }
+  if (status === "Chưa thanh toán" && secondhand && secondhandPaymentDetail) {
+    await prisma.secondHand.update({
+      where: {
+        id: secondhand.id,
+      },
+      data: {
+        amount: secondhand.amount + secondhandPaymentDetail.amount,
+      },
+    });
+    return await prisma.secondhandPaymentDetails.update({
+      where: {
+        id: paymentDetailId,
+      },
+      data: {
+        status: status,
+      },
+    });
+  }
 }
 async function getOrdering(userId: string) {
   const data = await prisma.secondhandPayments.findMany({
     where: {
       buyerId: userId,
-      SecondhandPaymentDetails:{
-        some:{
-          status: 'Đang vận chuyển'
-        }
-      }
+      SecondhandPaymentDetails: {
+        some: {
+          status: "Đang vận chuyển",
+        },
+      },
     },
     select: {
       id: true,
@@ -185,16 +229,16 @@ async function getOrdering(userId: string) {
     },
   });
   const filterData = data.map((item) => {
-    const filteredDetails = item.SecondhandPaymentDetails.map((detail)=>{
-      if(detail.status === 'Đang vận chuyển'){
+    const filteredDetails = item.SecondhandPaymentDetails.map((detail) => {
+      if (detail.status === "Đang vận chuyển") {
         return detail;
-      }else{
+      } else {
         return null;
       }
-    }).filter((itemm)=>itemm !== null);
+    }).filter((itemm) => itemm !== null);
     return {
       ...item,
-      SecondhandPaymentDetails: filteredDetails
+      SecondhandPaymentDetails: filteredDetails,
     };
   });
   return filterData;
@@ -246,21 +290,6 @@ async function passSecondhandItems(
         id: secondhandPaymentDetailId,
       },
     });
-    await prisma.secondHand.update({
-      where:{
-        id: secondhandPaymentDetailInfo.secondhandId
-      },
-      data:{
-        amount: secondhandPaymentDetailInfo.secondhand.amount - secondhandPaymentDetailInfo.amount
-      }
-    });
-    if(secondhandPaymentDetailInfo.secondhand.amount - secondhandPaymentDetailInfo.amount === 0){
-      await prisma.secondHand.delete({
-        where:{
-          id : secondhandPaymentDetailInfo.secondhandId
-        }
-      })
-    }
   } else {
     await prisma.wardrobe.create({
       data: {
@@ -275,14 +304,6 @@ async function passSecondhandItems(
         id: secondhandPaymentDetailId,
       },
     });
-    await prisma.secondHand.update({
-      where:{
-        id: secondhandPaymentDetailInfo.secondhandId
-      },
-      data:{
-        amount: secondhandPaymentDetailInfo.secondhand.amount - secondhandPaymentDetailInfo.amount
-      }
-    })
   }
   return true;
 }

@@ -42,6 +42,7 @@ export interface BeingOrderedItems {
     buyerName: string;
   };
   secondhand: {
+    price: number,
     wardrobe: {
       clothDetails: {
         id: string;

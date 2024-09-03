@@ -4,6 +4,8 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useEffect, useState } from "react";
 import { formatMoney } from "../../utils/formatMoney";
 import { io } from "socket.io-client";
+import { fetchDeletePaymentDetail } from '../../../../admin/src/features/payments/paymentSlice';
+import { showToast } from "../../utils/showToast";
 const socket = io("http://localhost:4000");
 export const PaymentHistory = () => {
   const dispatch = useAppDispatch();
@@ -39,7 +41,14 @@ export const PaymentHistory = () => {
     );
   }, [paymentHistory]);
   const handleOnClickDelete = (paymentDetailId: string)=>{
-    console.log(paymentDetailId)
+    dispatch(fetchDeletePaymentDetail(paymentDetailId)).then(()=>{
+      showToast("Hủy đơn thành công", 'info');
+      if (auth?.id) {
+        dispatch(fetchHistoryPayment(auth.id)).then((res: any) => {
+          setPaymentHistory(res.payload);
+        });
+      }
+    });
   }
   return (
     <>

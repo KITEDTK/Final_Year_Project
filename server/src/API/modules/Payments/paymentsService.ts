@@ -252,6 +252,11 @@ async function getHistoryPayment(userId: string){
   const result = await prisma.payments.findMany({
     where:{
       userId: userId,
+      paymentDetails:{
+        some:{
+          isEnable: true
+        }
+      }
     },
     orderBy:{
       createAt: 'desc'
@@ -316,6 +321,61 @@ async function barChartMonth (year: number, month: number){
   });
   return result;
 }
+async function deletePaymentDetail(paymentDetailId: string){
+  const data = await prisma.paymentDetails.delete({
+    where:{
+      id: paymentDetailId
+    }
+  });
+  const checkExistPayment = await prisma.paymentDetails.findFirst({
+    where:{
+      paymentId: data.paymentId,
+      isEnable: true
+    }
+  });
+  if(!checkExistPayment){
+    await prisma.payments.update({
+      where:{
+        id: data.paymentId
+      },
+      data:{
+        status: 'Khách đã hủy đơn'
+      }
+    });
+  }else{
+    const pricePayment = await prisma.paymentDetails.findMany({
+      where:{
+        paymentId: data.paymentId
+      },
+      select:{
+        amount: true,
+        clothDetail:{
+          select:{
+            cloth:{
+              select:{
+                price: true
+              }
+            }
+          }
+        }
+      }
+    });
+    const newPricePayment = pricePayment.reduce((accumulator, currentValue) => {
+      const clothPrice = currentValue?.clothDetail?.cloth?.price ?? 0;
+      const amount = currentValue?.amount ?? 0;
+      return accumulator + amount * clothPrice;
+    }, 0);
+    await prisma.payments.update({
+      where:{
+        id: data.paymentId
+      },
+      data:{
+        total: newPricePayment
+      }
+    });
+  }
+  return data.paymentId;
+}
 export default {
   barChartMonth,
   createPaymentPayWhenReceive,
@@ -327,5 +387,6 @@ export default {
   getPayments,
   getQuantityPayment,
   getPaymentDetail,
-  getHistoryPayment
+  getHistoryPayment,
+  deletePaymentDetail
 };

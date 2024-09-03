@@ -37,6 +37,7 @@ export function initSocket(server: http.Server): Server {
     socket.on("pull_selling_item",(data: {secondhandId: string})=>{
       const {secondhandId} = data;
       socket.to('anyone').emit('update_secondhand_item',{secondhandId});
+      socket.to('anyone').emit('update_odering');
     });
     socket.on("update_ordering_items_status",(data: {userId: string})=>{
       const {userId} = data;
