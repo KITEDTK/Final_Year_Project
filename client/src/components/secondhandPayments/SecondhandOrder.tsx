@@ -135,6 +135,10 @@ export const SecondhandOrder = () => {
         });
     }
   };
+  const sumPrice = auth2handCarts.reduce(
+    (accumulator, currentValue) => accumulator + (currentValue.amount * currentValue.seconHands.price),
+    0,
+  );
   return (
     <>
       <Modal show={showModal} onHide={handleOnHideModal}>
@@ -195,12 +199,12 @@ export const SecondhandOrder = () => {
                 })}
                 <tr className="summary-subtotal">
                   <td>Tổng giỏ hàng:</td>
-                  <td>$160.00</td>
+                  <td>{formatMoney(sumPrice)}đ</td>
                 </tr>
                 {/* End .summary-subtotal */}.
                 <tr className="summary-total">
                   <td>Tổng hóa đơn:</td>
-                  <td>$160.00</td>
+                  <td>{formatMoney(sumPrice)}đ</td>
                 </tr>
                 {/* End .summary-total */}
               </tbody>

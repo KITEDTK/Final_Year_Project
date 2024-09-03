@@ -67,7 +67,7 @@ export const UserProfile = () => {
                         href="#tab-orders"
                         role="tab"
                         aria-controls="tab-orders"
-                        aria-selected="false"
+                        aria-selected="true"
                       >
                         Lịch sử mua hàng
                       </a>
@@ -122,37 +122,6 @@ export const UserProfile = () => {
                         aria-selected="false"
                       >
                         Sản phẩm đang đặt
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className="nav-link"
-                        id="tab-address-link"
-                        data-toggle="tab"
-                        href="#tab-address"
-                        role="tab"
-                        aria-controls="tab-address"
-                        aria-selected="false"
-                      >
-                        Adresses
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className="nav-link"
-                        id="tab-account-link"
-                        data-toggle="tab"
-                        href="#tab-account"
-                        role="tab"
-                        aria-controls="tab-account"
-                        aria-selected="false"
-                      >
-                        Account Details
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a className="nav-link" href="#">
-                        Sign Out
                       </a>
                     </li>
                   </ul>

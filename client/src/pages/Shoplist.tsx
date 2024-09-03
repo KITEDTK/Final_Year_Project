@@ -102,7 +102,7 @@ export const Shoplist = () => {
           >
             <div className="container">
               <h1 className="page-title">
-                Grid 3 Columns<span>Shop</span>
+                {category?.name}<span>Shop</span>
               </h1>
             </div>
             {/* End .container */}
@@ -118,7 +118,7 @@ export const Shoplist = () => {
                   <a href="#">Shop</a>
                 </li>
                 <li className="breadcrumb-item active" aria-current="page">
-                  Grid 3 Columns
+                {category?.name}
                 </li>
               </ol>
             </div>
@@ -144,72 +144,6 @@ export const Shoplist = () => {
                     </div>
                     {/* End .toolbox-left */}
 
-                    <div className="toolbox-right">
-                      <div className="toolbox-sort">
-                        <label htmlFor="sortby">Sort by:</label>
-                        <div className="select-custom">
-                          <select
-                            name="sortby"
-                            id="sortby"
-                            className="form-control"
-                          >
-                            <select value="popularity">
-                              <option value="popularity" selected>
-                                Most Popular
-                              </option>
-                            </select>
-
-                            <option value="rating">Most Rated</option>
-                            <option value="date">Date</option>
-                          </select>
-                        </div>
-                      </div>
-                      {/* End .toolbox-sort */}
-                      <div className="toolbox-layout">
-                        <a href="category-list.html" className="btn-layout">
-                          <svg width="16" height="10">
-                            <rect x="0" y="0" width="4" height="4" />
-                            <rect x="6" y="0" width="10" height="4" />
-                            <rect x="0" y="6" width="4" height="4" />
-                            <rect x="6" y="6" width="10" height="4" />
-                          </svg>
-                        </a>
-
-                        <a href="category-2cols.html" className="btn-layout">
-                          <svg width="10" height="10">
-                            <rect x="0" y="0" width="4" height="4" />
-                            <rect x="6" y="0" width="4" height="4" />
-                            <rect x="0" y="6" width="4" height="4" />
-                            <rect x="6" y="6" width="4" height="4" />
-                          </svg>
-                        </a>
-
-                        <a href="category.html" className="btn-layout active">
-                          <svg width="16" height="10">
-                            <rect x="0" y="0" width="4" height="4" />
-                            <rect x="6" y="0" width="4" height="4" />
-                            <rect x="12" y="0" width="4" height="4" />
-                            <rect x="0" y="6" width="4" height="4" />
-                            <rect x="6" y="6" width="4" height="4" />
-                            <rect x="12" y="6" width="4" height="4" />
-                          </svg>
-                        </a>
-
-                        <a href="category-4cols.html" className="btn-layout">
-                          <svg width="22" height="10">
-                            <rect x="0" y="0" width="4" height="4" />
-                            <rect x="6" y="0" width="4" height="4" />
-                            <rect x="12" y="0" width="4" height="4" />
-                            <rect x="18" y="0" width="4" height="4" />
-                            <rect x="0" y="6" width="4" height="4" />
-                            <rect x="6" y="6" width="4" height="4" />
-                            <rect x="12" y="6" width="4" height="4" />
-                            <rect x="18" y="6" width="4" height="4" />
-                          </svg>
-                        </a>
-                      </div>
-                      {/* End .toolbox-layout */}
-                    </div>
                     {/* End .toolbox-right */}
                   </div>
                   {/* End .toolbox */}
@@ -287,189 +221,9 @@ export const Shoplist = () => {
                     {/* End .collapse */}
                     {/* End .widget */}
 
-                    <div className="widget widget-collapsible">
-                      <h3 className="widget-title">
-                        <a
-                          data-toggle="collapse"
-                          href="#widget-4"
-                          role="button"
-                          aria-expanded="true"
-                          aria-controls="widget-4"
-                        >
-                          Brand
-                        </a>
-                      </h3>
-                      {/* End .widget-title */}
 
-                      <div className="collapse show" id="widget-4">
-                        <div className="widget-body">
-                          <div className="filter-items">
-                            <div className="filter-item">
-                              <div className="custom-control custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  className="custom-control-input"
-                                  id="brand-1"
-                                />
-                                <label
-                                  className="custom-control-label"
-                                  htmlFor="brand-1"
-                                >
-                                  Next
-                                </label>
-                              </div>
-                              {/* End .custom-checkbox */}
-                            </div>
-                            {/* End .filter-item */}
-
-                            <div className="filter-item">
-                              <div className="custom-control custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  className="custom-control-input"
-                                  id="brand-2"
-                                />
-                                <label
-                                  className="custom-control-label"
-                                  htmlFor="brand-2"
-                                >
-                                  River Island
-                                </label>
-                              </div>
-                              {/* End .custom-checkbox */}
-                            </div>
-                            {/* End .filter-item */}
-
-                            <div className="filter-item">
-                              <div className="custom-control custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  className="custom-control-input"
-                                  id="brand-3"
-                                />
-                                <label
-                                  className="custom-control-label"
-                                  htmlFor="brand-3"
-                                >
-                                  Geox
-                                </label>
-                              </div>
-                              {/* End .custom-checkbox */}
-                            </div>
-                            {/* End .filter-item */}
-
-                            <div className="filter-item">
-                              <div className="custom-control custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  className="custom-control-input"
-                                  id="brand-4"
-                                />
-                                <label
-                                  className="custom-control-label"
-                                  htmlFor="brand-4"
-                                >
-                                  New Balance
-                                </label>
-                              </div>
-                              {/* End .custom-checkbox */}
-                            </div>
-                            {/* End .filter-item */}
-
-                            <div className="filter-item">
-                              <div className="custom-control custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  className="custom-control-input"
-                                  id="brand-5"
-                                />
-                                <label
-                                  className="custom-control-label"
-                                  htmlFor="brand-5"
-                                >
-                                  UGG
-                                </label>
-                              </div>
-                              {/* End .custom-checkbox */}
-                            </div>
-                            {/* End .filter-item */}
-
-                            <div className="filter-item">
-                              <div className="custom-control custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  className="custom-control-input"
-                                  id="brand-6"
-                                />
-                                <label
-                                  className="custom-control-label"
-                                  htmlFor="brand-6"
-                                >
-                                  F&F
-                                </label>
-                              </div>
-                              {/* End .custom-checkbox */}
-                            </div>
-                            {/* End .filter-item */}
-
-                            <div className="filter-item">
-                              <div className="custom-control custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  className="custom-control-input"
-                                  id="brand-7"
-                                />
-                                <label
-                                  className="custom-control-label"
-                                  htmlFor="brand-7"
-                                >
-                                  Nike
-                                </label>
-                              </div>
-                              {/* End .custom-checkbox */}
-                            </div>
-                            {/* End .filter-item */}
-                          </div>
-                          {/* End .filter-items */}
-                        </div>
-                        {/* End .widget-body */}
-                      </div>
-                      {/* End .collapse */}
-                    </div>
                     {/* End .widget */}
 
-                    <div className="widget widget-collapsible">
-                      <h3 className="widget-title">
-                        <a
-                          data-toggle="collapse"
-                          href="#widget-5"
-                          role="button"
-                          aria-expanded="true"
-                          aria-controls="widget-5"
-                        >
-                          Price
-                        </a>
-                      </h3>
-                      {/* End .widget-title */}
-
-                      <div className="collapse show" id="widget-5">
-                        <div className="widget-body">
-                          <div className="filter-price">
-                            <div className="filter-price-text">
-                              Price Range:
-                              <span id="filter-price-range"></span>
-                            </div>
-                            {/* End .filter-price-text */}
-
-                            <div id="price-slider"></div>
-                            {/* End #price-slider */}
-                          </div>
-                          {/* End .filter-price */}
-                        </div>
-                        {/* End .widget-body */}
-                      </div>
-                      {/* End .collapse */}
-                    </div>
                     {/* End .widget */}
                   </div>
                   {/* End .sidebar sidebar-shop */}

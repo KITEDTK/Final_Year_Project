@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { showToast } from "../../utils/showToast";
 import { Link } from "react-router-dom";
 import { io } from "socket.io-client";
+import { formatMoney } from '../../utils/formatMoney';
 const socket = io("http://localhost:4000");
 export const Mini2handHeaderCart = () => {
   const dispatch = useAppDispatch();
@@ -59,6 +60,10 @@ export const Mini2handHeaderCart = () => {
       socket.off("update_secondhand_item"); // Clean up the event listener
     };
   });
+  const sumPrice = auth2handCarts.reduce(
+    (accumulator, currentValue) => accumulator + (currentValue.amount * currentValue.seconHands.price),
+    0,
+  );
   return (
     <>
       <div className="dropdown cart-dropdown">
@@ -99,9 +104,9 @@ export const Mini2handHeaderCart = () => {
 
                         <span className="cart-product-info">
                           <span className="cart-product-qty">
-                            {item.amount}
+                            {item.amount}x
                           </span>
-                          x $84.00
+                        {formatMoney(item.seconHands.price)} đ 
                         </span>
                       </div>
                       {/* End .product-cart-details */}
@@ -133,9 +138,9 @@ export const Mini2handHeaderCart = () => {
           {/* End .cart-product */}
 
           <div className="dropdown-cart-total">
-            <span>Total</span>
+            <span>Tổng giá</span>
 
-            <span className="cart-total-price">$160.00</span>
+            <span className="cart-total-price">{formatMoney(sumPrice)}đ</span>
           </div>
           {/* End .dropdown-cart-total */}
 
