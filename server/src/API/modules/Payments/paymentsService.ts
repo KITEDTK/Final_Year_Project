@@ -270,6 +270,7 @@ async function getHistoryPayment(userId: string){
           amount: true,
           clothDetail:{
             select:{
+              image1: true,
               cloth:{
                 select:{
                   name: true,

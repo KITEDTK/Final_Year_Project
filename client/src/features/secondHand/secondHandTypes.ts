@@ -37,6 +37,7 @@ export interface SellingSecondhandProducts {
   price: number;
   wardrobe: {
     clothDetails: {
+      image1: string,
       cloth: {
         name: string;
       };

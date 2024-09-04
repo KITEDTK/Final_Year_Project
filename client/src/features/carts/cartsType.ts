@@ -5,6 +5,7 @@ export interface BaseCart {
   isCheckout: boolean;
   amount: number;
   clothDetails: {
+    image1: string,
     size: {
       name: string;
     };
@@ -47,6 +48,7 @@ export interface ItemInLocalCarts {
   clothDetailId: string;
   amount: number;
   price: number;
+  image1: string;
 }
 export interface updateItemInLocalCartInput {
   clothDetailId: string;

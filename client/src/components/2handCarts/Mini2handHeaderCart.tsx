@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { showToast } from "../../utils/showToast";
 import { Link } from "react-router-dom";
 import { io } from "socket.io-client";
-import { formatMoney } from '../../utils/formatMoney';
+import { formatMoney } from "../../utils/formatMoney";
 const socket = io("http://localhost:4000");
 export const Mini2handHeaderCart = () => {
   const dispatch = useAppDispatch();
@@ -61,8 +61,9 @@ export const Mini2handHeaderCart = () => {
     };
   });
   const sumPrice = auth2handCarts.reduce(
-    (accumulator, currentValue) => accumulator + (currentValue.amount * currentValue.seconHands.price),
-    0,
+    (accumulator, currentValue) =>
+      accumulator + currentValue.amount * currentValue.seconHands.price,
+    0
   );
   return (
     <>
@@ -106,7 +107,7 @@ export const Mini2handHeaderCart = () => {
                           <span className="cart-product-qty">
                             {item.amount}x
                           </span>
-                        {formatMoney(item.seconHands.price)} đ 
+                          {formatMoney(item.seconHands.price)} đ
                         </span>
                       </div>
                       {/* End .product-cart-details */}
@@ -114,7 +115,8 @@ export const Mini2handHeaderCart = () => {
                       <figure className="product-image-container">
                         <a href="product.html" className="product-image">
                           <img
-                            src="assets/images/products/cart/product-1.jpg"
+                            style={{ width: 60, height: 60 }}
+                            src={`http://localhost:4000/images/${item.seconHands.wardrobe.clothDetails.image1}`}
                             alt="product"
                           />
                         </a>

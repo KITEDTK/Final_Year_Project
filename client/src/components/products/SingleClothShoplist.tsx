@@ -105,6 +105,7 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
               clothesName: result.name,
               amount: 1,
               price: result.price,
+              image1: result.clothInfo?.image1 ?? ""
             })
           );
           showToast(<>Đã thêm sản phẩm vào giỏ hàng</>, "success");

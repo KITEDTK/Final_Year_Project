@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { showToast } from "../../utils/showToast";
 
 import {
   ClothesFilter,
@@ -167,7 +166,6 @@ const clothesSlice = createSlice({
       .addCase(fetchAddComment.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message ?? "Unknown error";
-        showToast('Ngươi dùng chưa mua mặt hàng này','error');
       })
       .addCase(fetchMaxClothesQuantity.pending, (state) => {
         state.loading = true;

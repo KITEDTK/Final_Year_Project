@@ -45,6 +45,7 @@ export interface BeingOrderedItems {
     price: number,
     wardrobe: {
       clothDetails: {
+        image1: string,
         id: string;
         size: {
           name: string;

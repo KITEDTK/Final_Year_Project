@@ -18,6 +18,7 @@ async function getAllByUserId(userId: string) {
       amount: true,
       clothDetails:{
         select:{
+          image1: true,
           cloth:{
             select: {
               name: true,

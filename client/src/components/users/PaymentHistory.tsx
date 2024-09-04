@@ -75,7 +75,8 @@ export const PaymentHistory = () => {
                       <figure className="product-media">
                         <a href="#">
                           <img
-                            src="assets/images/products/table/product-1.jpg"
+                          style={{width: 60, height: 60}}
+                            src={`http://localhost:4000/images/${itemm.clothDetail.image1}`}
                             alt="Product image"
                           />
                         </a>

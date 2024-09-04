@@ -23,8 +23,12 @@ export const CommentSingleCloth: React.FC<Props> = ({ commentInfo }) => {
             content: commentText,
             userId: auth.id,
           })
-        ).then(() => {
-          showToast("Đã thêm sản phẩn thành công", "success");
+        ).then((res: any) => {
+          if(res.error){
+            showToast('Bạn chưa mua sản phẩm này','error');
+          }else{
+            showToast('Thêm comment thành công','success');
+          }
         });
       }
     }

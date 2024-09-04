@@ -118,7 +118,8 @@ export const MiniHeaderCart = () => {
                       <figure className="product-image-container">
                         <a href="product.html" className="product-image">
                           <img
-                            src="assets/images/products/cart/product-1.jpg"
+                            style={{ width: 60, height: 60 }}
+                            src={`http://localhost:4000/images/${ac.clothDetails.image1}`}
                             alt="product"
                           />
                         </a>
@@ -168,7 +169,8 @@ export const MiniHeaderCart = () => {
                         <figure className="product-image-container">
                           <a href="product.html" className="product-image">
                             <img
-                              src="assets/images/products/cart/product-1.jpg"
+                              style={{width: 60, height: 60}}
+                              src={`http://localhost:4000/images/${lc.image1}`}
                               alt="product"
                             />
                           </a>

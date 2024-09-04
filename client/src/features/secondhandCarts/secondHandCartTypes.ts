@@ -14,6 +14,7 @@ export interface SecondhandCart {
     wardrobe: {
       userId: string,
       clothDetails: {
+        image1: string,
         size: {
           id: string;
           name: string;

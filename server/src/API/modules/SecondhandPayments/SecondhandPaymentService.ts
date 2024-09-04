@@ -96,6 +96,7 @@ async function fetchBeingOrderedItem(sellerId: string) {
             select: {
               clothDetails: {
                 select: {
+                  image1: true,
                   id: true,
                   cloth: {
                     select: {

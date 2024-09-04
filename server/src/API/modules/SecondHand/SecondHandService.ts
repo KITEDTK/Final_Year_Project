@@ -93,6 +93,7 @@ async function getSellingItems(userId: string) {
         select: {
           clothDetails: {
             select: {
+              image1: true,
               cloth: {
                 select: {
                   name: true,
@@ -132,12 +133,21 @@ async function pullSellingItems(secondhandId: string){
   if(!data){
     throw 'err';
   }
+  const secondhandInPayment = await prisma.secondhandPaymentDetails.findMany({
+    where:{
+      secondhandId: secondhandId
+    }
+  });
+  const totalAmountInPayment = secondhandInPayment.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.amount,
+    0,
+  );
   await prisma.wardrobe.update({
     where:{
       id: data.wardrobeId
     },
     data:{
-      amount: data.wardrobe.amount + data.amount
+      amount: data.wardrobe.amount + data.amount + totalAmountInPayment
     }
   });
   await prisma.secondHandCart.deleteMany({
