@@ -115,17 +115,6 @@ export function Clothes() {
                     >
                       Nhập hàng mới
                     </button>
-                    <button
-                      type="button"
-                      className="btn btn-block btn-success"
-                      style={{
-                        width: "10%",
-                        height: "100%",
-                        flex: "0 0 auto", // Thiết lập flex-grow, flex-shrink, và flex-basis cho nút thứ ba
-                      }}
-                    >
-                      Thêm hàng
-                    </button>
                   </div>
 
                   <br />
