@@ -25,7 +25,7 @@ export const Search: React.FC<props> = ({searchText}) => {
                 className="form-control"
                 name="q"
                 id="q"
-                placeholder="Search product ..."
+                placeholder="Tìm kiếm theo tên sản phẩm ..."
                 required
                 onChange={(event) => handleOnChangeSearchText(event.target.value)}
               />

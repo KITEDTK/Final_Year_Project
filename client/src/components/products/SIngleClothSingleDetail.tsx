@@ -34,6 +34,7 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
   const auth = useAppSelector((state) => state.auth.auth);
   const authCarts = useAppSelector((state) => state.carts.carts);
   const LocalCarts = useAppSelector((state)=>state.carts.localCarts);
+  const [viewImage, setViewImage] = useState<string>(clothDetails[1].image1);
   const [activeColor, setActiveColor] = useState<string>(() => {
     if (!clothDetails || clothDetails.length === 0) {
       return "";
@@ -128,7 +129,6 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
           cartItem !== undefined
             ? itemToAdd.amount - cartItem.amount
             : itemToAdd.amount;
-        console.log(maxQuantity);
         setQuantity((prev) => {
           const newQuantity = prev + value;
           if (newQuantity < 1) {
@@ -209,6 +209,7 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
                   clothesName: clothesInfo.rest.name,
                   amount: quantity,
                   price: clothesInfo.rest.price,
+                  image1: itemToAdd.image1
                 })
               );
               showToast("Đã thêm sản phẩm vào giỏ hàng", "success");
@@ -221,6 +222,9 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
       showToast("Vui lòng chọn kích thước", "info");
     }
   };
+  const handleChooseImage = (image: string)=>{
+    setViewImage(image);
+  }
   return (
     <>
       <div className="product-details-top">
@@ -231,8 +235,9 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
                 <figure className="product-main-image">
                   <img
                     id="product-zoom-1"
-                    src="assets/images/products/single/1.jpg"
-                    data-zoom-image="assets/images/products/single/1-big.jpg"
+                    src={`http://localhost:4000/images/${viewImage}`}
+                    data-zoom-image={`http://localhost:4000/images/${viewImage}`}
+
                     alt="product image"
                   />
 
@@ -250,52 +255,44 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
                   className="product-image-gallery"
                 >
                   <a
-                    className="product-gallery-item active"
-                    href="#"
-                    data-image="assets/images/products/single/1.jpg"
+                    className="product-gallery-item "
+                    onClick={()=>handleChooseImage(clothDetails[1].image1)}
+                    data-image={`http://localhost:4000/images/${clothDetails[1].image1}`}
                     data-zoom-image="assets/images/products/single/1-big.jpg"
                   >
                     <img
-                      src="assets/images/products/single/1-small.jpg"
+                    style={{width: 107, height:107}}
+                      src={`http://localhost:4000/images/${clothDetails[1].image1}`}
                       alt="product side"
                     />
                   </a>
 
                   <a
                     className="product-gallery-item"
-                    href="#"
+                    onClick={()=>handleChooseImage(clothDetails[1].image2)}
                     data-image="assets/images/products/single/2.jpg"
                     data-zoom-image="assets/images/products/single/2-big.jpg"
                   >
                     <img
-                      src="assets/images/products/single/2-small.jpg"
+                    style={{width: 107, height:107}}
+                      src={`http://localhost:4000/images/${clothDetails[1].image2}`}
                       alt="product cross"
                     />
                   </a>
 
                   <a
                     className="product-gallery-item"
-                    href="#"
+                    onClick={()=>handleChooseImage(clothDetails[1].image3)}
                     data-image="assets/images/products/single/3.jpg"
                     data-zoom-image="assets/images/products/single/3-big.jpg"
                   >
                     <img
-                      src="assets/images/products/single/3-small.jpg"
+                    style={{width: 107, height:107}}
+                      src={`http://localhost:4000/images/${clothDetails[1].image3}`}
                       alt="product with model"
                     />
                   </a>
 
-                  <a
-                    className="product-gallery-item"
-                    href="#"
-                    data-image="assets/images/products/single/4.jpg"
-                    data-zoom-image="assets/images/products/single/4-big.jpg"
-                  >
-                    <img
-                      src="assets/images/products/single/4-small.jpg"
-                      alt="product back"
-                    />
-                  </a>
                 </div>
                 {/*  End .product-image-gallery */}
               </div>

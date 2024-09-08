@@ -104,8 +104,8 @@ export const Header = () => {
             <div className="container">
               <div className="header-left">
                 <div className="header-dropdown">
-                  <a href="#">Usd</a>
-                  <div className="header-menu">
+                  <a href="#"></a>
+                  {/* <div className="header-menu">
                     <ul>
                       <li>
                         <a href="#">Eur</a>
@@ -114,26 +114,12 @@ export const Header = () => {
                         <a href="#">Usd</a>
                       </li>
                     </ul>
-                  </div>
+                  </div> */}
                   {/* End .header-menu */}
                 </div>
                 {/* End .header-dropdown */}
 
                 <div className="header-dropdown">
-                  <a href="#">Eng</a>
-                  <div className="header-menu">
-                    <ul>
-                      <li>
-                        <a href="#">English</a>
-                      </li>
-                      <li>
-                        <a href="#">French</a>
-                      </li>
-                      <li>
-                        <a href="#">Spanish</a>
-                      </li>
-                    </ul>
-                  </div>
                   {/* End .header-menu */}
                 </div>
                 {/* End .header-dropdown */}
@@ -147,18 +133,15 @@ export const Header = () => {
                     <ul>
                       <li>
                         <a href="tel:#">
-                          <i className="icon-phone"></i>Call: +0123 456 789
+                          <i className="icon-phone"></i>Call: 0866718960
                         </a>
                       </li>
-                      <li>
+                      {/* <li>
                         <a href="wishlist.html">
                           <i className="icon-heart-o"></i>Wishlist{" "}
                           <span>(3)</span>
                         </a>
-                      </li>
-                      <li>
-                        <a href="about.html">About Us</a>
-                      </li>
+                      </li> */}
                       {auth ? (
                         <li>
                           <Link
@@ -221,11 +204,6 @@ export const Header = () => {
             {/* End .header-left */}
 
             <div className="header-right">
-              <a href="wishlist.html" className="wishlist-link">
-                <i className="icon-heart-o"></i>
-                <span className="wishlist-count">3</span>
-                <span className="wishlist-txt">My Wishlist</span>
-              </a>
 
               <MiniHeaderCart />
 
