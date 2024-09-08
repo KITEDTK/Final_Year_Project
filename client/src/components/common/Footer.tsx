@@ -10,7 +10,7 @@ export function Footer() {
               <div className="col-sm-12 col-lg-6">
                 <div className="widget widget-about">
                   <img
-                    src="assets/images/demos/demo-5/logo-footer.png"
+                    src="assets/images/demos/demo-6/kitelogo.jpg"
                     className="footer-logo"
                     alt="Footer Logo"
                     width="105"

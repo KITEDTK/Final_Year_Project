@@ -194,7 +194,7 @@ export const Header = () => {
             <div className="header-center">
               <Link to="/" className="logo">
                 <img
-                  src="assets/images/demos/demo-6/logo.png"
+                  src="assets/images/demos/demo-6/kitelogo.jpg"
                   alt="Molla Logo"
                   width="82"
                   height="20"
