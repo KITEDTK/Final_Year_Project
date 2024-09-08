@@ -98,7 +98,87 @@ async function getPaymentPrice(year: number, month: number) {
   }, 0);
   return totalInitPrice;
 }
+async function topTenClothes(currentDateStart: Date, currentDateEnd: Date) {
+  const data = await prisma.paymentDetails.groupBy({
+    by: ["clothId"],
+    _sum: {
+      amount: true,
+    },
+    where: {
+      createAt: {
+        gte: currentDateStart, // Lớn hơn hoặc bằng ngày đầu tháng
+        lt: currentDateEnd, // Nhỏ hơn ngày đầu của tháng sau
+      },
+    },
+    orderBy: {
+      _sum: {
+        amount: "desc",
+      },
+    },
+    take: 10,
+  });
+
+  const filter = await Promise.all(
+    data.map(async (item) => {
+      const clothDetails = await prisma.clothDetails.findUnique({
+        where: {
+          id: item.clothId,
+        },
+        select: {
+          cloth: {
+            select: {
+              name: true,
+            },
+          },
+          size: {
+            select: {
+              name: true,
+            },
+          },
+          color: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      });
+
+      return {
+        name: clothDetails,
+        sum: item._sum.amount,
+      };
+    })
+  );
+  return filter;
+}
+async function getTopTenThisMonth() {
+  const currentMonthStart = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    1
+  ); // Ngày đầu tiên của tháng hiện tại
+  const currentMonthEnd = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth() + 1,
+    1
+  ); // Ngày đầu tiên của tháng tiếp theo
+  return topTenClothes(currentMonthStart, currentMonthEnd);
+}
+async function getTopTenThisWeek() {
+  const currentDate = new Date();
+  const currentDayOfWeek = currentDate.getDay(); // Lấy ngày trong tuần (0 là Chủ Nhật)
+  const firstDayOfWeek = new Date(
+    currentDate.setDate(currentDate.getDate() - currentDayOfWeek + 1)
+  ); // Thứ Hai đầu tuần
+  const lastDayOfWeek = new Date(
+    currentDate.setDate(currentDate.getDate() - currentDayOfWeek + 7)
+  ); // Chủ Nhật cuối tuần
+  return topTenClothes(firstDayOfWeek, lastDayOfWeek);
+}
 export default {
   getInitProductPrice,
   getPaymentPrice,
+  topTenClothes,
+  getTopTenThisMonth,
+  getTopTenThisWeek,
 };

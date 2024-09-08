@@ -14,8 +14,10 @@ import _ from "lodash";
 import {
   fetchPaymentPrice,
   fetchInitPrice,
+  fetchTopTenClothesMonth,
 } from "../features/statistiscal/statististicalSlice";
 import { formatMoney } from "../../../client/src/utils/formatMoney";
+import { StatisticalThisMonthOutput } from "../features/statistiscal/statisticalType";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -45,6 +47,7 @@ export const Dashboard = () => {
   const [paymentPrice, setPaymentPrice] = useState<number[]>([]);
   const [initPrice, setInitPrice] = useState<number[]>([]);
   const [yearToStats, setYearToStats] = useState<number>(2024);
+  const [thisMonthStats, setThisMonthStats] = useState<StatisticalThisMonthOutput[]>([]);
   useEffect(() => {
     const fetchAllInitPrices = async () => {
       const prices = [];
@@ -126,6 +129,39 @@ export const Dashboard = () => {
       },
     ],
   };
+  useEffect(()=>{
+    dispatch(fetchTopTenClothesMonth()).then((res: any)=>{
+      setThisMonthStats(res.payload)
+    })
+  },[dispatch]);
+  const optionsMonth = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      title: {
+        display: true,
+        text: "Top sản phẩm bán chạy tháng này"
+      }, 
+    },
+  }
+  const labelMonth: string[] = thisMonthStats.map((item)=>{
+    return item.name.cloth.name + " " + item.name.size.name +"/"+ item.name.size.name;
+  })
+  const statisThisMonth = thisMonthStats.map((item)=>{
+    return item.sum;
+  });
+  const dataMonth = {
+    labels: labelMonth,
+    datasets: [
+      {
+        label: "",
+        data: statisThisMonth,
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+    ],
+  };
   return (
     <>
       <h5>Nhập năm bạn muốn thống kê</h5>
@@ -136,6 +172,8 @@ export const Dashboard = () => {
         style={{ width: 200 }}
       />
       <Bar options={options} data={data} />
+      <br />
+      <Bar options={optionsMonth} data={dataMonth} />
     </>
   );
 };

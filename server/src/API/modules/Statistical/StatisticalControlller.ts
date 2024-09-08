@@ -19,7 +19,25 @@ async function getPaymentPrice(req: Request, res: Response){
     console.log(err);
   }
 }
+async function getTopTenItemsThisMonth(req: Request, res: Response){
+  try{
+    const result = await StatisticalService.getTopTenThisMonth();
+    res.json(result);
+  }catch(err){
+    console.log(err);
+  }
+}
+async function getTopTenThisWeek(req: Request, res: Response){
+  try{
+    const result = await StatisticalService.getTopTenThisWeek();
+    res.json(result);
+  }catch(err){
+    console.log(err);
+  }
+}
 export default {
     getInitProductPrice,
-    getPaymentPrice
+    getPaymentPrice,
+    getTopTenItemsThisMonth,
+    getTopTenThisWeek
 }
