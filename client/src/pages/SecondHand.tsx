@@ -68,7 +68,7 @@ export const SecondHand = () => {
           >
             <div className="container">
               <h1 className="page-title">
-                Grid 3 Columns<span>Shop</span>
+                Hàng Secondhand<span> KITE SHOP</span>
               </h1>
             </div>
             {/* End .container */}
