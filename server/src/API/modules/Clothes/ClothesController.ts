@@ -5,7 +5,7 @@ async function filterClothes(req: Request, res: Response) {
   try {
     const {page, rootCategoryId} = req.params;
     const result = await ClothesService.getClothesByRootCategory(rootCategoryId, page);
-    res.send(result);
+    res.json(result);
   } catch (err) {
     console.log(err);
   }
@@ -13,7 +13,7 @@ async function filterClothes(req: Request, res: Response) {
 async function clothesToCSV(req: Request, res: Response) {
   try {
     const result = await ClothesService.exportClothesToCSV();
-    res.send(result);
+    res.json(result);
   } catch (err) {
     console.log(err);
   }
@@ -22,7 +22,7 @@ async function getAllClothes(req: Request, res: Response) {
   try {
     const {page} = req.params;
     const result = await ClothesService.getAllClothes(page);
-    res.send(result);
+    res.json(result);
   } catch (err) {
     console.log(err);
   }
@@ -44,7 +44,7 @@ async function getSingleCLothes(req: Request, res: Response) {
   try {
     const { clothesId } = req.params;
     const result = await ClothesService.getSingleClothes(clothesId);
-    res.send(result);
+    res.json(result);
   } catch (err) {
     console.log(err);
   }
@@ -62,7 +62,7 @@ async function addCommentInClothes(req: Request, res: Response) {
     const { clothesId, userId } = req.params;
     const { content } = req.body;
     const result = await ClothesService.addComment(clothesId, userId, content);
-    res.send(result);
+    res.json(result);
   } catch (err) {
     if (err instanceof Error) {
       res.status(400).json({ message: err.message });
@@ -75,7 +75,7 @@ async function getSingleClothesAdmin(req: Request, res: Response){
   try{
     const {clothesId} = req.params;
     const result = await ClothesService.getSingleClothesAdmin(clothesId);
-    res.send(result);
+    res.json(result);
   }catch(err){
     if (err instanceof Error) {
       res.status(400).json({ message: err.message });

@@ -34,7 +34,10 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
   const auth = useAppSelector((state) => state.auth.auth);
   const authCarts = useAppSelector((state) => state.carts.carts);
   const LocalCarts = useAppSelector((state)=>state.carts.localCarts);
-  const [viewImage, setViewImage] = useState<string>(clothDetails[1].image1);
+  const [viewImage, setViewImage] = useState<string>(clothesInfo.clothDetails[1].image1);
+  useEffect(()=>{
+    setViewImage(clothDetails[1].image1)
+  },[clothDetails]);
   const [activeColor, setActiveColor] = useState<string>(() => {
     if (!clothDetails || clothDetails.length === 0) {
       return "";

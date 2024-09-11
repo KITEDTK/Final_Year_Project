@@ -63,7 +63,7 @@ export const CommentSingleCloth: React.FC<Props> = ({ commentInfo }) => {
 
         <br />
         <br />
-        <h3>Reviews ({commentInfo.length})</h3>
+        <h3>Reviews ({commentInfo && commentInfo.length})</h3>
         <div className="reviews">
           {commentInfo &&
             commentInfo.length &&

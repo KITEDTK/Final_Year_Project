@@ -118,7 +118,7 @@ export const SingleClothes: React.FC = () => {
                     aria-controls="product-review-tab"
                     aria-selected="false"
                   >
-                    Reviews ({comments.length})
+                    Reviews ({comments && comments.length})
                   </a>
                 </li>
               </ul>
