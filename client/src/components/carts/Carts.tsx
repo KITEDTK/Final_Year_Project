@@ -162,7 +162,7 @@ export const Carts = () => {
         >
           <div className="container">
             <h1 className="page-title">
-              Shopping Cart<span>Shop</span>
+              Giỏ hàng<span>KITE SHOP</span>
             </h1>
           </div>
           {/* End .container */}
@@ -474,89 +474,22 @@ export const Carts = () => {
                           </td>
                         </tr>
                         {/* End .summary-subtotal */}
-                        <tr className="summary-shipping">
-                          <td>Shipping:</td>
-                          <td>&nbsp;</td>
-                        </tr>
 
-                        <tr className="summary-shipping-row">
-                          <td>
-                            <div className="custom-control custom-radio">
-                              <input
-                                type="radio"
-                                id="free-shipping"
-                                name="shipping"
-                                className="custom-control-input"
-                              />
-                              <label
-                                className="custom-control-label"
-                                htmlFor="free-shipping"
-                              >
-                                Free Shipping
-                              </label>
-                            </div>
-                            {/* End .custom-control */}
-                          </td>
-                          <td>$0.00</td>
-                        </tr>
                         {/* End .summary-shipping-row */}
 
-                        <tr className="summary-shipping-row">
-                          <td>
-                            <div className="custom-control custom-radio">
-                              <input
-                                type="radio"
-                                id="standart-shipping"
-                                name="shipping"
-                                className="custom-control-input"
-                              />
-                              <label
-                                className="custom-control-label"
-                                htmlFor="standart-shipping"
-                              >
-                                Standart:
-                              </label>
-                            </div>
-                            {/* End .custom-control */}
-                          </td>
-                          <td>$10.00</td>
-                        </tr>
                         {/* End .summary-shipping-row */}
 
-                        <tr className="summary-shipping-row">
-                          <td>
-                            <div className="custom-control custom-radio">
-                              <input
-                                type="radio"
-                                id="express-shipping"
-                                name="shipping"
-                                className="custom-control-input"
-                              />
-                              <label
-                                className="custom-control-label"
-                                htmlFor="express-shipping"
-                              >
-                                Express:
-                              </label>
-                            </div>
-                            {/* End .custom-control */}
-                          </td>
-                          <td>$20.00</td>
-                        </tr>
                         {/* End .summary-shipping-row */}
 
-                        <tr className="summary-shipping-estimate">
-                          <td>
-                            Estimate for Your Country
-                            <br /> <a href="dashboard.html">Change address</a>
-                          </td>
-                          <td>&nbsp;</td>
-                        </tr>
                         {/* End .summary-shipping-estimate */}
 
                         <tr className="summary-total">
-                          <td>Total:</td>
-                          <td>$160.00</td>
+                          <td>Tổng giá trị giỏ hàng:</td>
+                          <td> {auth && auth !== null ? (
+                              <>{formatMoney(authTotalPrice)}đ</>
+                            ) : (
+                              <>{formatMoney(localCarts.totalPrice)}đ</>
+                            )}</td>
                         </tr>
                         {/* End .summary-total */}
                       </tbody>

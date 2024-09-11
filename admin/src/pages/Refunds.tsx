@@ -95,7 +95,8 @@ export const Refunds = () => {
                     </h3>
                     <div className="col-12">
                       <img
-                        src="../../dist/img/prod-1.jpg"
+                      style={{width: 575, height: 521}}
+                        src={`http://localhost:4000/images/${cloth.image1}`}
                         className="product-image"
                         alt="Product Image"
                       />

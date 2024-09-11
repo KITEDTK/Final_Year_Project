@@ -13,7 +13,7 @@ export const UserProfile = () => {
         >
           <div className="container">
             <h1 className="page-title">
-              My Account<span>Shop</span>
+            Tài khoản<span>KITE SHOP</span>
             </h1>
           </div>
           {/* End .container */}
