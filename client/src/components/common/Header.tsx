@@ -75,7 +75,7 @@ export const Header = () => {
             }}
           >
             <img
-              src="assets/images/products/cart/product-1.jpg"
+              src={`http://localhost:4000/images/${item.clothDetails.image1}`}
               alt="product"
               style={{ marginRight: 16, marginBottom: 10 }}
             />

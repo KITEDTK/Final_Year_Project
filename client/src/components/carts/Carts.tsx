@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { formatMoney } from "../../utils/formatMoney";
 import {
+  fetchDeleteItemInCart,
   fetchUpdateCartQuantity,
+  removeItemFromLocalCart,
   updateQuantityInLocalCart,
 } from "../../features/carts/cartsSlice";
 import { Link } from "react-router-dom";
 import { fetchAllClothDetails } from "../../features/products/clothesSlice";
+import { showToast } from "../../utils/showToast";
 export const Carts = () => {
   const auth = useAppSelector((state) => state.auth.auth);
   const dispatch = useAppDispatch();
@@ -149,6 +152,16 @@ export const Carts = () => {
       );
     }
   };
+  const handleDeleteItemInCart = (cartId: string) =>{
+    if(auth){
+      dispatch(fetchDeleteItemInCart({userId: auth.id, cartId: cartId})).then(()=>{
+        showToast('Xóa thành công','info')
+      })
+    }else{
+      dispatch(removeItemFromLocalCart(cartId));
+      showToast('Xóa thành công','info');
+    }
+  }
   return (
     <>
       <main className="main">
@@ -320,7 +333,7 @@ export const Carts = () => {
                                     đ
                                   </td>
                                   <td className="remove-col">
-                                    <button className="btn-remove">
+                                    <button onClick={()=>handleDeleteItemInCart(ac.id)} className="btn-remove">
                                       <i className="icon-close"></i>
                                     </button>
                                   </td>
@@ -417,7 +430,7 @@ export const Carts = () => {
                                 {formatMoney(lc.amount * lc.price)}đ
                               </td>
                               <td className="remove-col">
-                                <button className="btn-remove">
+                                <button onClick={()=>handleDeleteItemInCart(lc.clothDetailId)} className="btn-remove">
                                   <i className="icon-close"></i>
                                 </button>
                               </td>

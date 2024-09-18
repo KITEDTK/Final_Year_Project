@@ -89,34 +89,6 @@ export const BillingDetail = () => {
           <label>Email address *</label>
           <input type="email" value={auth.email} className="form-control" />
 
-          <div className="custom-control custom-checkbox">
-            <input
-              type="checkbox"
-              className="custom-control-input"
-              id="checkout-create-acc"
-            />
-            <label
-              className="custom-control-label"
-              htmlFor="checkout-create-acc"
-            >
-              Create an account?
-            </label>
-          </div>
-          {/* End .custom-checkbox */}
-
-          <div className="custom-control custom-checkbox">
-            <input
-              type="checkbox"
-              className="custom-control-input"
-              id="checkout-diff-address"
-            />
-            <label
-              className="custom-control-label"
-              htmlFor="checkout-diff-address"
-            >
-              Ship to a different address?
-            </label>
-          </div>
           {/* End .custom-checkbox */}
 
           <label>Order notes (optional)</label>

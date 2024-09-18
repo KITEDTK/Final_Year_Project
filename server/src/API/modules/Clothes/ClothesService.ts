@@ -489,6 +489,13 @@ async function searching(text: string) {
           }
         }
       ]
+    },
+    include:{
+      clothDetails:{
+        select:{
+          image1: true
+        }
+      }
     }
   });
   return result;

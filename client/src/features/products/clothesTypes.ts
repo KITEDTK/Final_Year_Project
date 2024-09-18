@@ -76,4 +76,7 @@ export interface CLothesSearching {
   id: string;
   name: string;
   price: number;
+  clothDetails:{
+    image1: string;
+  }
 }
