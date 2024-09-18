@@ -306,6 +306,16 @@ async function getSingleClothesAdmin(clothesId: string) {
         const orderPayments = await prisma.paymentDetails.findMany({
           where: {
             clothId: item.id,
+            payment:{
+              OR:[
+                {
+                  status: 'Chưa duyệt đơn'
+                },
+                {
+                  status: 'Đang vận chuyển'
+                }
+              ]
+            }
           },
           select: {
             amount: true,

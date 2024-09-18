@@ -181,7 +181,7 @@ async function getPaymentDetail(paymentId: string){
 }
 async function updateStatusPayment(paymentId: string, status: string){
   if(status === 'Đang vận chuyển'){
-    const dataPayment =  await prisma.paymentDetails.findMany({
+    const dataPayment = await prisma.paymentDetails.findMany({
       where:{
         paymentId: paymentId
       }

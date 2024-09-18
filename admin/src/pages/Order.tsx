@@ -152,7 +152,8 @@ export const Order = () => {
               item.id === res.payload.id;
             });
             if (!checkExist) {
-              return [res.payload, ...prev];
+              const prevFilter = prev.filter((item)=>item.id !== res.payload.id)
+              return [res.payload, ...prevFilter];
             } else {
               return [...prev];
             }
