@@ -9,6 +9,7 @@ import {
   CreateClothesInput,
   GenerateBarcodeInput,
   RefundInput,
+  SearchingClothes,
   SingleClothes,
   UpdateClothesInput,
 } from "./clothesType";
@@ -229,6 +230,22 @@ export const fetchRefunds = createAsyncThunk<any,RefundInput>(
       return response.data;
     }catch(err){
       console.error("fetching error", err);
+      throw err;
+    }
+  }
+)
+export const fetchClothesSearching = createAsyncThunk<SearchingClothes[],string>(
+  "cloth/searching",
+  async(text: string)=>{
+    try {
+      const response: AxiosResponse<SearchingClothes[]> = await axios.post(
+        `${BASE_URL}/searching`,
+        {text: text},
+        { headers: { "Content-Type": "application/json" } }
+      );
+      return response.data;
+    } catch (err) {
+      console.error("Tìm kiếm thất bại", err);
       throw err;
     }
   }

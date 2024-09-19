@@ -166,6 +166,15 @@ async function searching(req: Request, res: Response){
     console.log(err);
   }
 }
+async function adminSearching(req: Request, res: Response){
+  try {
+    const {text} = req.body;
+    const result = await ClothesService.adminSearching(text);
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
 async function addClothDetailQuantity(req: Request, res: Response){
   try {
     const {quantity} = req.body;
@@ -234,5 +243,6 @@ export default {
   getSingleClothesAdmin,
   updateSingleClothes,
   refund,
-  getQuantityDetail
+  getQuantityDetail,
+  adminSearching
 };

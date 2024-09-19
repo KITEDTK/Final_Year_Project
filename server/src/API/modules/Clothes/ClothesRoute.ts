@@ -88,6 +88,7 @@ router.post("/admin/barcode/search",ClothesController.getByBarcode);
 router.post("/searching", ClothesController.searching);
 router.patch("/admin/clothDetails/:clothDetailId/add-quantity",ClothesController.addClothDetailQuantity);
 router.patch("/admin/clothDetails/:clothDetailId/update-quantity", ClothesController.updateClothDetailQuantity);
+router.post("/admin/searching", ClothesController.adminSearching);
 
 
 export default router;

@@ -93,3 +93,14 @@ export interface RefundInput {
   clothDetailId: string;
   amount: number;
 }
+export interface SearchingClothes{
+  id: string;
+  brand: string;
+  category:{
+    name: string
+  }
+  location: string;
+  initPrice: number;
+  price: number;
+  name: string;
+}

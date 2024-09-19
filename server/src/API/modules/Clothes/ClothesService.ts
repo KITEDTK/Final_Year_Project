@@ -606,6 +606,37 @@ async function refund(clothDetailId: string, amount: number){
   });
   return update;
 }
+async function adminSearching(text: string) {
+  if(text === ""){
+    return null;
+  }
+  const result = await prisma.clothes.findMany({
+    where:{
+      OR: [
+        {
+          name: {
+            contains: text
+          }
+        },
+        {
+          category:{
+            name: {
+              contains: text
+            }
+          }
+        }
+      ]
+    },
+    include:{
+      category:{
+        select:{
+          name: true
+        }
+      }
+    }
+  });
+  return result;
+}
 export default {
   getMaxQuantityClothesByRootCategory,
   getClothesByRootCategory,
@@ -628,4 +659,5 @@ export default {
   searching,
   refund,
   getQuantityClothDetail,
+  adminSearching
 };
