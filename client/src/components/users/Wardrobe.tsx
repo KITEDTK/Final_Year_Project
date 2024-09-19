@@ -59,6 +59,7 @@ export const Wardrobe = () => {
     setPriceToSell(price);
   }
   useEffect(()=>{
+    socket.emit("join_user", { userId: auth?.id });
     socket.on('update_user_wardrobe',()=>{
       if (auth) {
         dispatch(fetchAllWardrobeByUsers({ userId: auth.id })).then(
