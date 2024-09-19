@@ -181,11 +181,11 @@ async function getOrdering(userId: string) {
   const data = await prisma.secondhandPayments.findMany({
     where: {
       buyerId: userId,
-      SecondhandPaymentDetails: {
-        some: {
-          status: "Đang vận chuyển",
-        },
-      },
+      // SecondhandPaymentDetails: {
+      //   some: {
+      //     status: "Đang vận chuyển",
+      //   },
+      // },
     },
     select: {
       id: true,
@@ -231,11 +231,11 @@ async function getOrdering(userId: string) {
   });
   const filterData = data.map((item) => {
     const filteredDetails = item.SecondhandPaymentDetails.map((detail) => {
-      if (detail.status === "Đang vận chuyển") {
+      //if (detail.status === "Đang vận chuyển") {
         return detail;
-      } else {
-        return null;
-      }
+      // } else {
+      //   return null;
+      // }
     }).filter((itemm) => itemm !== null);
     return {
       ...item,

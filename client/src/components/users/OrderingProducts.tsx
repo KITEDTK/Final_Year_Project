@@ -118,17 +118,18 @@ export const OrderingProducts = () => {
                     </td>
                     <td className="price-col">{itemm.amount}</td>
                     <td className="stock-col">
-                      <span className="in-stock">{itemm.status}</span>
-                      <div className="btn-wrap">
-                        <div
-                          onClick={() =>
-                            handleOnClickRecieve(auth.id, itemm.id)
-                          }
-                          className="btn btn-primary btn-round"
-                        >
-                          Đã nhận hàng
-                        </div>
+                    {itemm.status === 'Chưa thanh toán' ? (<><span className="in-stock">{itemm.status}</span></>) : (<><div className="btn-wrap">
+                      <div
+                        onClick={() =>
+                          handleOnClickRecieve(auth.id, itemm.id)
+                        }
+                        className="btn btn-primary btn-round"
+                      >
+                        Đã nhận hàng
                       </div>
+                    </div></>)}
+                      
+                      
                     </td>
                   </tr>
                 </>
