@@ -23,12 +23,11 @@ export const Wardrobe = () => {
       //join users
       socket.emit("join_user", { userId: auth.id });
     }
-    
   }, [dispatch, auth]);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [quantityToSell, setQuantityToSell]= useState<number>(1);
+  const [quantityToSell, setQuantityToSell] = useState<number>(1);
   const [priceToSell, setPriceToSell] = useState<number>(1);
-  const [wardrobelIdToSell, setWardrobeIdToSell] = useState<string>('');
+  const [wardrobelIdToSell, setWardrobeIdToSell] = useState<string>("");
   const handleShowModalSell = (wardrobelId: string) => {
     setShowModal(true);
     setWardrobeIdToSell(wardrobelId);
@@ -37,40 +36,39 @@ export const Wardrobe = () => {
     setShowModal(false);
   };
   const handleSell = () => {
-    dispatch(fetchAddSecondHand({wardrobeId: wardrobelIdToSell, amount: quantityToSell, price: priceToSell})).then(()=>{
+    dispatch(
+      fetchAddSecondHand({
+        wardrobeId: wardrobelIdToSell,
+        amount: quantityToSell,
+        price: priceToSell,
+      })
+    ).then(() => {
       setShowModal(false);
       if (auth) {
         dispatch(fetchAllWardrobeByUsers({ userId: auth.id })).then(
           (res: any) => {
             setWardrobeItems(res.payload);
-            socket.emit('join_user_selling_items',{userId: auth.id});
-          }
-        );
-      }
-    })
-  };
-  const handleOnChangeQuantity = (amount: number) => {
-    const maxQuantity = wardrobeItems?.find((item) => item.id === wardrobelIdToSell)?.amount;
-  
-    if (maxQuantity !== undefined) {
-      setQuantityToSell(Math.min(amount, maxQuantity));
-    }
-  };
-  const handleOnChangePrice = (price: number) =>{
-    setPriceToSell(price);
-  }
-  useEffect(()=>{
-    socket.on('update_user_wardrobe',()=>{
-      showToast('caapj nhat','success');
-      if (auth) {
-        dispatch(fetchAllWardrobeByUsers({ userId: auth.id })).then(
-          (res: any) => {
-            setWardrobeItems(res.payload); 
+            socket.emit("join_user_selling_items", { userId: auth.id });
           }
         );
       }
     });
-    socket.on('update_all_selling_items',()=>{
+  };
+  const handleOnChangeQuantity = (amount: number) => {
+    const maxQuantity = wardrobeItems?.find(
+      (item) => item.id === wardrobelIdToSell
+    )?.amount;
+
+    if (maxQuantity !== undefined) {
+      setQuantityToSell(Math.min(amount, maxQuantity));
+    }
+  };
+  const handleOnChangePrice = (price: number) => {
+    setPriceToSell(price);
+  };
+  useEffect(() => {
+    socket.on("update_user_wardrobe", () => {
+      showToast("caapj nhat", "success");
       if (auth) {
         dispatch(fetchAllWardrobeByUsers({ userId: auth.id })).then(
           (res: any) => {
@@ -78,49 +76,82 @@ export const Wardrobe = () => {
           }
         );
       }
-    })
+    });
+    socket.on("update_all_selling_items", () => {
+      if (auth) {
+        dispatch(fetchAllWardrobeByUsers({ userId: auth.id })).then(
+          (res: any) => {
+            setWardrobeItems(res.payload);
+          }
+        );
+      }
+    });
     return () => {
       socket.off("update_all_selling_items");
     };
-  })
+  });
   return (
     <>
-     <Modal show={showModal} onHide={handleOnHideModal}>
+      <Modal show={showModal} onHide={handleOnHideModal}>
         <Modal.Header closeButton>
           <Modal.Title>Nhập thông tin sản phẩm bán lại</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form>
-            <div>Nhập số lượng</div>
-            <div className="form-group">
+            <div style={{ textIndent: "2ch" }} >Nhập số lượng</div>
+            <div
+              className="form-group"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
               <input
                 type="text"
                 className="form-control"
                 id="singin-email-2"
                 name="singin-email"
                 value={quantityToSell}
-                onChange={(event)=>handleOnChangeQuantity(parseInt(event.target.value))}
+                onChange={(event) =>
+                  handleOnChangeQuantity(parseInt(event.target.value))
+                }
+                style={{ width: 550 }}
                 required
               />
             </div>
-            <div>Nhập giá</div>
-            <div className="form-group">
+            <div style={{ textIndent: "2ch" }}>Nhập giá</div>
+            <div
+              className="form-group"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
               <input
                 type="text"
                 className="form-control"
                 id="singin-email-2"
                 name="singin-email"
                 value={priceToSell}
-                onChange={(event)=>handleOnChangePrice(parseInt(event.target.value))}
+                onChange={(event) =>
+                  handleOnChangePrice(parseInt(event.target.value))
+                }
+                style={{ width: 550 }}
                 required
               />
             </div>
           </form>
-        {/* End .form-choice */}
+          {/* End .form-choice */}
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={()=>setShowModal(false)} variant="secondary">Đóng</Button>
-          <Button onClick={()=>handleSell()} variant="primary">Bán lại trên web</Button>
+          <Button onClick={() => setShowModal(false)} variant="secondary">
+            Đóng
+          </Button>
+          <Button onClick={() => handleSell()} variant="primary">
+            Bán lại trên web
+          </Button>
         </Modal.Footer>
       </Modal>
       <table className="table table-wishlist table-mobile">
@@ -144,7 +175,7 @@ export const Wardrobe = () => {
                     <figure className="product-media">
                       <a href="#">
                         <img
-                          style={{width: 60, height: 60}}
+                          style={{ width: 60, height: 60 }}
                           src={`http://localhost:4000/images/${item.clothDetails.image1}`}
                           alt="Product image"
                         />
