@@ -7,7 +7,6 @@ import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { fetchAddSecondHand } from "../../features/secondHand/secondHandSlice";
 import { io } from "socket.io-client";
-import { showToast } from "../../utils/showToast";
 const socket = io("http://localhost:4000");
 export const Wardrobe = () => {
   const dispatch = useAppDispatch();
@@ -68,7 +67,6 @@ export const Wardrobe = () => {
   };
   useEffect(() => {
     socket.on("update_user_wardrobe", () => {
-      showToast("caapj nhat", "success");
       if (auth) {
         dispatch(fetchAllWardrobeByUsers({ userId: auth.id })).then(
           (res: any) => {
