@@ -494,7 +494,8 @@ async function searching(text: string) {
       clothDetails:{
         select:{
           image1: true
-        }
+        },
+        take: 1
       }
     }
   });

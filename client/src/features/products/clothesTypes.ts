@@ -2,25 +2,25 @@ import { Category } from "../categorires/categoriesTypes";
 import { SingleComment } from "../comments/commentsTypes";
 
 export interface ClothDetailsColorSize {
-    id: string;
-    sizeId: string;
-    colorId: string;
-    codeBar: string;
-    clothId: string;
-    amount: number;
-    createAt: Date;
-    updateAt: Date | null;
-    isEnable: boolean;
-    size: {
-      name: string;
-    };
-    color: {
-      name: string;
-    };
-    image1: string;
-    image2: string;
-    image3: string;
-  }
+  id: string;
+  sizeId: string;
+  colorId: string;
+  codeBar: string;
+  clothId: string;
+  amount: number;
+  createAt: Date;
+  updateAt: Date | null;
+  isEnable: boolean;
+  size: {
+    name: string;
+  };
+  color: {
+    name: string;
+  };
+  image1: string;
+  image2: string;
+  image3: string;
+}
 export interface ClothesFilter {
   id: string;
   name: string;
@@ -38,12 +38,12 @@ export interface Filter {
   page?: number;
 }
 export interface ClothesState {
-    clothes: ClothesFilter[];
-    singleClothes: SingleClothes;
-    allClothDetails: ClothDetails[];
-    maxQuantityByCategory: number;
-    loading: boolean;
-    error: string | null;
+  clothes: ClothesFilter[];
+  singleClothes: SingleClothes;
+  allClothDetails: ClothDetails[];
+  maxQuantityByCategory: number;
+  loading: boolean;
+  error: string | null;
 }
 export interface SingleClothes {
   id: string;
@@ -76,7 +76,5 @@ export interface CLothesSearching {
   id: string;
   name: string;
   price: number;
-  clothDetails:{
-    image1: string;
-  }
+  clothDetails: [{ image1: string }];
 }

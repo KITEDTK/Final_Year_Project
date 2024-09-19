@@ -75,9 +75,10 @@ export const Header = () => {
             }}
           >
             <img
-              src={`http://localhost:4000/images/${item.clothDetails.image1}`}
+              src={`http://localhost:4000/images/${item.clothDetails?.[0]?.image1 || ""}`}
+
               alt="product"
-              style={{ marginRight: 16, marginBottom: 10 }}
+              style={{ marginRight: 16, marginBottom: 10, width: 60, height: 60 }}
             />
             <div style={{ flex: 1 }}>
               <a href="#" role="button">
