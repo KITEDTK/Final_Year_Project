@@ -1,16 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { showToast } from "../utils/showToast";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { login } from "../features/auth/authSlice";
 
 export const Login: React.FC = () => {
+    const dispatch = useAppDispatch();
+    const auth = useAppSelector((state)=>state.auth.auth);
     const [username, setUsername] = useState<string>();
     const [password, setPassword] = useState<string>();
     const handleLogin = () =>{
         if(username === 'kiet' && password === '123'){
-            localStorage.setItem("auth", 'true');
+            dispatch(login());
         }else{
             showToast('Sai tài khoản hoặc mật khẩu', 'error');
         }
     }
+    useEffect(()=>{
+        console.log(auth);
+    },[auth]);
   return (
     <>
       <body className="hold-transition login-page">
@@ -55,40 +62,14 @@ export const Login: React.FC = () => {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col-8">
-                    <div className="icheck-primary">
-                      <input type="checkbox" id="remember" />
-                      <label htmlFor="remember"> Remember Me </label>
-                    </div>
-                  </div>
 
                   <div className="col-4">
-                    <button onClick={()=>handleLogin()} type="button" className="btn btn-primary btn-block">
-                      Sign In
+                    <button style={{ width: 100, marginLeft: 'auto', display: 'block' }} onClick={()=>handleLogin()} type="button" className="btn btn-primary btn-block">
+                      Đăng nhập
                     </button>
                   </div>
                 </div>
               </form>
-              <div className="social-auth-links text-center mb-3">
-                <p>- OR -</p>
-                <a href="#" className="btn btn-block btn-primary">
-                  <i className="fab fa-facebook mr-2"></i> Sign in using
-                  Facebook
-                </a>
-                <a href="#" className="btn btn-block btn-danger">
-                  <i className="fab fa-google-plus mr-2"></i> Sign in using
-                  Google+
-                </a>
-              </div>
-
-              <p className="mb-1">
-                <a href="forgot-password.html">I forgot my password</a>
-              </p>
-              <p className="mb-0">
-                <a href="register.html" className="text-center">
-                  Register a new membership
-                </a>
-              </p>
             </div>
           </div>
         </div>
