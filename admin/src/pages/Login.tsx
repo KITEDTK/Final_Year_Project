@@ -11,6 +11,7 @@ export const Login: React.FC = () => {
     const handleLogin = () =>{
         if(username === 'kiet' && password === '123'){
             dispatch(login());
+            window.location.href = 'http://localhost:1709';
         }else{
             showToast('Sai tài khoản hoặc mật khẩu', 'error');
         }
