@@ -43,7 +43,7 @@ export function Sidebar() {
               data-accordion="false"
             >
               <li className="nav-item menu-open">
-                <Link  to='/' className="nav-link active">
+                <Link  to='/dashboard' className="nav-link active">
                   <i className="nav-icon fas fa-tachometer-alt"></i>
                   <p>
                     Thống kê

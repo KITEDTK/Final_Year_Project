@@ -8,10 +8,10 @@ export const Login: React.FC = () => {
     const auth = useAppSelector((state)=>state.auth.auth);
     const [username, setUsername] = useState<string>();
     const [password, setPassword] = useState<string>();
-    const handleLogin = () =>{
+    const handleLogin = async () =>{
         if(username === 'kiet' && password === '123'){
-            dispatch(login());
-            window.location.href = 'http://localhost:1709';
+            await dispatch(login());
+            window.location.href = 'http://localhost:1709/dashboard';
         }else{
             showToast('Sai tài khoản hoặc mật khẩu', 'error');
         }

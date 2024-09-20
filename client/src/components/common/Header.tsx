@@ -50,7 +50,7 @@ export const Header = () => {
       style={{
         position: "absolute",
         top: 100,
-        left: 200,
+        left: 350,
         backgroundColor: "white",
         borderTopWidth: 1,
         borderTopColor: "#ebebeb",
