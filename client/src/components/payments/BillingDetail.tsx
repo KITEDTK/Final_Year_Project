@@ -45,7 +45,7 @@ export const BillingDetail = () => {
     <>
       {auth && auth !== null ? (
         <div className="col-lg-9">
-          <h2 className="checkout-title">Billing Details</h2>
+          <h2 className="checkout-title">Chi tiết hóa đơn</h2>
           {/* End .checkout-title */}
           <div className="row">
             <div className="col-sm-6">
@@ -63,11 +63,11 @@ export const BillingDetail = () => {
           {/* End .row */}
 
 
-          <label>Street address *</label>
+          <label>Địa chỉ</label>
           <input
             type="text"
             className="form-control"
-            placeholder="House number and Street name"
+            placeholder="Số nhà và tên đường ..."
           />
           {/* End .row */}
 
@@ -75,7 +75,7 @@ export const BillingDetail = () => {
             {/* End .col-sm-6 */}
 
             <div className="col-sm-6">
-              <label>Phone *</label>
+              <label>Số điện thoại</label>
               <input
                 type="tel"
                 value={auth.phoneNumber}
@@ -86,22 +86,15 @@ export const BillingDetail = () => {
           </div>
           {/* End .row */}
 
-          <label>Email address *</label>
+          <label>Địa chỉ email</label>
           <input type="email" value={auth.email} className="form-control" />
 
           {/* End .custom-checkbox */}
 
-          <label>Order notes (optional)</label>
-          <textarea
-            className="form-control"
-            cols={30}
-            rows={4}
-            placeholder="Notes about your order, e.g. special notes for delivery"
-          ></textarea>
         </div>
       ) : (
         <div className="col-lg-9">
-          <h2 className="checkout-title">Billing Details</h2>
+          <h2 className="checkout-title">Chi tiết hóa đơn</h2>
           {/* End .checkout-title */}
           <div className="row">
             <div className="col-sm-6">
@@ -123,7 +116,7 @@ export const BillingDetail = () => {
           <input
             type="text"
             className="form-control"
-            placeholder="House number and Street name"
+            placeholder="Số nhà và tên đường ..."
             value={infoLocal.address}
             onChange={(event) => handleChangeAddress(event)}
             required
@@ -148,7 +141,7 @@ export const BillingDetail = () => {
           </div>
           {/* End .row */}
 
-          <label>Email address *</label>
+          <label>Địa chỉ email</label>
           <input
             type="email"
             className="form-control"
@@ -156,43 +149,9 @@ export const BillingDetail = () => {
             required
           />
 
-          <div className="custom-control custom-checkbox">
-            <input
-              type="checkbox"
-              className="custom-control-input"
-              id="checkout-create-acc"
-            />
-            <label
-              className="custom-control-label"
-              htmlFor="checkout-create-acc"
-            >
-              Create an account?
-            </label>
-          </div>
           {/* End .custom-checkbox */}
 
-          <div className="custom-control custom-checkbox">
-            <input
-              type="checkbox"
-              className="custom-control-input"
-              id="checkout-diff-address"
-            />
-            <label
-              className="custom-control-label"
-              htmlFor="checkout-diff-address"
-            >
-              Ship to a different address?
-            </label>
-          </div>
           {/* End .custom-checkbox */}
-
-          <label>Order notes (optional)</label>
-          <textarea
-            className="form-control"
-            cols={30}
-            rows={4}
-            placeholder="Notes about your order, e.g. special notes for delivery"
-          ></textarea>
         </div>
       )}
     </>

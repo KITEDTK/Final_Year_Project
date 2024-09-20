@@ -147,14 +147,12 @@ export const Mini2handHeaderCart = () => {
           {/* End .dropdown-cart-total */}
 
           <div className="dropdown-cart-action">
-            <a href="cart.html" className="btn btn-primary">
-              View Cart
-            </a>
+            
             <Link
               to="/secondhand-checkout"
               className="btn btn-outline-primary-2"
             >
-              <span>Checkout</span>
+              <span>Thanh toán</span>
               <i className="icon-long-arrow-right"></i>
             </Link>
           </div>

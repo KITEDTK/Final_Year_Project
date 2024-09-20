@@ -107,7 +107,7 @@ export const Register = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="register-password-2">Password *</label>
+            <label htmlFor="register-password-2">Mật khẩu</label>
             <input
               type="password"
               className="form-control"

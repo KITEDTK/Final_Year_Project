@@ -36,7 +36,7 @@ export const FilterSize: React.FC<Props> = ({onSelectSize})=>{
             aria-expanded="true"
             aria-controls="widget-2"
           >
-            Size
+            Kích cỡ
           </a>
         </h3>
         {/* End .widget-title */}

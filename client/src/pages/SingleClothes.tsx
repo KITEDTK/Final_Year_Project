@@ -25,7 +25,7 @@ export const SingleClothes: React.FC = () => {
                 <a href="index.html">Home</a>
               </li>
               <li className="breadcrumb-item">
-                <a href="#">Products</a>
+                <a href="#">Sản phẩm</a>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
                 Default
@@ -33,25 +33,6 @@ export const SingleClothes: React.FC = () => {
             </ol>
 
             <nav className="product-pager ml-auto" aria-label="Product">
-              <a
-                className="product-pager-link product-pager-prev"
-                href="#"
-                aria-label="Previous"
-                tabIndex={-1}
-              >
-                <i className="icon-angle-left"></i>
-                <span>Prev</span>
-              </a>
-
-              <a
-                className="product-pager-link product-pager-next"
-                href="#"
-                aria-label="Next"
-                tabIndex={-1}
-              >
-                <span>Next</span>
-                <i className="icon-angle-right"></i>
-              </a>
             </nav>
             {/*  End .pager-nav */}
           </div>
@@ -79,7 +60,7 @@ export const SingleClothes: React.FC = () => {
                     aria-controls="product-desc-tab"
                     aria-selected="true"
                   >
-                    Description
+                    Mô tả
                   </a>
                 </li>
                 <li className="nav-item">
@@ -92,7 +73,7 @@ export const SingleClothes: React.FC = () => {
                     aria-controls="product-info-tab"
                     aria-selected="false"
                   >
-                    Additional information
+                    Thông tin thêm 
                   </a>
                 </li>
                 <li className="nav-item">
@@ -105,7 +86,7 @@ export const SingleClothes: React.FC = () => {
                     aria-controls="product-shipping-tab"
                     aria-selected="false"
                   >
-                    Shipping & Returns
+                    Vận chuyển
                   </a>
                 </li>
                 <li className="nav-item">
@@ -116,9 +97,9 @@ export const SingleClothes: React.FC = () => {
                     href="#product-review-tab"
                     role="tab"
                     aria-controls="product-review-tab"
-                    aria-selected="false"
+                    aria-selected="true"
                   >
-                    Reviews ({comments && comments.length})
+                    Bình luận ({comments && comments.length})
                   </a>
                 </li>
               </ul>
@@ -130,39 +111,12 @@ export const SingleClothes: React.FC = () => {
                   aria-labelledby="product-desc-link"
                 >
                   <div className="product-desc-content">
-                    <h3>Product Information</h3>
+                    <h3>Thông tin sản phẩm</h3>
                     <p>
-                      Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                      Donec odio. Quisque volutpat mattis eros. Nullam malesuada
-                      erat ut turpis. Suspendisse urna viverra non, semper
-                      suscipit, posuere a, pede. Donec nec justo eget felis
-                      facilisis fermentum. Aliquam porttitor mauris sit amet
-                      orci. Aenean dignissim pellentesque felis. Phasellus
-                      ultrices nulla quis nibh. Quisque a lectus. Donec
-                      consectetuer ligula vulputate sem tristique cursus.{" "}
+                    Áo thun là một loại trang phục phổ biến, thường được làm từ chất liệu cotton hoặc vải thun co giãn, mang lại cảm giác thoải mái và thoáng mát cho người mặc. Áo thun có nhiều kiểu dáng, từ cổ tròn, cổ tim, đến cổ bẻ, và thường có tay ngắn. Đây là lựa chọn lý tưởng cho những dịp dạo phố, đi học, đi làm hoặc thậm chí là tham gia các hoạt động thể thao nhẹ nhàng. Một số áo thun còn được in hoặc thêu họa tiết, logo, hoặc thông điệp, giúp người mặc thể hiện phong cách và cá tính riêng của mình..{" "}
                     </p>
                     <ul>
-                      <li>
-                        Nunc nec porttitor turpis. In eu risus enim. In vitae
-                        mollis elit.{" "}
-                      </li>
-                      <li>Vivamus finibus vel mauris ut vehicula.</li>
-                      <li>
-                        Nullam a magna porttitor, dictum risus nec, faucibus
-                        sapien.
-                      </li>
                     </ul>
-
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                      Donec odio. Quisque volutpat mattis eros. Nullam malesuada
-                      erat ut turpis. Suspendisse urna viverra non, semper
-                      suscipit, posuere a, pede. Donec nec justo eget felis
-                      facilisis fermentum. Aliquam porttitor mauris sit amet
-                      orci. Aenean dignissim pellentesque felis. Phasellus
-                      ultrices nulla quis nibh. Quisque a lectus. Donec
-                      consectetuer ligula vulputate sem tristique cursus.{" "}
-                    </p>
                   </div>
                   {/*  End .product-desc-content */}
                 </div>
@@ -174,32 +128,10 @@ export const SingleClothes: React.FC = () => {
                   aria-labelledby="product-info-link"
                 >
                   <div className="product-desc-content">
-                    <h3>Information</h3>
+                    <h3>Thông tin</h3>
                     <p>
-                      Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                      Donec odio. Quisque volutpat mattis eros. Nullam malesuada
-                      erat ut turpis. Suspendisse urna viverra non, semper
-                      suscipit, posuere a, pede. Donec nec justo eget felis
-                      facilisis fermentum. Aliquam porttitor mauris sit amet
-                      orci.{" "}
+                    Áo thun không chỉ đa dạng về kiểu dáng mà còn phong phú về màu sắc và kích cỡ, phù hợp cho cả nam, nữ và trẻ em. Chúng dễ dàng phối hợp với nhiều trang phục khác như quần jeans, chân váy, hoặc quần shorts, tạo nên phong cách thời trang từ đơn giản đến năng động. Ngoài ra, áo thun còn có nhiều dòng sản phẩm chuyên biệt như áo thun thể thao với khả năng thấm hút mồ hôi tốt, áo thun oversized tạo phong cách thoải mái, hay áo thun bodyfit tôn dáng. Đây là một trong những món đồ thời trang không thể thiếu trong tủ đồ của mọi người..{" "}
                     </p>
-
-                    <h3>Fabric & care</h3>
-                    <ul>
-                      <li>Faux suede fabric</li>
-                      <li>Gold tone metal hoop handles.</li>
-                      <li>RI branding</li>
-                      <li>Snake print trim interior </li>
-                      <li>Adjustable cross body strap</li>
-                      <li>
-                        {" "}
-                        Height: 31cm; Width: 32cm; Depth: 12cm; Handle Drop:
-                        61cm
-                      </li>
-                    </ul>
-
-                    <h3>Size</h3>
-                    <p>one size</p>
                   </div>
                   {/*  End .product-desc-content */}
                 </div>
@@ -211,16 +143,9 @@ export const SingleClothes: React.FC = () => {
                   aria-labelledby="product-shipping-link"
                 >
                   <div className="product-desc-content">
-                    <h3>Delivery & returns</h3>
+                    <h3>Vận chuyển</h3>
                     <p>
-                      We deliver to over 100 countries around the world. For
-                      full details of the delivery options we offer, please view
-                      our <a href="#">Delivery information</a>
-                      <br />
-                      We hope you’ll love every purchase, but if you ever need
-                      to return an item you can do so within a month of receipt.
-                      For full details of how to make a return, please view our{" "}
-                      <a href="#">Returns information</a>
+                    Vận chuyển là quá trình chuyển giao hàng hóa từ người bán đến người mua, đóng vai trò quan trọng trong thương mại điện tử. Các phương thức vận chuyển phổ biến bao gồm giao hàng nhanh, giao hàng tiêu chuẩn, hoặc dịch vụ giao hàng quốc tế. Thời gian vận chuyển thường dao động từ 1-3 ngày đối với giao hàng nội địa và từ 5-14 ngày đối với quốc tế, tùy thuộc vào khoảng cách địa lý và phương thức vận chuyển. Để đảm bảo hàng hóa được vận chuyển an toàn, các đơn vị vận chuyển thường sử dụng đóng gói cẩn thận và cung cấp các tùy chọn như theo dõi đơn hàng trực tuyến, hỗ trợ bảo hiểm hàng hóa, và dịch vụ giao hàng tận nơi. Vận chuyển hiệu quả giúp nâng cao trải nghiệm mua sắm của khách hàng.
                     </p>
                   </div>
                   {/*  End .product-desc-content */}

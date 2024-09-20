@@ -37,7 +37,7 @@ export const FilterColor: React.FC<Props> = ({ onSelectColor }) => {
             aria-expanded="true"
             aria-controls="widget-3"
           >
-            Colour
+            Màu sắc
           </a>
         </h3>
         <div className="collapse show" id="widget-3">

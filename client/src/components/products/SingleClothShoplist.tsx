@@ -178,12 +178,9 @@ export const SingleClothShoplist: React.FC<Props> = ({ clothes }) => {
             <div className="product-price">{formatMoney(clothes.price)}đ</div>
             {/* End .product-price */}
             <div className="ratings-container">
-              <div className="ratings">
-                <div className="ratings-val" style={{ width: "20%" }}></div>
-                {/* End .ratings-val */}
-              </div>
+              
               {/* End .ratings */}
-              <span className="ratings-text">( 2 Reviews )</span>
+              
             </div>
             {/* End .rating-container */}
 

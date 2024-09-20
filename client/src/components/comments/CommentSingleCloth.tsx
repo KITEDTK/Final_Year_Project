@@ -65,7 +65,7 @@ export const CommentSingleCloth: React.FC<Props> = ({ commentInfo }) => {
         <br />
         <h3>Reviews ({commentInfo && commentInfo.length})</h3>
         <div className="reviews">
-          {commentInfo &&
+          {commentInfo && commentInfo.length !== 0?
             commentInfo.length &&
             commentInfo.map((item) => (
               <>
@@ -103,7 +103,7 @@ export const CommentSingleCloth: React.FC<Props> = ({ commentInfo }) => {
                   {/*  End .row */}
                 </div>
               </>
-            ))}
+            )) : <>Chưa có ai bình luận</>} 
 
           {/*  End .review */}
 

@@ -208,10 +208,10 @@ export const MiniHeaderCart = () => {
 
           <div className="dropdown-cart-action">
             <Link to={'/carts'} className="btn btn-primary">
-              View Cart
+              Giỏ hàng
             </Link>
             <Link to="/checkout" className="btn btn-outline-primary-2">
-              <span>Checkout</span>
+              <span>Thanh toán</span>
               <i className="icon-long-arrow-right"></i>
             </Link>
           </div>

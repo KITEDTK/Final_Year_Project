@@ -205,7 +205,7 @@ export const Navbar = () => {
 
           <div className="header-right">
             <i className="la la-lightbulb-o"></i>
-            <p>Clearance Up to 30% Off</p>
+            <p>KITESHOP Xin chào</p>
           </div>
         </div>
         {/* End .container */}

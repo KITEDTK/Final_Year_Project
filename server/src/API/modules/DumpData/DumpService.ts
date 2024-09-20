@@ -5,13 +5,19 @@ const prisma = new PrismaClient();
 async function dumpCategories(){
     const input = [
         {
-            name: 'Tất cả'
+            name: 'Ready to Wear'
+        },
+        {
+            name: 'Copper Denim'
+        },
+        {
+            name: 'Công nghệ Excool'
         }
     ];
     const dataInput = input.map((c)=>{
         return {
             ...c,
-            parentId: '0ca741f6-944c-4517-ae17-51087c5ddd11'
+            parentId: '0c3145ad-8842-4472-b01e-02d90004f098'
         }
     })
     const dump = await prisma.categories.createMany({

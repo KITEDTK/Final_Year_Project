@@ -12,10 +12,10 @@ function LoginAndRegister() {
                 <a href="index.html">Home</a>
               </li>
               <li className="breadcrumb-item">
-                <a href="#">Pages</a>
+                <a href="#">Trang</a>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
-                Login
+                Đăng nhập
               </li>
             </ol>
           </div>
@@ -41,7 +41,7 @@ function LoginAndRegister() {
                       aria-controls="signin-2"
                       aria-selected="false"
                     >
-                      Sign In
+                      ĐĂNG NHẬP
                     </a>
                   </li>
                   <li className="nav-item">
@@ -54,7 +54,7 @@ function LoginAndRegister() {
                       aria-controls="register-2"
                       aria-selected="true"
                     >
-                      Register
+                      ĐĂNG KÍ
                     </a>
                   </li>
                 </ul>

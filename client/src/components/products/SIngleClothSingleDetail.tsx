@@ -311,18 +311,9 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
               {/*  End .product-title */}
 
               <div className="ratings-container">
-                <div className="ratings">
-                  <div className="ratings-val" style={{ width: "80%" }}></div>
-                  {/*  End .ratings-val */}
-                </div>
+               
                 {/*  End .ratings */}
-                <a
-                  className="ratings-text"
-                  href="#product-review-link"
-                  id="review-link"
-                >
-                  ( 2 Reviews )
-                </a>
+                
               </div>
               {/*  End .rating-container */}
 
@@ -333,9 +324,7 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
 
               <div className="product-content">
                 <p>
-                  Sed egestas, ante et vulputate volutpat, eros pede semper est,
-                  vitae luctus metus libero eu augue. Morbi purus libero,
-                  faucibus adipiscing. Sed lectus.{" "}
+                Quần áo thời trang luôn thay đổi theo xu hướng, thể hiện phong cách cá nhân và văn hóa. Chúng mang tính thẩm mỹ cao và giúp người mặc tự tin, tạo ấn tượng riêng biệt.{" "}
                 </p>
               </div>
               {/*  End .product-content */}
@@ -390,9 +379,7 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
                 </div>
                 {/* End .product-size */}
 
-                <a href="#" className="size-guide">
-                  <i className="icon-th-list"></i>size guide
-                </a>
+               
               </div>
               {/* End .details-filter-row */}
               {/*  End .details-filter-row */}
@@ -445,72 +432,19 @@ export const SingleClothSingleDetail: React.FC<Props> = ({ clothesInfo }) => {
                   onClick={() => handleAddToCart()}
                   className="btn-product btn-cart"
                 >
-                  <span>add to cart</span>
+                  <span>thêm vào giỏ hàng</span>
                 </a>
 
                 <div className="details-action-wrapper">
-                  <a
-                    href="#"
-                    className="btn-product btn-wishlist"
-                    title="Wishlist"
-                  >
-                    <span>Add to Wishlist</span>
-                  </a>
-                  <a
-                    href="#"
-                    className="btn-product btn-compare"
-                    title="Compare"
-                  >
-                    <span>Add to Compare</span>
-                  </a>
                 </div>
                 {/*  End .details-action-wrapper */}
               </div>
               {/*  End .product-details-action */}
 
               <div className="product-details-footer">
-                <div className="product-cat">
-                  <span>Category:</span>
-                  <a href="#">Women</a>,<a href="#">Dresses</a>,
-                  <a href="#">Yellow</a>
-                </div>
+                
                 {/*  End .product-cat */}
 
-                <div className="social-icons social-icons-sm">
-                  <span className="social-label">Share:</span>
-                  <a
-                    href="#"
-                    className="social-icon"
-                    title="Facebook"
-                    target="_blank"
-                  >
-                    <i className="icon-facebook-f"></i>
-                  </a>
-                  <a
-                    href="#"
-                    className="social-icon"
-                    title="Twitter"
-                    target="_blank"
-                  >
-                    <i className="icon-twitter"></i>
-                  </a>
-                  <a
-                    href="#"
-                    className="social-icon"
-                    title="Instagram"
-                    target="_blank"
-                  >
-                    <i className="icon-instagram"></i>
-                  </a>
-                  <a
-                    href="#"
-                    className="social-icon"
-                    title="Pinterest"
-                    target="_blank"
-                  >
-                    <i className="icon-pinterest"></i>
-                  </a>
-                </div>
               </div>
               {/*  End .product-details-footer */}
             </div>

@@ -197,12 +197,7 @@ export const Shoplist = () => {
                 {/* End .col-lg-9 */}
                 <aside className="col-lg-3 order-lg-first">
                   <div className="sidebar sidebar-shop">
-                    <div className="widget widget-clean">
-                      <label>Filters:</label>
-                      <a href="#" className="sidebar-filter-clear">
-                        Clean All
-                      </a>
-                    </div>
+                    
                     {/* End .widget widget-clean */}
 
                     <FilterCategory

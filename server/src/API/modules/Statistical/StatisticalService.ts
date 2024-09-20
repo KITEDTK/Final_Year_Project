@@ -115,7 +115,7 @@ async function topTenClothes(currentDateStart: Date, currentDateEnd: Date) {
         amount: "desc",
       },
     },
-    take: 10,
+    take: 5,
   });
 
   const filter = await Promise.all(

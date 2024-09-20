@@ -278,8 +278,8 @@ export const Order = () => {
             type="button"
             className="btn btn-outline-primary-2 btn-order btn-block"
           >
-            <span className="btn-text">Place Order</span>
-            <span className="btn-hover-text">Proceed to Checkout</span>
+            <span className="btn-text">Đặt hàng</span>
+            <span className="btn-hover-text">Thanh toán</span>
           </button>
         </div>
         {/* End .summary */}

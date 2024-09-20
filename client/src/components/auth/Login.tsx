@@ -40,7 +40,7 @@ export const Login = () => {
       >
           <form>
             <div className="form-group">
-              <label htmlFor="singin-email-2">Username or email address *</label>
+              <label htmlFor="singin-email-2">Tên đăng nhập hoặc email</label>
               <input
                 type="text"
                 className="form-control"
@@ -54,7 +54,7 @@ export const Login = () => {
             {/* End .form-group */}
 
             <div className="form-group">
-              <label htmlFor="singin-password-2">Password *</label>
+              <label htmlFor="singin-password-2">Mật khẩu</label>
               <input
                 type="password"
                 className="form-control"
@@ -79,9 +79,6 @@ export const Login = () => {
 
               {/* End .custom-checkbox */}
 
-              <a href="#" className="forgot-link">
-                Bạn quên mật khẩu ?
-              </a>
             </div>
             {/* End .form-footer */}
           </form>
